@@ -1,0 +1,24 @@
+<idea-plugin>
+    <id>ijkl</id>
+    <name>IJKL shortctus</name>
+    <version>1.0</version>
+    <vendor email="dmitry.kandalov@gmail.com" url="http://www.yourcompany.com">Dmitry Kandalov</vendor>
+
+    <!-- http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/build_number_ranges.html -->
+    <!-- Since IJ 2016.1 it has Kotlin support. -->
+    <idea-version since-build="145"/>
+
+    <!-- See http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html -->
+    <depends>com.intellij.modules.lang</depends>
+
+    <application-components>
+        <component>
+            <implementation-class>ijkl.AppComponent</implementation-class>
+        </component>
+    </application-components>
+
+    <actions>
+        <!-- Add your actions here -->
+    </actions>
+
+</idea-plugin>

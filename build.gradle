@@ -1,0 +1,49 @@
+buildscript {
+	ext.kotlin_version = '1.0.6'
+	repositories {
+		mavenCentral()
+	}
+	dependencies {
+		classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+	}
+}
+
+apply plugin: 'java'
+apply plugin: 'kotlin'
+apply plugin: 'idea'
+
+ext.ideaPath = "${System.env.HOME}/Library/Application Support/JetBrains/Toolbox/apps/IDEA-U/ch-0/172.3317.6/IntelliJ IDEA 2017.2 EAP.app/Contents"
+
+repositories {
+	mavenCentral()
+	maven { url 'lib' }
+}
+enableProvidedScope()
+
+dependencies {
+	// dependencies below are "provided" because they should be on IDE classpath
+	provided "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+	provided "org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version"
+	provided "junit:junit:4.11" // also includes hamcrest-core
+	provided fileTree(dir: "${ideaPath}/lib/", include: "*.jar")
+}
+
+sourceSets {
+	main {
+		kotlin { srcDir "./src" }
+		resources { srcDir "./src/resources" }
+	}
+	test {
+		kotlin { srcDir "./test" }
+	}
+}
+
+def enableProvidedScope() {
+	configurations {
+		provided
+		compile.extendsFrom provided
+	}
+	idea {
+		module { scopes.PROVIDED.plus += [configurations.provided] }
+	}
+}
