@@ -4,11 +4,19 @@ import com.intellij.openapi.actionSystem.KeyboardShortcut
 import com.intellij.openapi.actionSystem.Shortcut
 import com.intellij.ui.KeyStrokeAdapter
 import org.w3c.dom.Node
+import java.io.File
 import java.io.InputStream
 import javax.swing.KeyStroke
 import javax.xml.parsers.DocumentBuilderFactory
 
 data class ShortcutData(val actionId: String, val shortcuts: List<Shortcut>)
+
+fun readShortcutsData(fileName: String): List<ShortcutData> {
+    val inputStream =
+        if (File(fileName).exists()) File(fileName).inputStream()
+        else ShortcutData::class.java.classLoader.getResource(fileName).openStream()
+    return inputStream.use { readShortcutsData(it) }
+}
 
 fun readShortcutsData(inputStream: InputStream): List<ShortcutData> {
     fun Node.getAttribute(name: String): String? =

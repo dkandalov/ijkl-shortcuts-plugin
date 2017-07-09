@@ -4,18 +4,12 @@ import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.components.ApplicationComponent
 import com.intellij.openapi.diagnostic.Logger
 import com.intellij.openapi.keymap.Keymap
-import java.io.File
 
 class AppComponent: ApplicationComponent {
     private val logger = Logger.getInstance(this.javaClass.canonicalName)
 
     override fun initComponent() {
-        val fileName = "ijkl-keymap.xml"
-        val inputStream =
-            if (File(fileName).exists()) File(fileName).inputStream()
-            else javaClass.classLoader.getResource(fileName).openStream()
-        val shortcutsData = inputStream.use { readShortcutsData(it) }
-
+        val shortcutsData = readShortcutsData("ijkl-keymap.xml")
         var addShortcutsResult = AddShortcutsResult()
 
         registerKeymapListener(ApplicationManager.getApplication(), object: KeymapChangeListener {

@@ -6,11 +6,9 @@ import org.junit.Test
 
 class Tests {
     @Test fun `read keymap xml`() {
-        val shortcutsData = javaClass.classLoader.getResource("ijkl-keymap.xml").openStream().use {
-            readShortcutsData(it)
-        }
+        val shortcutsData = readShortcutsData("ijkl-keymap.xml")
 
-        shortcutsData.size shouldEqual 86
+        shortcutsData.size shouldEqual 76
         shortcutsData.first().apply {
             actionId shouldEqual "\$Delete"
             shortcuts shouldEqual listOf("delete", "back_space", "meta back_space", "alt semicolon").map{ it.toKeyboardShortcut() }
