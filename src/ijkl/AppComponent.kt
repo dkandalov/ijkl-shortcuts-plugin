@@ -7,6 +7,7 @@ import com.intellij.openapi.keymap.Keymap
 
 class AppComponent: ApplicationComponent {
     private val logger = Logger.getInstance(this.javaClass.canonicalName)
+    private val logConflicts = System.getProperty("ijkl.log.shortcut.conflicts").toBoolean()
 
     override fun initComponent() {
         val shortcutsData = readShortcutsData("ijkl-keymap.xml")
@@ -17,12 +18,15 @@ class AppComponent: ApplicationComponent {
                 if (oldKeymap != null) oldKeymap.remove(addShortcutsResult.added)
                 if (newKeymap != null) addShortcutsResult = newKeymap.add(shortcutsData)
 
-                logger.info(
-                    "Switched keymap from '$oldKeymap' to '$newKeymap'. Shortcuts: " +
-                        "added - ${addShortcutsResult.added.size}; " +
-                        "already existed - ${addShortcutsResult.alreadyExisted.size}; " +
-                        "conflicts - ${addShortcutsResult.conflictsByActionId.size}"
-                )
+                if (logConflicts) {
+                    logger.info(
+                        "Switched keymap from '$oldKeymap' to '$newKeymap'. Shortcuts: " +
+                            "added - ${addShortcutsResult.added.size}; " +
+                            "already existed - ${addShortcutsResult.alreadyExisted.size}; " +
+                            "conflicts - ${addShortcutsResult.conflictsByActionId.size}"
+                    )
+                    addShortcutsResult.conflictsByActionId.forEach { logger.info(it.toString()) }
+                }
             }
         })
     }
