@@ -6,16 +6,18 @@ import org.junit.Test
 
 class Tests {
     @Test fun `read keymap xml`() {
-        val shortcutsData = loadShortcutsData("test/ijkl/ijkl-osx.xml")
+        val shortcutsData = javaClass.classLoader.getResource("ijkl-keymap.xml").openStream().use {
+            loadShortcutsData(it)
+        }
 
         shortcutsData.size shouldEqual 130
         shortcutsData.first().apply {
             actionId shouldEqual "\$Delete"
-            keystrokes shouldEqual listOf("delete", "back_space", "meta back_space", "alt semicolon")
+            shortcuts shouldEqual listOf("delete", "back_space", "meta back_space", "alt semicolon").map{ it.toKeyboardShortcut() }
         }
         shortcutsData.last().apply {
             actionId shouldEqual "splitAndMoveRight"
-            keystrokes shouldEqual listOf("shift ctrl alt close_bracket")
+            shortcuts shouldEqual listOf("shift ctrl alt close_bracket").map{ it.toKeyboardShortcut() }
         }
     }
 

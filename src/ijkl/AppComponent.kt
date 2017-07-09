@@ -2,36 +2,47 @@ package ijkl
 
 import com.intellij.openapi.Disposable
 import com.intellij.openapi.actionSystem.KeyboardShortcut
+import com.intellij.openapi.actionSystem.Shortcut
 import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.components.ApplicationComponent
+import com.intellij.openapi.diagnostic.Logger
 import com.intellij.openapi.keymap.Keymap
 import com.intellij.openapi.keymap.KeymapManager
 import com.intellij.openapi.keymap.KeymapManagerListener
 import com.intellij.openapi.util.Disposer
 import com.intellij.ui.KeyStrokeAdapter
 import org.w3c.dom.Node
-import java.io.File
+import java.io.InputStream
 import javax.swing.KeyStroke
 import javax.xml.parsers.DocumentBuilderFactory
 
 class AppComponent: ApplicationComponent {
-    override fun initComponent() {
-        val shortcutsData = loadShortcutsData("/Users/dima/IdeaProjects/ijkl-keymaps/intellij/ijkl-osx.xml")
-//        show("Loaded shortcuts size: " + shortcutsData.size)
+    private val logger = Logger.getInstance(this.javaClass.canonicalName)
 
-        var mergeResult = MergeShortcutsResult()
+    override fun initComponent() {
+        val shortcutsData = javaClass.classLoader.getResource("ijkl-keymap.xml").openStream().use {
+            loadShortcutsData(it)
+        }
+
+        var addShortcutsResult = AddShortcutsResult()
 
         registerKeymapListener(ApplicationManager.getApplication(), object: KeymapChangeListener {
             override fun onChange(oldKeymap: Keymap?, newKeymap: Keymap?) {
-                //show("Before ${oldKeymap}; After ${newKeymap}")
-                if (oldKeymap != null) oldKeymap.remove(mergeResult.added)
-                if (newKeymap != null) mergeResult = newKeymap.add(shortcutsData)
+                if (oldKeymap != null) oldKeymap.remove(addShortcutsResult.added)
+                if (newKeymap != null) addShortcutsResult = newKeymap.add(shortcutsData)
+
+                logger.info(
+                    "Switched keymap from '$oldKeymap' to '$newKeymap'. Shortcuts:" +
+                        "added - ${addShortcutsResult.added.size};" +
+                        "already existed - ${addShortcutsResult.alreadyExisted.size};" +
+                        "conflicts - ${addShortcutsResult.conflictsByActionId.size}"
+                )
             }
         })
     }
 }
 
-fun loadShortcutsData(fileName: String): List<ShortcutData> {
+fun loadShortcutsData(inputStream: InputStream): List<ShortcutData> {
     fun Node.getAttribute(name: String): String? =
         attributes.getNamedItem(name)?.nodeValue
 
@@ -44,7 +55,7 @@ fun loadShortcutsData(fileName: String): List<ShortcutData> {
     }
 
     val builder = DocumentBuilderFactory.newInstance().newDocumentBuilder()
-    val document = builder.parse(File(fileName))
+    val document = builder.parse(inputStream)
     val keymapTag = document.children().find { it.nodeName == "keymap" } ?: error("")
 
     return keymapTag.children()
@@ -54,49 +65,44 @@ fun loadShortcutsData(fileName: String): List<ShortcutData> {
                 it.getAttribute("id") ?: "",
                 it.children()
                     .filter { it.nodeName == "keyboard-shortcut" }
-                    .map { it.getAttribute("first-keystroke") ?: "" }
+                    .map { it.getAttribute("first-keystroke")?.toKeyboardShortcut() }
+                    .filterNotNull()
             )
         }
 }
 
-data class ShortcutData(val actionId: String, val keystrokes: List<String>)
+data class ShortcutData(val actionId: String, val shortcuts: List<Shortcut>)
 
-data class MergeShortcutsResult(
+data class AddShortcutsResult(
     val added: MutableList<ShortcutData> = ArrayList(),
     val alreadyExisted: LinkedHashSet<ShortcutData> = LinkedHashSet(),
     val conflictsByActionId: MutableMap<String, ShortcutData> = HashMap()
 ) {
     override fun toString() =
-        "MergeShortcutsResult{added=$added, alreadyExisted=$alreadyExisted, conflictsByActionId=$conflictsByActionId}"
+        "AddShortcutsResult{added=$added, alreadyExisted=$alreadyExisted, conflictsByActionId=$conflictsByActionId}"
 }
 
-fun Keymap.add(shortcutsData: List<ShortcutData>): MergeShortcutsResult {
-    val result = MergeShortcutsResult()
+fun Keymap.add(shortcutsData: List<ShortcutData>): AddShortcutsResult {
+    val result = AddShortcutsResult()
     shortcutsData.forEach {
-        it.keystrokes
-            .map { keystroke -> keystroke.toKeyboardShortcut() }
-            .filterNotNull()
-            .forEach { shortcut: KeyboardShortcut ->
-                val boundActionIds = getActionIds(shortcut).toList()
-                if (boundActionIds.contains(it.actionId)) {
-                    result.alreadyExisted.add(it)
-                } else {
-                    result.added.add(it)
-                    addShortcut(it.actionId, shortcut)
-                }
-
-                (boundActionIds - it.actionId).forEach { boundActionId ->
-                    result.conflictsByActionId.put(boundActionId, it)
-                }
+        it.shortcuts.forEach { shortcut ->
+            val boundActionIds = getActionIds(shortcut).toList()
+            if (boundActionIds.contains(it.actionId)) {
+                result.alreadyExisted.add(it)
+            } else {
+                result.added.add(it)
+                addShortcut(it.actionId, shortcut)
             }
+
+            (boundActionIds - it.actionId).forEach { boundActionId ->
+                result.conflictsByActionId.put(boundActionId, it)
+            }
+        }
     }
-//    show("Added: " + result.added.size())
-//    show("Existed: " + result.alreadyExisted.size())
-//    show("Conflicts: " + result.conflictsByActionId.size())
     return result
 }
 
-fun String?.toKeyboardShortcut(): KeyboardShortcut? {
+fun String?.toKeyboardShortcut(): Shortcut? {
     if (this == null || trim().isEmpty()) return null
 
     val firstKeystroke: KeyStroke?
@@ -108,17 +114,15 @@ fun String?.toKeyboardShortcut(): KeyboardShortcut? {
     } else {
         firstKeystroke = KeyStrokeAdapter.getKeyStroke(this)
     }
-    if (firstKeystroke == null) throw error("Invalid keystroke '${this}'")
+    if (firstKeystroke == null) error("Invalid keystroke '${this}'")
+
     return KeyboardShortcut(firstKeystroke, secondKeystroke)
 }
 
 fun Keymap.remove(shortcutsData: List<ShortcutData>) {
     shortcutsData.forEach {
-        it.keystrokes.forEach { keystroke ->
-            val shortcut = keystroke.toKeyboardShortcut()
-            if (shortcut != null) {
-                removeShortcut(it.actionId, shortcut)
-            }
+        it.shortcuts.forEach { shortcut ->
+            removeShortcut(it.actionId, shortcut)
         }
     }
 }

@@ -5,7 +5,7 @@
     <vendor email="dmitry.kandalov@gmail.com" url="http://www.yourcompany.com">Dmitry Kandalov</vendor>
 
     <!-- http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/build_number_ranges.html -->
-    <!-- Since IJ 2016.1 it has Kotlin support. -->
+    <!-- Since IJ 2016.1 because it has Kotlin support. -->
     <idea-version since-build="145"/>
 
     <!-- See http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html -->
