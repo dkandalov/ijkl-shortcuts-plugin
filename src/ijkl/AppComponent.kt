@@ -18,9 +18,9 @@ class AppComponent: ApplicationComponent {
                 if (newKeymap != null) addShortcutsResult = newKeymap.add(shortcutsData)
 
                 logger.info(
-                    "Switched keymap from '$oldKeymap' to '$newKeymap'. Shortcuts:" +
-                        "added - ${addShortcutsResult.added.size};" +
-                        "already existed - ${addShortcutsResult.alreadyExisted.size};" +
+                    "Switched keymap from '$oldKeymap' to '$newKeymap'. Shortcuts: " +
+                        "added - ${addShortcutsResult.added.size}; " +
+                        "already existed - ${addShortcutsResult.alreadyExisted.size}; " +
                         "conflicts - ${addShortcutsResult.conflictsByActionId.size}"
                 )
             }

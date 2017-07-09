@@ -1,8 +1,5 @@
 <keymap version="1" name="ijkl (Mac OS X)" parent="Mac OS X">
   <action id="$Delete">
-    <keyboard-shortcut first-keystroke="delete" />
-    <keyboard-shortcut first-keystroke="back_space" />
-    <keyboard-shortcut first-keystroke="meta back_space" />
     <keyboard-shortcut first-keystroke="alt semicolon" />
   </action>
   <action id="ActivateChangesToolWindow">
@@ -24,7 +21,6 @@
     <keyboard-shortcut first-keystroke="alt 2" />
   </action>
   <action id="Back">
-    <keyboard-shortcut first-keystroke="meta alt left" />
     <keyboard-shortcut first-keystroke="alt b" />
   </action>
   <action id="BuildArtifact">
@@ -34,7 +30,6 @@
     <keyboard-shortcut first-keystroke="shift alt q" />
   </action>
   <action id="CloseEditor">
-    <keyboard-shortcut first-keystroke="meta f4" />
     <keyboard-shortcut first-keystroke="alt q" />
   </action>
   <action id="CodeCompletion">
@@ -46,23 +41,16 @@
   <action id="CompareClipboardWithSelection">
     <keyboard-shortcut first-keystroke="shift alt c" />
   </action>
-  <action id="DSM.Analyze">
-    <keyboard-shortcut first-keystroke="shift ctrl alt m" />
-  </action>
   <action id="EditSource">
-    <keyboard-shortcut first-keystroke="f4" />
     <keyboard-shortcut first-keystroke="alt h" />
   </action>
   <action id="Editor Delete">
     <keyboard-shortcut first-keystroke="alt semicolon" />
   </action>
   <action id="EditorBackSpace">
-    <keyboard-shortcut first-keystroke="back_space" />
-    <keyboard-shortcut first-keystroke="shift back_space" />
     <keyboard-shortcut first-keystroke="shift alt semicolon" />
   </action>
   <action id="EditorChooseLookupItemReplace">
-    <keyboard-shortcut first-keystroke="tab" />
     <keyboard-shortcut first-keystroke="alt l" />
     <keyboard-shortcut first-keystroke="alt quote" />
   </action>
@@ -71,8 +59,6 @@
     <keyboard-shortcut first-keystroke="meta l" />
   </action>
   <action id="EditorDelete">
-    <keyboard-shortcut first-keystroke="delete" />
-    <keyboard-shortcut first-keystroke="meta back_space" />
     <keyboard-shortcut first-keystroke="alt semicolon" />
   </action>
   <action id="EditorDeleteToWordEnd">
@@ -80,75 +66,54 @@
     <keyboard-shortcut first-keystroke="alt d" />
   </action>
   <action id="EditorDown">
-    <keyboard-shortcut first-keystroke="down" />
     <keyboard-shortcut first-keystroke="alt k" />
   </action>
   <action id="EditorDownWithSelection">
-    <keyboard-shortcut first-keystroke="shift down" />
     <keyboard-shortcut first-keystroke="shift alt k" />
   </action>
   <action id="EditorEscape">
-    <keyboard-shortcut first-keystroke="escape" />
     <keyboard-shortcut first-keystroke="alt j" />
   </action>
   <action id="EditorLeft">
-    <keyboard-shortcut first-keystroke="left" />
     <keyboard-shortcut first-keystroke="alt n" />
   </action>
   <action id="EditorLeftWithSelection">
-    <keyboard-shortcut first-keystroke="shift left" />
     <keyboard-shortcut first-keystroke="shift alt n" />
   </action>
   <action id="EditorLineEnd">
-    <keyboard-shortcut first-keystroke="end" />
-    <keyboard-shortcut first-keystroke="meta right" />
     <keyboard-shortcut first-keystroke="alt o" />
   </action>
   <action id="EditorLineEndWithSelection">
-    <keyboard-shortcut first-keystroke="shift end" />
-    <keyboard-shortcut first-keystroke="shift meta right" />
     <keyboard-shortcut first-keystroke="shift alt o" />
   </action>
   <action id="EditorLineStart">
-    <keyboard-shortcut first-keystroke="home" />
-    <keyboard-shortcut first-keystroke="meta left" />
     <keyboard-shortcut first-keystroke="alt u" />
   </action>
   <action id="EditorLineStartWithSelection">
-    <keyboard-shortcut first-keystroke="shift home" />
-    <keyboard-shortcut first-keystroke="shift meta left" />
     <keyboard-shortcut first-keystroke="shift alt u" />
   </action>
   <action id="EditorNextWord">
-    <keyboard-shortcut first-keystroke="alt right" />
     <keyboard-shortcut first-keystroke="alt l" />
   </action>
   <action id="EditorNextWordWithSelection">
-    <keyboard-shortcut first-keystroke="shift alt right" />
     <keyboard-shortcut first-keystroke="shift alt l" />
   </action>
   <action id="EditorPageDown">
-    <keyboard-shortcut first-keystroke="page_down" />
     <keyboard-shortcut first-keystroke="alt f" />
   </action>
   <action id="EditorPageUp">
-    <keyboard-shortcut first-keystroke="page_up" />
     <keyboard-shortcut first-keystroke="alt w" />
   </action>
   <action id="EditorPreviousWord">
-    <keyboard-shortcut first-keystroke="alt left" />
     <keyboard-shortcut first-keystroke="alt j" />
   </action>
   <action id="EditorPreviousWordWithSelection">
-    <keyboard-shortcut first-keystroke="shift alt left" />
     <keyboard-shortcut first-keystroke="shift alt j" />
   </action>
   <action id="EditorRight">
-    <keyboard-shortcut first-keystroke="right" />
     <keyboard-shortcut first-keystroke="alt m" />
   </action>
   <action id="EditorRightWithSelection">
-    <keyboard-shortcut first-keystroke="shift right" />
     <keyboard-shortcut first-keystroke="shift alt m" />
   </action>
   <action id="EditorToggleColumnMode">
@@ -161,15 +126,12 @@
     <keyboard-shortcut first-keystroke="shift meta alt w" />
   </action>
   <action id="EditorUp">
-    <keyboard-shortcut first-keystroke="up" />
     <keyboard-shortcut first-keystroke="alt i" />
   </action>
   <action id="EditorUpWithSelection">
-    <keyboard-shortcut first-keystroke="shift up" />
     <keyboard-shortcut first-keystroke="shift alt i" />
   </action>
   <action id="EvaluateExpression">
-    <keyboard-shortcut first-keystroke="alt f8" />
     <keyboard-shortcut first-keystroke="shift alt e" />
   </action>
   <action id="FileStructurePopup">
@@ -181,11 +143,9 @@
     <keyboard-shortcut first-keystroke="shift meta f" />
   </action>
   <action id="FindUsages">
-    <keyboard-shortcut first-keystroke="alt f7" />
     <keyboard-shortcut first-keystroke="shift alt s" />
   </action>
   <action id="Forward">
-    <keyboard-shortcut first-keystroke="meta alt right" />
     <keyboard-shortcut first-keystroke="shift alt b" />
   </action>
   <action id="Git.Pull">
@@ -226,11 +186,7 @@
     <keyboard-shortcut first-keystroke="alt down" />
     <keyboard-shortcut first-keystroke="shift meta k" />
   </action>
-  <action id="NextSplitter">
-    <keyboard-shortcut first-keystroke="ctrl alt period" />
-  </action>
   <action id="NextTab">
-    <keyboard-shortcut first-keystroke="ctrl right" />
     <keyboard-shortcut first-keystroke="alt 9" />
     <keyboard-shortcut first-keystroke="shift meta close_bracket" />
   </action>
@@ -240,7 +196,6 @@
     <keyboard-shortcut first-keystroke="shift meta i" />
   </action>
   <action id="PreviousTab">
-    <keyboard-shortcut first-keystroke="ctrl left" />
     <keyboard-shortcut first-keystroke="alt 8" />
     <keyboard-shortcut first-keystroke="shift meta open_bracket" />
   </action>
@@ -257,30 +212,14 @@
   <action id="ReplaceCurrentWord">
     <keyboard-shortcut first-keystroke="shift ctrl alt r" />
   </action>
-  <action id="Rerun">
-    <keyboard-shortcut first-keystroke="meta alt r" />
-  </action>
-  <action id="Run">
-    <keyboard-shortcut first-keystroke="shift f10" />
-    <keyboard-shortcut first-keystroke="meta 2" />
-  </action>
-  <action id="RunInspection">
-    <keyboard-shortcut first-keystroke="shift ctrl alt i" />
-  </action>
-  <action id="ScopeHighlight">
-    <keyboard-shortcut first-keystroke="shift ctrl comma" />
-  </action>
   <action id="SelectIn">
-    <keyboard-shortcut first-keystroke="alt f1" />
     <keyboard-shortcut first-keystroke="alt back_quote" />
   </action>
   <action id="ShowNavBar">
-    <keyboard-shortcut first-keystroke="alt home" />
     <keyboard-shortcut first-keystroke="ctrl escape" />
     <keyboard-shortcut first-keystroke="ctrl 1" />
   </action>
   <action id="ShowUsages">
-    <keyboard-shortcut first-keystroke="meta alt f7" />
     <keyboard-shortcut first-keystroke="alt s" />
   </action>
   <action id="ToolWindowsGroup">
