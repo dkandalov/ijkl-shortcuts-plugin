@@ -11,7 +11,6 @@
   <action id="ActivateDebugToolWindow">
     <keyboard-shortcut first-keystroke="alt 4" />
   </action>
-  <action id="ActivateFavoritesToolWindow" />
   <action id="ActivatePluginsToolWindow">
     <keyboard-shortcut first-keystroke="meta 5" />
   </action>
@@ -21,7 +20,6 @@
   <action id="ActivateRunToolWindow">
     <keyboard-shortcut first-keystroke="alt 3" />
   </action>
-  <action id="ActivateStructureToolWindow" />
   <action id="ActivateVersionControlToolWindow">
     <keyboard-shortcut first-keystroke="alt 2" />
   </action>
@@ -49,31 +47,14 @@
     <keyboard-shortcut first-keystroke="ctrl space" />
     <keyboard-shortcut first-keystroke="alt quote" />
   </action>
-  <action id="CodeInspection.OnEditor" />
   <action id="CommaShortcut">
     <keyboard-shortcut first-keystroke="shift alt comma" />
   </action>
   <action id="CompareClipboardWithSelection">
     <keyboard-shortcut first-keystroke="shift alt c" />
   </action>
-  <action id="Console.TableResult.NavigateAction">
-    <keyboard-shortcut first-keystroke="f4" />
-  </action>
-  <action id="ContextHelp" />
-  <action id="ContextHistory">
-    <keyboard-shortcut first-keystroke="shift alt h" />
-  </action>
   <action id="DSM.Analyze">
     <keyboard-shortcut first-keystroke="shift ctrl alt m" />
-  </action>
-  <action id="DSM.OpenInEditor">
-    <keyboard-shortcut first-keystroke="f4" />
-  </action>
-  <action id="DomCollectionControl.Edit">
-    <keyboard-shortcut first-keystroke="f4" />
-  </action>
-  <action id="DomElementsTreeView.GotoDomElementDeclarationAction">
-    <keyboard-shortcut first-keystroke="f4" />
   </action>
   <action id="EditSource">
     <keyboard-shortcut first-keystroke="f4" />
@@ -92,8 +73,6 @@
     <keyboard-shortcut first-keystroke="alt l" />
     <keyboard-shortcut first-keystroke="alt quote" />
   </action>
-  <action id="EditorCodeBlockEndWithSelection" />
-  <action id="EditorCodeBlockStartWithSelection" />
   <action id="EditorCompleteStatement">
     <keyboard-shortcut first-keystroke="shift meta enter" />
     <keyboard-shortcut first-keystroke="meta l" />
@@ -180,7 +159,6 @@
     <keyboard-shortcut first-keystroke="shift alt m" />
   </action>
   <action id="EditorToggleColumnMode">
-    <keyboard-shortcut first-keystroke="shift meta multiply" />
     <keyboard-shortcut first-keystroke="shift meta back_slash" />
   </action>
   <action id="EditorToggleInsertState">
@@ -201,10 +179,6 @@
     <keyboard-shortcut first-keystroke="alt f8" />
     <keyboard-shortcut first-keystroke="shift alt e" />
   </action>
-  <action id="ExternalSystem.OpenConfig">
-    <keyboard-shortcut first-keystroke="f4" />
-  </action>
-  <action id="FileChooser.GotoProject" />
   <action id="FileStructurePopup">
     <keyboard-shortcut first-keystroke="meta f12" />
     <keyboard-shortcut first-keystroke="shift meta o" />
@@ -224,13 +198,10 @@
   <action id="Git.Pull">
     <keyboard-shortcut first-keystroke="ctrl p" />
   </action>
-  <action id="Git.Push" />
-  <action id="GotoBookmark1" />
   <action id="GotoImplementation">
     <mouse-shortcut keystroke="meta alt button1" />
     <keyboard-shortcut first-keystroke="ctrl meta b" />
   </action>
-  <action id="GotoTest" />
   <action id="Gradle.ExecuteTask">
     <keyboard-shortcut first-keystroke="shift meta g" />
   </action>
@@ -238,22 +209,6 @@
     <keyboard-shortcut first-keystroke="shift meta f7" />
     <keyboard-shortcut first-keystroke="alt a" />
   </action>
-  <action id="Infer Type Parameter">
-    <keyboard-shortcut first-keystroke="ctrl alt i" />
-  </action>
-  <action id="InferReturnTypeParameter">
-    <keyboard-shortcut first-keystroke="shift ctrl t" />
-  </action>
-  <action id="InsertNewLineAbove">
-    <keyboard-shortcut first-keystroke="shift alt enter" />
-  </action>
-  <action id="InsertNewLineAboveCurrent">
-    <keyboard-shortcut first-keystroke="shift ctrl alt i" />
-  </action>
-  <action id="Jdbc.OpenTableEditor">
-    <keyboard-shortcut first-keystroke="f4" />
-  </action>
-  <action id="MaximizeToolWindow" />
   <action id="MethodDown">
     <keyboard-shortcut first-keystroke="ctrl down" />
     <keyboard-shortcut first-keystroke="alt comma" />
@@ -286,10 +241,6 @@
     <keyboard-shortcut first-keystroke="alt 9" />
     <keyboard-shortcut first-keystroke="shift meta close_bracket" />
   </action>
-  <action id="OpenModuleSettings">
-    <keyboard-shortcut first-keystroke="f4" />
-  </action>
-  <action id="PrevSplitter" />
   <action id="PreviousDiff">
     <keyboard-shortcut first-keystroke="shift f7" />
     <keyboard-shortcut first-keystroke="alt up" />
@@ -300,14 +251,8 @@
     <keyboard-shortcut first-keystroke="alt 8" />
     <keyboard-shortcut first-keystroke="shift meta open_bracket" />
   </action>
-  <action id="RailsNavigatePopupAction" />
-  <action id="RecentChangedFiles" />
-  <action id="RecentChanges" />
   <action id="RecentProjectListGroup">
     <keyboard-shortcut first-keystroke="shift meta alt o" />
-  </action>
-  <action id="RemoteHostView.EditSource">
-    <keyboard-shortcut first-keystroke="f4" />
   </action>
   <action id="RenameElement">
     <keyboard-shortcut first-keystroke="shift f6" />
@@ -322,7 +267,6 @@
   <action id="Rerun">
     <keyboard-shortcut first-keystroke="meta alt r" />
   </action>
-  <action id="RerunTests" />
   <action id="Run">
     <keyboard-shortcut first-keystroke="shift f10" />
     <keyboard-shortcut first-keystroke="meta 2" />
@@ -330,7 +274,6 @@
   <action id="RunInspection">
     <keyboard-shortcut first-keystroke="shift ctrl alt i" />
   </action>
-  <action id="SaveAll" />
   <action id="ScopeHighlight">
     <keyboard-shortcut first-keystroke="shift ctrl comma" />
   </action>
@@ -376,39 +319,5 @@
   </action>
   <action id="Unwrap">
     <keyboard-shortcut first-keystroke="shift ctrl back_space" />
-  </action>
-  <action id="context.load">
-    <keyboard-shortcut first-keystroke="shift ctrl alt l" />
-  </action>
-  <action id="context.save" />
-  <action id="grammars.IntroduceRule" />
-  <action id="hideOverride">
-    <keyboard-shortcut first-keystroke="shift ctrl alt 0" />
-  </action>
-  <action id="minimizeAll">
-    <keyboard-shortcut first-keystroke="shift ctrl alt 0" />
-  </action>
-  <action id="nextPsi">
-    <keyboard-shortcut first-keystroke="shift ctrl alt k" />
-  </action>
-  <action id="org.jetbrains.plugins.ruby.console.LoadInIrbConsoleAction" />
-  <action id="org.jetbrains.plugins.ruby.rails.actions.generators.GeneratorsPopupAction" />
-  <action id="prevPsi">
-    <keyboard-shortcut first-keystroke="shift ctrl alt j" />
-  </action>
-  <action id="showHistorySliderAction">
-    <keyboard-shortcut first-keystroke="shift ctrl alt h" />
-  </action>
-  <action id="showMethodHistoryAction">
-    <keyboard-shortcut first-keystroke="shift ctrl alt h" />
-  </action>
-  <action id="splitAndClose">
-    <keyboard-shortcut first-keystroke="shift ctrl alt y" />
-  </action>
-  <action id="splitAndMoveLeft">
-    <keyboard-shortcut first-keystroke="shift ctrl alt open_bracket" />
-  </action>
-  <action id="splitAndMoveRight">
-    <keyboard-shortcut first-keystroke="shift ctrl alt close_bracket" />
   </action>
 </keymap>
