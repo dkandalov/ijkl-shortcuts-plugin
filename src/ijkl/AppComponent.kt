@@ -9,8 +9,10 @@ import com.intellij.openapi.keymap.KeymapManager
 import com.intellij.openapi.keymap.KeymapManagerListener
 import com.intellij.openapi.util.Disposer
 import com.intellij.ui.KeyStrokeAdapter
+import org.w3c.dom.Node
 import java.io.File
 import javax.swing.KeyStroke
+import javax.xml.parsers.DocumentBuilderFactory
 
 class AppComponent: ApplicationComponent {
     override fun initComponent() {
@@ -19,29 +21,42 @@ class AppComponent: ApplicationComponent {
 
         var mergeResult = MergeShortcutsResult()
 
-        registerKeymapListener(ApplicationManager.getApplication(), object : KeymapChangeListener {
+        registerKeymapListener(ApplicationManager.getApplication(), object: KeymapChangeListener {
             override fun onChange(oldKeymap: Keymap?, newKeymap: Keymap?) {
                 //show("Before ${oldKeymap}; After ${newKeymap}")
-                if (oldKeymap != newKeymap) {
-                    if (oldKeymap != null) removeFrom(oldKeymap, mergeResult.added)
-                    if (newKeymap != null) mergeResult = addTo(newKeymap, shortcutsData)
-                }
+                if (oldKeymap != null) oldKeymap.remove(mergeResult.added)
+                if (newKeymap != null) mergeResult = newKeymap.add(shortcutsData)
             }
         })
     }
 }
 
 fun loadShortcutsData(fileName: String): List<ShortcutData> {
-    val file = File(fileName)
-//    val rootNode = XmlParser().parse(file)
-//    val result = rootNode.children().collect {
-//        new ShortcutData(
-//            it.@id as String,
-//        it.children().collect { it.@"first-keystroke" as String }
-//        )
-//    }
-//    return result
-    TODO()
+    fun Node.getAttribute(name: String): String? =
+        attributes.getNamedItem(name)?.nodeValue
+
+    fun Node.children(): List<Node> {
+        val result = ArrayList<Node>()
+        0.until(childNodes.length).forEach { i ->
+            result.add(childNodes.item(i))
+        }
+        return result
+    }
+
+    val builder = DocumentBuilderFactory.newInstance().newDocumentBuilder()
+    val document = builder.parse(File(fileName))
+    val keymapTag = document.children().find { it.nodeName == "keymap" } ?: error("")
+
+    return keymapTag.children()
+        .filter { it.nodeName == "action" }
+        .map {
+            ShortcutData(
+                it.getAttribute("id") ?: "",
+                it.children()
+                    .filter { it.nodeName == "keyboard-shortcut" }
+                    .map { it.getAttribute("first-keystroke") ?: "" }
+            )
+        }
 }
 
 data class ShortcutData(val actionId: String, val keystrokes: List<String>)
@@ -55,19 +70,19 @@ data class MergeShortcutsResult(
         "MergeShortcutsResult{added=$added, alreadyExisted=$alreadyExisted, conflictsByActionId=$conflictsByActionId}"
 }
 
-fun addTo(keymap: Keymap, shortcutsData: List<ShortcutData>): MergeShortcutsResult {
+fun Keymap.add(shortcutsData: List<ShortcutData>): MergeShortcutsResult {
     val result = MergeShortcutsResult()
     shortcutsData.forEach {
         it.keystrokes
-            .map { keystroke -> asKeyboardShortcut(keystroke) }
+            .map { keystroke -> keystroke.toKeyboardShortcut() }
             .filterNotNull()
             .forEach { shortcut: KeyboardShortcut ->
-                val boundActionIds = keymap.getActionIds(shortcut).toList()
+                val boundActionIds = getActionIds(shortcut).toList()
                 if (boundActionIds.contains(it.actionId)) {
                     result.alreadyExisted.add(it)
                 } else {
                     result.added.add(it)
-                    keymap.addShortcut(it.actionId, shortcut)
+                    addShortcut(it.actionId, shortcut)
                 }
 
                 (boundActionIds - it.actionId).forEach { boundActionId ->
@@ -81,28 +96,28 @@ fun addTo(keymap: Keymap, shortcutsData: List<ShortcutData>): MergeShortcutsResu
     return result
 }
 
-fun asKeyboardShortcut(keyStroke: String?): KeyboardShortcut? {
-    if (keyStroke == null || keyStroke.trim().isEmpty()) return null
+fun String?.toKeyboardShortcut(): KeyboardShortcut? {
+    if (this == null || trim().isEmpty()) return null
 
-    var firstKeystroke: KeyStroke? = null
+    val firstKeystroke: KeyStroke?
     var secondKeystroke: KeyStroke? = null
-    if (keyStroke.contains(",")) {
-        val i = keyStroke.indexOf(",")
-        firstKeystroke = KeyStrokeAdapter.getKeyStroke(keyStroke.substring(0, i).trim())
-        secondKeystroke = KeyStrokeAdapter.getKeyStroke(keyStroke.substring(i + 1).trim())
+    if (contains(",")) {
+        val i = indexOf(",")
+        firstKeystroke = KeyStrokeAdapter.getKeyStroke(substring(0, i).trim())
+        secondKeystroke = KeyStrokeAdapter.getKeyStroke(substring(i + 1).trim())
     } else {
-        firstKeystroke = KeyStrokeAdapter.getKeyStroke(keyStroke)
+        firstKeystroke = KeyStrokeAdapter.getKeyStroke(this)
     }
-    if (firstKeystroke == null) throw error("Invalid keystroke '$keyStroke'")
+    if (firstKeystroke == null) throw error("Invalid keystroke '${this}'")
     return KeyboardShortcut(firstKeystroke, secondKeystroke)
 }
 
-fun removeFrom(keymap: Keymap, shortcutsData: List<ShortcutData>) {
+fun Keymap.remove(shortcutsData: List<ShortcutData>) {
     shortcutsData.forEach {
         it.keystrokes.forEach { keystroke ->
-            val shortcut = asKeyboardShortcut(keystroke)
+            val shortcut = keystroke.toKeyboardShortcut()
             if (shortcut != null) {
-                keymap.removeShortcut(it.actionId, shortcut)
+                removeShortcut(it.actionId, shortcut)
             }
         }
     }
@@ -119,12 +134,14 @@ fun registerKeymapListener(parentDisposable: Disposable, listener: KeymapChangeL
         val oldKeymap = keymap
         keymap = newKeymap
 
-        listener.onChange(oldKeymap, newKeymap)
+        if (oldKeymap != newKeymap) {
+            listener.onChange(oldKeymap, newKeymap)
+        }
     }, parentDisposable)
 
     Disposer.register(parentDisposable, Disposable {
-        listener.onChange(keymap, null) }
-    )
+        listener.onChange(keymap, null)
+    })
 
     listener.onChange(null, keymap)
 }
