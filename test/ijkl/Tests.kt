@@ -8,8 +8,8 @@ class Tests {
     @Test fun `read keymap xml`() {
         val shortcutsData = readShortcutsData("ijkl-keymap.xml")
 
-        shortcutsData.size shouldEqual 70
-        shortcutsData.sumBy { it.shortcuts.size } shouldEqual 88
+        shortcutsData.size shouldEqual 68
+        shortcutsData.sumBy { it.shortcuts.size } shouldEqual 79
         shortcutsData.first().apply {
             actionId shouldEqual "\$Delete"
             shortcuts shouldEqual listOf("alt semicolon").map{ it.toKeyboardShortcut() }

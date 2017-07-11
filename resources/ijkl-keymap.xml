@@ -136,7 +136,6 @@
   </action>
   <action id="FileStructurePopup">
     <keyboard-shortcut first-keystroke="meta f12" />
-    <keyboard-shortcut first-keystroke="shift meta o" />
   </action>
   <action id="FindInPath">
     <keyboard-shortcut first-keystroke="shift ctrl f" />
@@ -155,27 +154,19 @@
     <mouse-shortcut keystroke="meta alt button1" />
     <keyboard-shortcut first-keystroke="ctrl meta b" />
   </action>
-  <action id="Gradle.ExecuteTask">
-    <keyboard-shortcut first-keystroke="shift meta g" />
-  </action>
   <action id="HighlightUsagesInFile">
-    <keyboard-shortcut first-keystroke="shift meta f7" />
     <keyboard-shortcut first-keystroke="alt a" />
   </action>
   <action id="MethodDown">
-    <keyboard-shortcut first-keystroke="ctrl down" />
     <keyboard-shortcut first-keystroke="alt comma" />
   </action>
   <action id="MethodUp">
-    <keyboard-shortcut first-keystroke="ctrl up" />
     <keyboard-shortcut first-keystroke="alt period" />
   </action>
   <action id="MoveStatementDown">
-    <keyboard-shortcut first-keystroke="shift meta down" />
     <keyboard-shortcut first-keystroke="shift meta alt k" />
   </action>
   <action id="MoveStatementUp">
-    <keyboard-shortcut first-keystroke="shift meta up" />
     <keyboard-shortcut first-keystroke="shift meta alt i" />
   </action>
   <action id="MoveTabRight">
@@ -203,14 +194,10 @@
     <keyboard-shortcut first-keystroke="shift meta alt o" />
   </action>
   <action id="RenameElement">
-    <keyboard-shortcut first-keystroke="shift f6" />
     <keyboard-shortcut first-keystroke="shift alt r" />
   </action>
   <action id="ReopenClosedTab">
     <keyboard-shortcut first-keystroke="shift meta t" />
-  </action>
-  <action id="ReplaceCurrentWord">
-    <keyboard-shortcut first-keystroke="shift ctrl alt r" />
   </action>
   <action id="SelectIn">
     <keyboard-shortcut first-keystroke="alt back_quote" />
