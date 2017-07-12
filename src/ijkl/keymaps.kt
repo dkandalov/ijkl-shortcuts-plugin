@@ -6,41 +6,44 @@ import com.intellij.openapi.keymap.KeymapManager
 import com.intellij.openapi.keymap.KeymapManagerListener
 import com.intellij.openapi.util.Disposer
 
-data class AddShortcutsResult(
-    val added: MutableList<ShortcutData> = ArrayList(),
-    val alreadyExisted: LinkedHashSet<ShortcutData> = LinkedHashSet(),
-    val conflictsByActionId: MutableMap<String, ShortcutData> = HashMap()
+data class IjklShortcuts(
+    val all: List<ShortcutData>,
+    val added: List<ShortcutData> = ArrayList(),
+    val alreadyExisted: Set<ShortcutData> = LinkedHashSet(),
+    val conflictsByActionId: Map<String, ShortcutData> = HashMap()
 ) {
+    fun addTo(keymap: Keymap): IjklShortcuts {
+        val added = ArrayList<ShortcutData>()
+        val alreadyExisted = LinkedHashSet<ShortcutData>()
+        val conflictsByActionId = HashMap<String, ShortcutData>()
+        all.forEach {
+            it.shortcuts.forEach { shortcut ->
+                val boundActionIds = keymap.getActionIds(shortcut).toList()
+                if (boundActionIds.contains(it.actionId)) {
+                    alreadyExisted.add(it)
+                } else {
+                    added.add(it)
+                    keymap.addShortcut(it.actionId, shortcut)
+                }
+
+                (boundActionIds - it.actionId).forEach { boundActionId ->
+                    conflictsByActionId.put(boundActionId, it)
+                }
+            }
+        }
+        return IjklShortcuts(all, added, alreadyExisted, conflictsByActionId)
+    }
+
+    fun removeFrom(keymap: Keymap) {
+        added.forEach {
+            it.shortcuts.forEach { shortcut ->
+                keymap.removeShortcut(it.actionId, shortcut)
+            }
+        }
+    }
+
     override fun toString() =
-        "AddShortcutsResult{added=$added, alreadyExisted=$alreadyExisted, conflictsByActionId=$conflictsByActionId}"
-}
-
-fun Keymap.add(shortcutsData: List<ShortcutData>): AddShortcutsResult {
-    val result = AddShortcutsResult()
-    shortcutsData.forEach {
-        it.shortcuts.forEach { shortcut ->
-            val boundActionIds = getActionIds(shortcut).toList()
-            if (boundActionIds.contains(it.actionId)) {
-                result.alreadyExisted.add(it)
-            } else {
-                result.added.add(it)
-                addShortcut(it.actionId, shortcut)
-            }
-
-            (boundActionIds - it.actionId).forEach { boundActionId ->
-                result.conflictsByActionId.put(boundActionId, it)
-            }
-        }
-    }
-    return result
-}
-
-fun Keymap.remove(shortcutsData: List<ShortcutData>) {
-    shortcutsData.forEach {
-        it.shortcuts.forEach { shortcut ->
-            removeShortcut(it.actionId, shortcut)
-        }
-    }
+        "IjklShortcuts{added=$added, alreadyExisted=$alreadyExisted, conflictsByActionId=$conflictsByActionId}"
 }
 
 interface KeymapChangeListener {

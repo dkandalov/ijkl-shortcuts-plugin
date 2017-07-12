@@ -31,22 +31,21 @@ class AppComponent: ApplicationComponent {
             }
         }
 
-        val shortcutsData = resourceInputStream("ijkl-keymap.xml").readShortcutsData()
-        var addShortcutsResult = AddShortcutsResult()
+        var shortcuts = IjklShortcuts(all = resourceInputStream("ijkl-keymap.xml").readShortcutsData())
 
         registerKeymapListener(ApplicationManager.getApplication(), object: KeymapChangeListener {
             override fun onChange(oldKeymap: Keymap?, newKeymap: Keymap?) {
-                if (oldKeymap != null) oldKeymap.remove(addShortcutsResult.added)
-                if (newKeymap != null) addShortcutsResult = newKeymap.add(shortcutsData)
+                if (oldKeymap != null) shortcuts.removeFrom(oldKeymap)
+                if (newKeymap != null) shortcuts = shortcuts.addTo(newKeymap)
 
                 if (logConflicts) {
                     logger.info(
                         "Switched keymap from '$oldKeymap' to '$newKeymap'. Shortcuts: " +
-                            "added - ${addShortcutsResult.added.size}; " +
-                            "already existed - ${addShortcutsResult.alreadyExisted.size}; " +
-                            "conflicts - ${addShortcutsResult.conflictsByActionId.size}"
+                            "added - ${shortcuts.added.size}; " +
+                            "already existed - ${shortcuts.alreadyExisted.size}; " +
+                            "conflicts - ${shortcuts.conflictsByActionId.size}"
                     )
-                    addShortcutsResult.conflictsByActionId.forEach { logger.info(it.toString()) }
+                    shortcuts.conflictsByActionId.forEach { logger.info(it.toString()) }
                 }
             }
         })
