@@ -6,7 +6,7 @@ import org.junit.Test
 
 class Tests {
     @Test fun `read keymap xml`() {
-        val shortcutsData = readShortcutsData("ijkl-keymap.xml")
+        val shortcutsData = resourceInputStream("ijkl-keymap.xml").readShortcutsData()
 
         shortcutsData.size shouldEqual 70
         shortcutsData.sumBy { it.shortcuts.size } shouldEqual 81
