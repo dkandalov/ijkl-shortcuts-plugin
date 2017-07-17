@@ -1,0 +1,1 @@
+Plugin for using `alt+ijkl` shortcuts in IntelliJ IDEs.
