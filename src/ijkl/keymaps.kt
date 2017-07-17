@@ -1,10 +1,39 @@
 package ijkl
 
 import com.intellij.openapi.Disposable
+import com.intellij.openapi.application.Application
+import com.intellij.openapi.diagnostic.Logger
 import com.intellij.openapi.keymap.Keymap
 import com.intellij.openapi.keymap.KeymapManager
 import com.intellij.openapi.keymap.KeymapManagerListener
 import com.intellij.openapi.util.Disposer
+import java.io.InputStream
+
+fun initCurrentKeymapModifier(
+    keymapInputStream: InputStream,
+    application: Application,
+    logger: Logger,
+    shouldLogConflicts: Boolean
+) {
+    var shortcuts = IjklShortcuts(all = keymapInputStream.readShortcutsData())
+
+    registerKeymapListener(application, object: KeymapChangeListener {
+        override fun onChange(oldKeymap: Keymap?, newKeymap: Keymap?) {
+            if (oldKeymap != null) shortcuts.removeFrom(oldKeymap)
+            if (newKeymap != null) shortcuts = shortcuts.addTo(newKeymap)
+
+            if (shouldLogConflicts) {
+                logger.info(
+                    "Switched keymap from '$oldKeymap' to '$newKeymap'. Shortcuts: " +
+                    "added - ${shortcuts.added.size}; " +
+                    "already existed - ${shortcuts.alreadyExisted.size}; " +
+                    "conflicts - ${shortcuts.conflictsByActionId.size}"
+                )
+                shortcuts.conflictsByActionId.forEach { logger.info(it.toString()) }
+            }
+        }
+    })
+}
 
 data class IjklShortcuts(
     val all: List<ShortcutData>,
@@ -50,7 +79,7 @@ interface KeymapChangeListener {
     fun onChange(oldKeymap: Keymap?, newKeymap: Keymap?)
 }
 
-fun registerKeymapListener(parentDisposable: Disposable, listener: KeymapChangeListener) {
+private fun registerKeymapListener(parentDisposable: Disposable, listener: KeymapChangeListener) {
     val keymapManager = KeymapManager.getInstance()
     var keymap = keymapManager.activeKeymap
     keymapManager.addKeymapManagerListener(KeymapManagerListener { newKeymap ->
