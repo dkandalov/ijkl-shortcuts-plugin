@@ -45,18 +45,18 @@ data class IjklShortcuts(
         val added = ArrayList<ShortcutData>()
         val alreadyExisted = LinkedHashSet<ShortcutData>()
         val conflictsByActionId = HashMap<String, ShortcutData>()
-        all.forEach {
-            it.shortcuts.forEach { shortcut ->
+        all.forEach { shortcutData ->
+            shortcutData.shortcuts.forEach { shortcut ->
                 val boundActionIds = keymap.getActionIds(shortcut).toList()
-                if (boundActionIds.contains(it.actionId)) {
-                    alreadyExisted.add(it)
-                } else {
-                    added.add(it)
-                    keymap.addShortcut(it.actionId, shortcut)
-                }
+                val conflictingActionIds = boundActionIds - shortcutData.actionId
 
-                (boundActionIds - it.actionId).forEach { boundActionId ->
-                    conflictsByActionId.put(boundActionId, it)
+                if (boundActionIds.contains(shortcutData.actionId)) {
+                    alreadyExisted.add(shortcutData)
+                } else if (conflictingActionIds.isNotEmpty()) {
+                    conflictingActionIds.forEach { conflictsByActionId.put(it, shortcutData) }
+                } else {
+                    added.add(shortcutData)
+                    keymap.addShortcut(shortcutData.actionId, shortcut)
                 }
             }
         }
@@ -64,9 +64,9 @@ data class IjklShortcuts(
     }
 
     fun removeFrom(keymap: Keymap) {
-        added.forEach {
-            it.shortcuts.forEach { shortcut ->
-                keymap.removeShortcut(it.actionId, shortcut)
+        added.forEach { (actionId, shortcuts) ->
+            shortcuts.forEach { shortcut ->
+                keymap.removeShortcut(actionId, shortcut)
             }
         }
     }
