@@ -11,9 +11,9 @@ import java.io.InputStream
 
 fun initCurrentKeymapModifier(
     keymapInputStream: InputStream,
+    shouldLogConflicts: Boolean,
     application: Application,
-    logger: Logger,
-    shouldLogConflicts: Boolean
+    logger: Logger
 ) {
     var shortcuts = IjklShortcuts(all = keymapInputStream.readShortcutsData())
 

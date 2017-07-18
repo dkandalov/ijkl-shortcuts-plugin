@@ -26,7 +26,7 @@ class Tests {
     @Test fun `copy layout from resources to a folder`() {
         val tempDir = FileUtil.createTempDirectory("", "", true)
 
-        copyKeyLayoutTo(tempDir.absolutePath)
+        copyKeyLayoutTo(fromResource = "ijkl-keys.bundle", toDir = tempDir.absolutePath)
 
         allFilesIn(tempDir) shouldEqual allFilesIn(File("resources/ijkl-keys.bundle"))
     }

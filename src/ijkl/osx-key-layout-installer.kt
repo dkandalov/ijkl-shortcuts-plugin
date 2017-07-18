@@ -1,10 +1,6 @@
 package ijkl
 
-import com.intellij.notification.Notification
 import com.intellij.notification.NotificationListener
-import com.intellij.notification.NotificationListener.URL_OPENING_LISTENER
-import com.intellij.notification.NotificationType
-import com.intellij.notification.Notifications
 import com.intellij.openapi.application.Application
 import com.intellij.openapi.diagnostic.Logger
 import com.intellij.openapi.util.SystemInfo
@@ -12,11 +8,14 @@ import com.intellij.openapi.util.io.FileUtil
 import java.io.File
 import java.io.FileOutputStream
 
-private val ijklBundleName = "ijkl-keys.bundle"
-private val systemPathToBundle = "/Library/Keyboard Layouts/$ijklBundleName"
-private val userPathToBundle = "${System.getProperty("user.home")}/Library/Keyboard Layouts/$ijklBundleName"
 
-fun initOsxKeyLayoutInstaller(application: Application, logger: Logger) {
+fun initOsxKeyLayoutInstaller(
+    bundleName: String,
+    systemPathToBundle: String,
+    userPathToBundle: String,
+    application: Application,
+    logger: Logger
+) {
     if (!SystemInfo.isMac || userPathToBundle.dirExists() || systemPathToBundle.dirExists()) return
 
     application.invokeLater {
@@ -27,7 +26,7 @@ fun initOsxKeyLayoutInstaller(application: Application, logger: Logger) {
         application.showNotification(message, NotificationListener { notification, _ ->
             try {
 
-                copyKeyLayoutTo(userPathToBundle)
+                copyKeyLayoutTo(bundleName, userPathToBundle)
                 notification.expire()
                 application.showNotification(
                     "The bundle with input sources was copied to '$userPathToBundle'. " +
@@ -42,17 +41,9 @@ fun initOsxKeyLayoutInstaller(application: Application, logger: Logger) {
     }
 }
 
-private fun Application.showNotification(message: String, listener: NotificationListener = URL_OPENING_LISTENER) {
-    val title = ""
-    val groupDisplayId = "IJKL Shortcuts"
-    messageBus
-        .syncPublisher(Notifications.TOPIC)
-        .notify(Notification(groupDisplayId, title, message, NotificationType.INFORMATION, listener))
-}
-
-fun copyKeyLayoutTo(dir: String) {
+fun copyKeyLayoutTo(fromResource: String, toDir: String) {
     // List directories and files manually because there seems to be no easy way to list files/dirs in classloader resources.
-    FileUtil.createDirectory(File("$dir/Contents/Resources/English.lproj"))
+    FileUtil.createDirectory(File("$toDir/Contents/Resources/English.lproj"))
     val files = listOf(
         "Contents/Info.plist",
         "Contents/version.plist",
@@ -64,8 +55,8 @@ fun copyKeyLayoutTo(dir: String) {
     )
     files.forEach { fileName ->
         FileUtil.copy(
-            resourceInputStream("$ijklBundleName/$fileName"),
-            FileOutputStream("$dir/$fileName")
+            resourceInputStream("$fromResource/$fileName"),
+            FileOutputStream("$toDir/$fileName")
         )
     }
 }
