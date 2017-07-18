@@ -8,13 +8,16 @@ import java.io.InputStream
 
 class AppComponent: ApplicationComponent {
     override fun initComponent() {
+        val logger = Logger.getInstance(javaClass.canonicalName)
+        val application = ApplicationManager.getApplication()
         initOsxKeyLayoutInstaller(
-            ApplicationManager.getApplication()
+            application,
+            logger
         )
         initCurrentKeymapModifier(
             resourceInputStream("ijkl-keymap.xml"),
-            ApplicationManager.getApplication(),
-            Logger.getInstance(javaClass.canonicalName),
+            application,
+            logger,
             System.getProperty("ijkl.log.shortcut.conflicts").toBoolean()
         )
     }
