@@ -8,8 +8,6 @@ import java.io.InputStream
 import javax.swing.KeyStroke
 import javax.xml.parsers.DocumentBuilderFactory
 
-data class ShortcutData(val actionId: String, val shortcuts: List<Shortcut>)
-
 fun InputStream.readShortcutsData(): List<ShortcutData> {
     return use { readShortcutsDataFrom(this) }
 }

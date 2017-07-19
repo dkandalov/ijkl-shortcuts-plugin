@@ -1,6 +1,8 @@
 package ijkl
 
 import com.intellij.openapi.Disposable
+import com.intellij.openapi.actionSystem.ActionManager
+import com.intellij.openapi.actionSystem.Shortcut
 import com.intellij.openapi.application.Application
 import com.intellij.openapi.diagnostic.Logger
 import com.intellij.openapi.keymap.Keymap
@@ -11,9 +13,9 @@ import java.io.InputStream
 
 fun initCurrentKeymapModifier(
     keymapInputStream: InputStream,
-    shouldLogConflicts: Boolean,
     application: Application,
-    logger: Logger
+    logger: Logger,
+    actionManager: ActionManager = ActionManager.getInstance()
 ) {
     var shortcuts = IjklShortcuts(all = keymapInputStream.readShortcutsData())
 
@@ -22,29 +24,44 @@ fun initCurrentKeymapModifier(
             if (oldKeymap != null) shortcuts.removeFrom(oldKeymap)
             if (newKeymap != null) shortcuts = shortcuts.addTo(newKeymap)
 
-            if (shouldLogConflicts) {
-                logger.info(
-                    "Switched keymap from '$oldKeymap' to '$newKeymap'. Shortcuts: " +
-                    "added - ${shortcuts.added.size}; " +
-                    "already existed - ${shortcuts.alreadyExisted.size}; " +
-                    "conflicts - ${shortcuts.conflictsByActionId.size}"
+            if (shortcuts.conflicts.isNotEmpty()) {
+                val conflictsDescription = shortcuts
+                    .conflicts.entries
+                    .map { (shortcutData, conflictingActionIds) ->
+                        val actionsDescription = conflictingActionIds
+                            .map { id -> actionManager.actionText(id) }
+                            .joinToString(", ", "[", "]")
+                        actionManager.actionText(shortcutData.actionId) + " " + shortcutData.shortcuts + " conflicts with: " + actionsDescription
+                    }
+                    .joinToString("<br/>")
+
+                application.showNotification(
+                    "There were conflicts between IJKL shortcuts and current keymap.<br/>" +
+                    "In particular: " + conflictsDescription
                 )
-                shortcuts.conflictsByActionId.forEach { logger.info(it.toString()) }
             }
+            logger.info(
+                "Switched keymap from '$oldKeymap' to '$newKeymap'. Shortcuts: " +
+                "added - ${shortcuts.added.size}; " +
+                "already existed - ${shortcuts.alreadyExisted.size}; " +
+                "conflicts - ${shortcuts.conflicts.values.sumBy { it.size }}"
+            )
         }
     })
 }
+
+data class ShortcutData(val actionId: String, val shortcuts: List<Shortcut>)
 
 data class IjklShortcuts(
     val all: List<ShortcutData>,
     val added: List<ShortcutData> = ArrayList(),
     val alreadyExisted: Set<ShortcutData> = LinkedHashSet(),
-    val conflictsByActionId: Map<String, ShortcutData> = HashMap()
+    val conflicts: Map<ShortcutData, List<String>> = HashMap()
 ) {
     fun addTo(keymap: Keymap): IjklShortcuts {
         val added = ArrayList<ShortcutData>()
         val alreadyExisted = LinkedHashSet<ShortcutData>()
-        val conflictsByActionId = HashMap<String, ShortcutData>()
+        val conflicts = HashMap<ShortcutData, List<String>>()
         all.forEach { shortcutData ->
             shortcutData.shortcuts.forEach { shortcut ->
                 val boundActionIds = keymap.getActionIds(shortcut).toList()
@@ -53,14 +70,14 @@ data class IjklShortcuts(
                 if (boundActionIds.contains(shortcutData.actionId)) {
                     alreadyExisted.add(shortcutData)
                 } else if (conflictingActionIds.isNotEmpty()) {
-                    conflictingActionIds.forEach { conflictsByActionId.put(it, shortcutData) }
+                    conflicts.put(shortcutData, conflictingActionIds)
                 } else {
                     added.add(shortcutData)
                     keymap.addShortcut(shortcutData.actionId, shortcut)
                 }
             }
         }
-        return IjklShortcuts(all, added, alreadyExisted, conflictsByActionId)
+        return IjklShortcuts(all, added, alreadyExisted, conflicts)
     }
 
     fun removeFrom(keymap: Keymap) {
@@ -72,7 +89,7 @@ data class IjklShortcuts(
     }
 
     override fun toString() =
-        "IjklShortcuts{added=$added, alreadyExisted=$alreadyExisted, conflictsByActionId=$conflictsByActionId}"
+        "IjklShortcuts{added=$added, alreadyExisted=$alreadyExisted, conflictsByActionId=$conflicts}"
 }
 
 interface KeymapChangeListener {

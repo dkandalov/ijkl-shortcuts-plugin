@@ -6,7 +6,7 @@ import com.intellij.openapi.diagnostic.Logger
 
 class AppComponent: ApplicationComponent {
     override fun initComponent() {
-        val logger = Logger.getInstance(javaClass.canonicalName)
+        val logger = Logger.getInstance(this.javaClass.canonicalName)
         val application = ApplicationManager.getApplication()
 
         initOsxKeyLayoutInstaller(
@@ -19,7 +19,6 @@ class AppComponent: ApplicationComponent {
 
         initCurrentKeymapModifier(
             keymapInputStream = resourceInputStream("ijkl-keymap.xml"),
-            shouldLogConflicts = System.getProperty("ijkl.log.shortcut.conflicts").toBoolean(),
             application = application,
             logger = logger
         )
