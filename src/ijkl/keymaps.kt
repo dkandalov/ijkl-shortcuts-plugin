@@ -24,6 +24,12 @@ fun initCurrentKeymapModifier(
             if (oldKeymap != null) shortcuts.removeFrom(oldKeymap)
             if (newKeymap != null) shortcuts = shortcuts.addTo(newKeymap)
 
+            logger.info(
+                "Switched keymap from '$oldKeymap' to '$newKeymap'. Shortcuts: " +
+                "added - ${shortcuts.added.size}; " +
+                "already existed - ${shortcuts.alreadyExisted.size}; " +
+                "conflicts - ${shortcuts.conflicts.values.sumBy { it.size }}"
+            )
             if (shortcuts.conflicts.isNotEmpty()) {
                 val conflictsDescription = shortcuts
                     .conflicts.entries
@@ -31,21 +37,15 @@ fun initCurrentKeymapModifier(
                         val actionsDescription = conflictingActionIds
                             .map { id -> actionManager.actionText(id) }
                             .joinToString(", ", "[", "]")
-                        actionManager.actionText(shortcutData.actionId) + " " + shortcutData.shortcuts + " conflicts with: " + actionsDescription
+                        "${shortcutData.shortcuts} ${actionManager.actionText(shortcutData.actionId)} conflicts with: $actionsDescription"
                     }
-                    .joinToString("<br/>")
 
-                application.showNotification(
+                val htmlMessage =
                     "There were conflicts between IJKL shortcuts and current keymap.<br/>" +
-                    "In particular: " + conflictsDescription
-                )
+                    "In particular: " + conflictsDescription.joinToString("<br/>")
+                application.showNotification(htmlMessage)
+                logger.info(htmlMessage.replace("<br/>", "\n"))
             }
-            logger.info(
-                "Switched keymap from '$oldKeymap' to '$newKeymap'. Shortcuts: " +
-                "added - ${shortcuts.added.size}; " +
-                "already existed - ${shortcuts.alreadyExisted.size}; " +
-                "conflicts - ${shortcuts.conflicts.values.sumBy { it.size }}"
-            )
         }
     })
 }
@@ -62,9 +62,15 @@ data class IjklShortcuts(
         val added = ArrayList<ShortcutData>()
         val alreadyExisted = LinkedHashSet<ShortcutData>()
         val conflicts = HashMap<ShortcutData, List<String>>()
+
+        // Collect bound action ids before modifying keymap.
+        val boundActionIdsByShortcut: Map<Shortcut, List<String>> = all
+            .flatMap { it.shortcuts }.distinct()
+            .associate{ Pair(it, keymap.getActionIds(it).toList()) }
+
         all.forEach { shortcutData ->
             shortcutData.shortcuts.forEach { shortcut ->
-                val boundActionIds = keymap.getActionIds(shortcut).toList()
+                val boundActionIds = boundActionIdsByShortcut[shortcut]!!
                 val conflictingActionIds = boundActionIds - shortcutData.actionId
 
                 if (boundActionIds.contains(shortcutData.actionId)) {

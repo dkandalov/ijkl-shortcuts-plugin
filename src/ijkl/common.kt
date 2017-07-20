@@ -23,4 +23,4 @@ fun Application.showNotification(message: String, listener: NotificationListener
 }
 
 fun ActionManager.actionText(actionId: String) =
-    getAction(actionId).templatePresentation.text ?: actionId
+    getAction(actionId)?.templatePresentation?.text ?: actionId
