@@ -45,9 +45,6 @@
     <action id="EditorDownWithSelection">
         <keyboard-shortcut first-keystroke="shift alt k"/>
     </action>
-    <action id="EditorEscape">
-        <keyboard-shortcut first-keystroke="alt j"/>
-    </action>
     <action id="EditorLeft">
         <keyboard-shortcut first-keystroke="alt n"/>
     </action>
@@ -100,7 +97,7 @@
         <keyboard-shortcut first-keystroke="alt y"/>
     </action>
     <action id="EditorSelectWord">
-        <keyboard-shortcut first-keystroke="alt e" />
+        <keyboard-shortcut first-keystroke="alt w" />
     </action>
     <action id="EvaluateExpression">
         <keyboard-shortcut first-keystroke="shift alt e"/>
@@ -140,17 +137,9 @@
     <action id="MoveTabRight">
         <keyboard-shortcut first-keystroke="shift ctrl close_bracket"/>
     </action>
-    <action id="NextDiff">
-        <keyboard-shortcut first-keystroke="alt down"/>
-        <keyboard-shortcut first-keystroke="shift meta k"/>
-    </action>
     <action id="NextTab">
         <keyboard-shortcut first-keystroke="alt 9"/>
         <keyboard-shortcut first-keystroke="shift meta close_bracket"/>
-    </action>
-    <action id="PreviousDiff">
-        <keyboard-shortcut first-keystroke="alt up"/>
-        <keyboard-shortcut first-keystroke="shift meta i"/>
     </action>
     <action id="PreviousTab">
         <keyboard-shortcut first-keystroke="alt 8"/>
@@ -164,9 +153,6 @@
     </action>
     <action id="ReopenClosedTab">
         <keyboard-shortcut first-keystroke="shift meta t"/>
-    </action>
-    <action id="SelectIn">
-        <keyboard-shortcut first-keystroke="alt back_quote"/>
     </action>
     <action id="ShowUsages">
         <keyboard-shortcut first-keystroke="alt s"/>
