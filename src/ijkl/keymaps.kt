@@ -42,7 +42,7 @@ fun initCurrentKeymapModifier(
 
                 val htmlMessage =
                     "There were conflicts between IJKL shortcuts and current keymap.<br/>" +
-                    "In particular: " + conflictsDescription.joinToString("<br/>")
+                    "In particular:<br/>" + conflictsDescription.joinToString("<br/>")
                 application.showNotification(htmlMessage)
                 logger.info(htmlMessage.replace("<br/>", "\n"))
             }
@@ -75,11 +75,13 @@ data class IjklShortcuts(
 
                 if (boundActionIds.contains(shortcutData.actionId)) {
                     alreadyExisted.add(shortcutData)
-                } else if (conflictingActionIds.isNotEmpty()) {
-                    conflicts.put(shortcutData, conflictingActionIds)
                 } else {
                     added.add(shortcutData)
                     keymap.addShortcut(shortcutData.actionId, shortcut)
+                }
+
+                if (conflictingActionIds.isNotEmpty()) {
+                    conflicts.put(shortcutData, conflictingActionIds)
                 }
             }
         }
