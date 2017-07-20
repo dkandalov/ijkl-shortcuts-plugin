@@ -2,32 +2,8 @@
     <action id="$Delete">
         <keyboard-shortcut first-keystroke="alt semicolon"/>
     </action>
-    <action id="ActivateChangesToolWindow">
-        <keyboard-shortcut first-keystroke="alt 2"/>
-    </action>
-    <action id="ActivateDebugToolWindow">
-        <keyboard-shortcut first-keystroke="alt 4"/>
-    </action>
-    <action id="ActivatePluginsToolWindow">
-        <keyboard-shortcut first-keystroke="meta 5"/>
-    </action>
-    <action id="ActivateProjectToolWindow">
-        <keyboard-shortcut first-keystroke="alt 1"/>
-    </action>
-    <action id="ActivateRunToolWindow">
-        <keyboard-shortcut first-keystroke="alt 3"/>
-    </action>
-    <action id="ActivateVersionControlToolWindow">
-        <keyboard-shortcut first-keystroke="alt 2"/>
-    </action>
     <action id="Back">
         <keyboard-shortcut first-keystroke="alt b"/>
-    </action>
-    <action id="BuildArtifact">
-        <keyboard-shortcut first-keystroke="shift meta alt b"/>
-    </action>
-    <action id="CloseAllEditorsButActive">
-        <keyboard-shortcut first-keystroke="shift alt q"/>
     </action>
     <action id="CloseEditor">
         <keyboard-shortcut first-keystroke="alt q"/>
@@ -114,15 +90,6 @@
     <action id="EditorRightWithSelection">
         <keyboard-shortcut first-keystroke="shift alt m"/>
     </action>
-    <action id="EditorToggleColumnMode">
-        <keyboard-shortcut first-keystroke="shift meta back_slash"/>
-    </action>
-    <action id="EditorToggleInsertState">
-        <keyboard-shortcut first-keystroke="shift meta quote"/>
-    </action>
-    <action id="EditorToggleUseSoftWraps">
-        <keyboard-shortcut first-keystroke="shift meta alt w"/>
-    </action>
     <action id="EditorUp">
         <keyboard-shortcut first-keystroke="alt i"/>
     </action>
@@ -151,9 +118,6 @@
     <action id="Forward">
         <keyboard-shortcut first-keystroke="shift alt b"/>
     </action>
-    <action id="Git.Pull">
-        <keyboard-shortcut first-keystroke="ctrl p"/>
-    </action>
     <action id="GotoImplementation">
         <mouse-shortcut keystroke="meta alt button1"/>
         <keyboard-shortcut first-keystroke="ctrl meta b"/>
@@ -177,7 +141,6 @@
         <keyboard-shortcut first-keystroke="shift ctrl close_bracket"/>
     </action>
     <action id="NextDiff">
-        <keyboard-shortcut first-keystroke="f7"/>
         <keyboard-shortcut first-keystroke="alt down"/>
         <keyboard-shortcut first-keystroke="shift meta k"/>
     </action>
@@ -186,7 +149,6 @@
         <keyboard-shortcut first-keystroke="shift meta close_bracket"/>
     </action>
     <action id="PreviousDiff">
-        <keyboard-shortcut first-keystroke="shift f7"/>
         <keyboard-shortcut first-keystroke="alt up"/>
         <keyboard-shortcut first-keystroke="shift meta i"/>
     </action>
@@ -206,14 +168,8 @@
     <action id="SelectIn">
         <keyboard-shortcut first-keystroke="alt back_quote"/>
     </action>
-    <action id="ShowNavBar">
-        <keyboard-shortcut first-keystroke="ctrl 1"/>
-    </action>
     <action id="ShowUsages">
         <keyboard-shortcut first-keystroke="alt s"/>
-    </action>
-    <action id="ToolWindowsGroup">
-        <keyboard-shortcut first-keystroke="alt tab"/>
     </action>
     <action id="Unwrap">
         <keyboard-shortcut first-keystroke="shift ctrl back_space"/>
