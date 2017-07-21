@@ -8,6 +8,7 @@ import com.intellij.openapi.diagnostic.Logger
 import com.intellij.openapi.keymap.Keymap
 import com.intellij.openapi.keymap.KeymapManager
 import com.intellij.openapi.keymap.KeymapManagerListener
+import com.intellij.openapi.keymap.KeymapUtil.getShortcutText
 import com.intellij.openapi.util.Disposer
 import java.io.InputStream
 
@@ -34,10 +35,13 @@ fun initCurrentKeymapModifier(
                 val conflictsDescription = shortcuts
                     .conflicts.entries
                     .map { (shortcutData, conflictingActionIds) ->
+                        val shortcutsDescription = shortcutData.shortcuts.map { getShortcutText(it) }
+                        val ijklAction = actionManager.actionText(shortcutData.actionId)
                         val actionsDescription = conflictingActionIds
                             .map { id -> actionManager.actionText(id) }
                             .joinToString(", ", "[", "]")
-                        "${shortcutData.shortcuts} ${actionManager.actionText(shortcutData.actionId)} conflicts with: $actionsDescription"
+
+                        "$shortcutsDescription '$ijklAction' conflicts with: $actionsDescription"
                     }
 
                 val htmlMessage =
