@@ -24,4 +24,8 @@ class AppComponent: ApplicationComponent {
             logger = logger
         )
     }
+
+    override fun disposeComponent() {}
+
+    override fun getComponentName() = "Pomodoro"
 }
