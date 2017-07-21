@@ -21,8 +21,7 @@ fun initOsxKeyLayoutInstaller(
     application.invokeLater {
         val message =
             "Because of JDK limitations alt+ijkl shortcuts need keyboard input source with no dead key mapping for alt+[letter] shortcuts. " +
-            "<a href='https://github.com/dkandalov/ijkl-shortcuts-plugin/blob/master/readme.md'>" +
-            "Click here</a> to install bundle with 'U.S. - IJKL' and 'British - IJKL' input sources. "
+            "<a href=''>Click here</a> to install bundle with 'U.S. - IJKL' and 'British - IJKL' input sources. "
         application.showNotification(message, NotificationListener { notification, _ ->
             try {
 
@@ -31,7 +30,7 @@ fun initOsxKeyLayoutInstaller(
                 application.showNotification(
                     "The bundle with input sources was copied to '$userPathToBundle'. " +
                     "You will need to add it manually in OSX 'System Preferences -> Keyboard -> Input Sources'. " +
-                    "See <a href=''>plugin readme</a> for more details."
+                    "See <a href='https://github.com/dkandalov/ijkl-shortcuts-plugin/blob/master/readme.md'>plugin readme</a> for more details."
                 )
 
             } catch(e: Exception) {
