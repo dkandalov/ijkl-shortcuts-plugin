@@ -8,18 +8,30 @@ import java.io.File
 import java.util.regex.Pattern
 
 class Tests {
-    @Test fun `read keymap xml`() {
-        val shortcutsData = resourceInputStream("ijkl-keymap.xml").readShortcutsData()
+    @Test fun `win, linux keymap xml`() {
+        resourceInputStream("ijkl-keymap.xml").readShortcutsData().validate(
+            amountOfActions = 51,
+            amountOfShortcuts = 54
+        )
+    }
 
-        shortcutsData.size shouldEqual 52
-        shortcutsData.sumBy { it.shortcuts.size } shouldEqual 56
-        shortcutsData.first().apply {
+    @Test fun `osx keymap xml`() {
+        resourceInputStream("ijkl-osx-keymap.xml").readShortcutsData().validate(
+            amountOfActions = 51,
+            amountOfShortcuts = 55
+        )
+    }
+
+    private fun List<ShortcutData>.validate(amountOfActions: Int, amountOfShortcuts: Int) {
+        size shouldEqual amountOfActions
+        sumBy { it.shortcuts.size } shouldEqual amountOfShortcuts
+        first().apply {
             actionId shouldEqual "\$Delete"
-            shortcuts shouldEqual listOf("alt semicolon").map{ it.toKeyboardShortcut() }
+            shortcuts shouldEqual listOf("alt semicolon").map { it.toKeyboardShortcut() }
         }
-        shortcutsData.last().apply {
+        last().apply {
             actionId shouldEqual "Unwrap"
-            shortcuts shouldEqual listOf("shift ctrl back_space").map{ it.toKeyboardShortcut() }
+            shortcuts shouldEqual listOf("shift ctrl back_space").map { it.toKeyboardShortcut() }
         }
     }
 

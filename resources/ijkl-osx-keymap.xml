@@ -31,7 +31,7 @@
         <keyboard-shortcut first-keystroke="alt quote"/>
     </action>
     <action id="EditorCompleteStatement">
-        <keyboard-shortcut first-keystroke="ctrl l"/>
+        <keyboard-shortcut first-keystroke="meta l"/>
     </action>
     <action id="EditorDelete">
         <keyboard-shortcut first-keystroke="alt semicolon"/>
@@ -104,6 +104,7 @@
     </action>
     <action id="FindInPath">
         <keyboard-shortcut first-keystroke="shift ctrl f"/>
+        <keyboard-shortcut first-keystroke="shift meta f"/>
     </action>
     <action id="FindUsages">
         <keyboard-shortcut first-keystroke="shift alt s"/>
@@ -112,8 +113,8 @@
         <keyboard-shortcut first-keystroke="shift alt b"/>
     </action>
     <action id="GotoImplementation">
-        <mouse-shortcut keystroke="ctrl alt button1"/>
-        <keyboard-shortcut first-keystroke="ctrl alt b"/>
+        <mouse-shortcut keystroke="meta alt button1"/>
+        <keyboard-shortcut first-keystroke="ctrl meta b"/>
     </action>
     <action id="HighlightUsagesInFile">
         <keyboard-shortcut first-keystroke="alt a"/>
@@ -125,30 +126,30 @@
         <keyboard-shortcut first-keystroke="alt period"/>
     </action>
     <action id="MoveStatementDown">
-        <keyboard-shortcut first-keystroke="shift ctrl alt k"/>
+        <keyboard-shortcut first-keystroke="shift meta alt k"/>
     </action>
     <action id="MoveStatementUp">
-        <keyboard-shortcut first-keystroke="shift ctrl alt i"/>
+        <keyboard-shortcut first-keystroke="shift meta alt i"/>
     </action>
     <action id="MoveTabRight">
         <keyboard-shortcut first-keystroke="shift ctrl close_bracket"/>
     </action>
     <action id="NextTab">
         <keyboard-shortcut first-keystroke="alt 9"/>
-        <keyboard-shortcut first-keystroke="shift ctrl close_bracket"/>
+        <keyboard-shortcut first-keystroke="shift meta close_bracket"/>
     </action>
     <action id="PreviousTab">
         <keyboard-shortcut first-keystroke="alt 8"/>
-        <keyboard-shortcut first-keystroke="shift ctrl open_bracket"/>
+        <keyboard-shortcut first-keystroke="shift meta open_bracket"/>
     </action>
     <action id="RecentProjectListGroup">
-        <keyboard-shortcut first-keystroke="shift ctrl alt o"/>
+        <keyboard-shortcut first-keystroke="shift meta alt o"/>
     </action>
     <action id="RenameElement">
         <keyboard-shortcut first-keystroke="shift alt r"/>
     </action>
     <action id="ReopenClosedTab">
-        <keyboard-shortcut first-keystroke="shift ctrl t"/>
+        <keyboard-shortcut first-keystroke="shift meta t"/>
     </action>
     <action id="ShowUsages">
         <keyboard-shortcut first-keystroke="alt s"/>
