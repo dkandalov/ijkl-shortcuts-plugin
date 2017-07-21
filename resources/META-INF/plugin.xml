@@ -5,10 +5,9 @@
     <vendor email="dmitry.kandalov@gmail.com" url="https://github.com/dkandalov/ijkl-shortcuts-plugin">Dmitry Kandalov</vendor>
 
     <description><![CDATA[
-        Plugin which imposes IJKL navigation shortcuts on currently open keymap.
+        Plugin which imposes alt+IJKL navigation shortcuts on currently open keymap.
         The idea is that these shortcuts are more ergonomic for navigation and editing than using keyboard arrows.
-        <br/>
-        Example of some shortcuts:
+        Some of the shortcuts:
         <ul>
             <li>alt-i - line up</li>
             <li>alt-j - move to previous word</li>
@@ -22,6 +21,9 @@
             <li>alt-d - delete next word</li>
             <li>alt-; - delete next character</li>
         </ul>
+        Note that in OSX you will need to configure keyboard input source without dead keys.
+        This can be done after plugin startup in notification popup.
+        <br/>
         For more details see <a href="https://github.com/dkandalov/ijkl-shortcuts-plugin">GitHub</a>.
         <br/><br/>
     ]]></description>
