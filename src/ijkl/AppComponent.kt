@@ -1,5 +1,7 @@
 package ijkl
 
+import com.intellij.notification.NotificationDisplayType.STICKY_BALLOON
+import com.intellij.notification.NotificationsConfiguration
 import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.components.ApplicationComponent
 import com.intellij.openapi.diagnostic.Logger
@@ -9,6 +11,7 @@ class AppComponent: ApplicationComponent {
     override fun initComponent() {
         val logger = Logger.getInstance(this.javaClass.canonicalName)
         val application = ApplicationManager.getApplication()
+        NotificationsConfiguration.getNotificationsConfiguration().register(groupDisplayId, STICKY_BALLOON, true)
 
         initOsxKeyLayoutInstaller(
             bundleName = "ijkl-keys.bundle",

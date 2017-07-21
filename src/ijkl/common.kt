@@ -1,21 +1,17 @@
 package ijkl
 
 import com.intellij.notification.Notification
-import com.intellij.notification.NotificationDisplayType.STICKY_BALLOON
 import com.intellij.notification.NotificationListener
 import com.intellij.notification.NotificationListener.URL_OPENING_LISTENER
 import com.intellij.notification.NotificationType.INFORMATION
 import com.intellij.notification.Notifications
-import com.intellij.notification.NotificationsConfiguration
 import com.intellij.openapi.actionSystem.ActionManager
 import com.intellij.openapi.application.Application
 import java.io.File
 import java.io.InputStream
 
+val groupDisplayId = "IJKL Shortcuts"
 private val notificationTitle = "IJKL Shortcuts plugin"
-private val groupDisplayId = "IJKL Shortcuts".apply {
-    NotificationsConfiguration.getNotificationsConfiguration().register(this, STICKY_BALLOON, true)
-}
 
 fun resourceInputStream(fileName: String): InputStream =
     if (File(fileName).exists()) File(fileName).inputStream()

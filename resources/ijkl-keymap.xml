@@ -11,20 +11,11 @@
     <action id="CodeCompletion">
         <keyboard-shortcut first-keystroke="alt quote"/>
     </action>
-    <action id="CommaShortcut">
-        <keyboard-shortcut first-keystroke="shift alt comma"/>
-    </action>
-    <action id="CompareClipboardWithSelection">
-        <keyboard-shortcut first-keystroke="shift alt c"/>
-    </action>
     <action id="EditSource">
         <keyboard-shortcut first-keystroke="alt h"/>
     </action>
     <action id="Editor Delete">
         <keyboard-shortcut first-keystroke="alt semicolon"/>
-    </action>
-    <action id="EditorBackSpace">
-        <keyboard-shortcut first-keystroke="shift alt semicolon"/>
     </action>
     <action id="EditorChooseLookupItemReplace">
         <keyboard-shortcut first-keystroke="alt l"/>
@@ -69,12 +60,6 @@
     <action id="EditorNextWordWithSelection">
         <keyboard-shortcut first-keystroke="shift alt l"/>
     </action>
-    <action id="EditorPageDown">
-        <keyboard-shortcut first-keystroke="alt f"/>
-    </action>
-    <action id="EditorPageUp">
-        <keyboard-shortcut first-keystroke="alt w"/>
-    </action>
     <action id="EditorPreviousWord">
         <keyboard-shortcut first-keystroke="alt j"/>
     </action>
@@ -98,6 +83,9 @@
     </action>
     <action id="EditorSelectWord">
         <keyboard-shortcut first-keystroke="alt w" />
+    </action>
+    <action id="EditorUnSelectWord">
+        <keyboard-shortcut first-keystroke="shift alt w" />
     </action>
     <action id="EvaluateExpression">
         <keyboard-shortcut first-keystroke="shift alt e"/>
@@ -129,9 +117,6 @@
     </action>
     <action id="MoveStatementUp">
         <keyboard-shortcut first-keystroke="shift ctrl alt i"/>
-    </action>
-    <action id="MoveTabRight">
-        <keyboard-shortcut first-keystroke="shift ctrl close_bracket"/>
     </action>
     <action id="NextTab">
         <keyboard-shortcut first-keystroke="alt 9"/>

@@ -10,15 +10,15 @@ import java.util.regex.Pattern
 class Tests {
     @Test fun `win, linux keymap xml`() {
         resourceInputStream("ijkl-keymap.xml").readShortcutsData().validate(
-            amountOfActions = 51,
-            amountOfShortcuts = 54
+            amountOfActions = 46,
+            amountOfShortcuts = 49
         )
     }
 
     @Test fun `osx keymap xml`() {
         resourceInputStream("ijkl-osx-keymap.xml").readShortcutsData().validate(
-            amountOfActions = 51,
-            amountOfShortcuts = 55
+            amountOfActions = 46,
+            amountOfShortcuts = 50
         )
     }
 
