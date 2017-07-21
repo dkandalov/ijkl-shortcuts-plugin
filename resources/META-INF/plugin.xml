@@ -1,24 +1,41 @@
 <idea-plugin>
-    <id>ijkl</id>
+    <id>ijkl-shortcuts</id>
     <name>IJKL Shortctus</name>
     <version>1.0</version>
-    <vendor email="dmitry.kandalov@gmail.com" url="http://www.yourcompany.com">Dmitry Kandalov</vendor>
+    <vendor email="dmitry.kandalov@gmail.com" url="https://github.com/dkandalov/ijkl-shortcuts-plugin">Dmitry Kandalov</vendor>
+
+    <description><![CDATA[
+        Plugin which imposes IJKL navigation shortcuts on currently open keymap.
+        The idea is that these shortcuts are more ergonomic for navigation and editing than using keyboard arrows.
+        <br/>
+        Example of some shortcuts:
+        <ul>
+            <li>alt-i - line up</li>
+            <li>alt-j - move to previous word</li>
+            <li>alt-k - line down</li>
+            <li>alt-l - move to next word</li>
+            <li>alt-n - move left</li>
+            <li>alt-m - move right</li>
+            <li>alt-u - move to start of line</li>
+            <li>alt-o - move to end of line</li>
+            <li>alt-shift-ijklmnuo - navigate with selection</li>
+            <li>alt-d - delete next word</li>
+            <li>alt-; - delete next character</li>
+        </ul>
+        For more details see <a href="https://github.com/dkandalov/ijkl-shortcuts-plugin">GitHub</a>.
+        <br/><br/>
+    ]]></description>
 
     <!-- http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/build_number_ranges.html -->
     <!-- Since IJ 2016.1 because it has Kotlin support. -->
     <idea-version since-build="145"/>
 
     <!-- See http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html -->
-    <depends>com.intellij.modules.lang</depends>
+    <depends>com.intellij.modules.platform</depends>
 
     <application-components>
         <component>
             <implementation-class>ijkl.AppComponent</implementation-class>
         </component>
     </application-components>
-
-    <actions>
-        <!-- Add your actions here -->
-    </actions>
-
 </idea-plugin>
