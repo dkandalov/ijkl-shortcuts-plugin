@@ -1,15 +1,19 @@
 package ijkl
 
+import com.intellij.ide.actions.ShowFilePathAction
+import com.intellij.notification.NotificationListener
 import com.intellij.openapi.Disposable
 import com.intellij.openapi.actionSystem.ActionManager
 import com.intellij.openapi.actionSystem.Shortcut
 import com.intellij.openapi.application.Application
+import com.intellij.openapi.application.PathManager
 import com.intellij.openapi.diagnostic.Logger
 import com.intellij.openapi.keymap.Keymap
 import com.intellij.openapi.keymap.KeymapManager
 import com.intellij.openapi.keymap.KeymapManagerListener
 import com.intellij.openapi.keymap.KeymapUtil.getShortcutText
 import com.intellij.openapi.util.Disposer
+import java.io.File
 import java.io.InputStream
 
 fun initCurrentKeymapModifier(
@@ -44,11 +48,17 @@ fun initCurrentKeymapModifier(
                         "$shortcutsDescription '$ijklAction' conflicts with: $actionsDescription"
                     }
 
-                val htmlMessage =
-                    "There were conflicts between IJKL shortcuts and current keymap.<br/>" +
-                    "In particular:<br/>" + conflictsDescription.joinToString("<br/>")
-                application.showNotification(htmlMessage)
-                logger.info(htmlMessage.replace("<br/>", "\n"))
+                application.showNotification(
+                    message = "There were conflicts between IJKL shortcuts and '$newKeymap' keymap. See <a href=''>IDE log file</a> for more details.",
+                    listener = NotificationListener { _, _ ->
+                        // Based on com.intellij.ide.actions.ShowLogAction code.
+                        if (ShowFilePathAction.isSupported()) {
+                            val logFile = File(PathManager.getLogPath(), "idea.log")
+                            ShowFilePathAction.openFile(logFile)
+                        }
+                    }
+                )
+                logger.info("Conflicts after switching to '$newKeymap'\n" + conflictsDescription.joinToString("\n"))
             }
         }
     })

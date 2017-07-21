@@ -15,7 +15,7 @@ fun resourceInputStream(fileName: String): InputStream =
     else AppComponent::class.java.classLoader.getResource(fileName).openStream()
 
 fun Application.showNotification(message: String, listener: NotificationListener = URL_OPENING_LISTENER) {
-    val title = ""
+    val title = "IJKL Shortcuts plugin"
     val groupDisplayId = "IJKL Shortcuts"
     messageBus
         .syncPublisher(Notifications.TOPIC)
