@@ -37,7 +37,7 @@ class AppComponent: ApplicationComponent {
     }
 
     private fun initEventReDispatch() {
-        fun KeyEvent.copy(excludeModifier: Int, keyCode: Int) =
+        fun KeyEvent.copy(excludeModifier: Int = ALT_MASK, keyCode: Int) =
             KeyEvent(
                 source as Component,
                 id,
@@ -53,17 +53,15 @@ class AppComponent: ApplicationComponent {
                 if (e !is KeyEvent) return false
                 if (e.modifiers.and(ALT_MASK) == 0) return false
 
-                if (e.keyCode == VK_K) {
-                    eventQueue.dispatchEvent(e.copy(excludeModifier = 0, keyCode = VK_DOWN))
-                    return true
-                } else if (e.keyCode == VK_J) {
-                    eventQueue.dispatchEvent(e.copy(excludeModifier = 0, keyCode = VK_LEFT))
-                    return true
-                } else if (e.keyCode == VK_I) {
-                    eventQueue.dispatchEvent(e.copy(excludeModifier = 0, keyCode = VK_UP))
-                    return true
-                } else if (e.keyCode == VK_L) {
-                    eventQueue.dispatchEvent(e.copy(excludeModifier = 0, keyCode = VK_RIGHT))
+                val newEvent =
+                    if (e.keyCode == VK_K) (e.copy(keyCode = VK_DOWN))
+                    else if (e.keyCode == VK_J) e.copy(keyCode = VK_LEFT)
+                    else if (e.keyCode == VK_I) e.copy(keyCode = VK_UP)
+                    else if (e.keyCode == VK_L) e.copy(keyCode = VK_RIGHT)
+                    else null
+
+                if (newEvent != null) {
+                    eventQueue.dispatchEvent(newEvent)
                     return true
                 } else {
                     return false
