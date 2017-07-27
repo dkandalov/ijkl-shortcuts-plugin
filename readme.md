@@ -45,8 +45,14 @@ Search and advanced navigation:
  - `alt-q` - close tab
  - `shift ctrl t` - reopen closed tab
 
+## Why these shortcuts?
 
-## Caveats
+
+
+## Conflicts with current keymap
+
+
+## OSX Caveats
 
 There are couple issues when using alt+IJKL shortcuts with built-in OSX keyboard layouts:
 1. dead keys cannot be used as IDE shortcuts (e.g. `alt+i` in US layout)
