@@ -32,7 +32,8 @@ private class IjklEventDispatcher(
         if (event.modifiers.and(ALT_MASK) == 0) return false
 
         val newEvent =
-            if ((event.keyCode == VK_I || event.keyCode == VK_J || event.keyCode == VK_K || event.keyCode == VK_L) && focusIsInTree()) {
+            if ((event.keyCode == VK_I || event.keyCode == VK_J || event.keyCode == VK_K || event.keyCode == VK_L) &&
+                (focusIsInTree() || (event.component?.hasParentListPopup() ?: false))) {
                 if (event.keyCode == VK_I) event.copy(keyCode = VK_UP)
                 else if (event.keyCode == VK_J) event.copy(keyCode = VK_LEFT)
                 else if (event.keyCode == VK_K) (event.copy(keyCode = VK_DOWN))
@@ -70,3 +71,10 @@ private fun Component?.hasParentJTree(): Boolean =
     if (this == null) false
     else if (this is JTree) true
     else parent.hasParentJTree()
+
+private fun Component?.hasParentListPopup(): Boolean =
+    if (this == null) false
+    // There seems to be no easy way to determine from public classes in component hierarchy if we are in a popup.
+    // Therefore, checking for class name which is more fragile.
+    else if (this.javaClass.toString().contains("com.intellij.ui.popup.list.ListPopup")) true
+    else parent.hasParentListPopup()
