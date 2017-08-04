@@ -19,29 +19,47 @@ fun initEventReDispatch(
     keyboardFocusManager: KeyboardFocusManager,
     application: Application
 ) {
-    val dispatcher = IjklEventDispatcher(keyboardFocusManager, ideEventQueue)
+    val focusOwnerFinder = FocusOwnerFinder(keyboardFocusManager)
+    val dispatcher = IjklEventDispatcher(focusOwnerFinder, ideEventQueue)
 
     // This is a workaround to make sure ijkl dispatch works in popups,
     // because IdeEventQueue invokes popup dispatchers before custom dispatchers.
+    val popupEventDispatcher = IjklIdePopupEventDispatcher(dispatcher, focusOwnerFinder, afterDispatch = {
+        ideEventQueue.popupManager.remove(it)
+    })
     ideEventQueue.addActivityListener(Runnable {
         if (ideEventQueue.isPopupActive) {
-            val component = keyboardFocusManager.focusOwner ?: IdeFocusManager.findInstanceByContext(null).focusOwner
-            ideEventQueue.popupManager.push(object: IdePopupEventDispatcher {
-                override fun dispatch(event: AWTEvent) = dispatcher.dispatch(event)
-                override fun getComponent() = component
-                override fun getPopupStream(): Stream<JBPopup> = Stream.empty()
-                override fun requestFocus() = false
-                override fun close() = false
-                override fun setRestoreFocusSilentely() {}
-            })
+            ideEventQueue.popupManager.push(popupEventDispatcher)
         }
     }, application)
 
     ideEventQueue.addDispatcher(dispatcher, application)
 }
 
+private class FocusOwnerFinder(private val keyboardFocusManager: KeyboardFocusManager) {
+    fun find(): Component? = keyboardFocusManager.focusOwner ?: IdeFocusManager.findInstanceByContext(null).focusOwner
+}
+
+private class IjklIdePopupEventDispatcher(
+    private val dispatcher: IjklEventDispatcher,
+    private val focusOwnerFinder: FocusOwnerFinder,
+    private val afterDispatch: (IjklIdePopupEventDispatcher) -> Unit
+) : IdePopupEventDispatcher {
+
+    override fun dispatch(event: AWTEvent): Boolean {
+        val result = dispatcher.dispatch(event)
+        afterDispatch(this)
+        return result
+    }
+    override fun getComponent() = focusOwnerFinder.find()
+    override fun getPopupStream(): Stream<JBPopup> = Stream.empty()
+    override fun requestFocus() = false
+    override fun close() = false
+    override fun setRestoreFocusSilentely() {}
+}
+
 private class IjklEventDispatcher(
-    private val keyboardFocusManager: KeyboardFocusManager,
+    private val focusOwnerFinder: FocusOwnerFinder,
     private val ideEventQueue: IdeEventQueue
 ) : IdeEventQueue.EventDispatcher {
 
@@ -52,7 +70,6 @@ private class IjklEventDispatcher(
         val ijIJKL = event.keyCode == VK_I || event.keyCode == VK_J || event.keyCode == VK_K || event.keyCode == VK_L
         val newEvent =
             if (ijIJKL && (focusIsInTree() || ideEventQueue.isPopupActive)) {
-                println("ijkl")
                 if (event.keyCode == VK_I) event.copyWithoutAlt(VK_UP)
                 else if (event.keyCode == VK_J) event.copyWithoutAlt(VK_LEFT)
                 else if (event.keyCode == VK_K) (event.copyWithoutAlt(VK_DOWN))
@@ -70,10 +87,7 @@ private class IjklEventDispatcher(
         }
     }
 
-    fun focusIsInTree(): Boolean {
-        val component = keyboardFocusManager.focusOwner ?: IdeFocusManager.findInstanceByContext(null).focusOwner
-        return component.hasParentJTree()
-    }
+    fun focusIsInTree() = focusOwnerFinder.find().hasParentJTree()
 }
 
 private fun KeyEvent.copyWithoutAlt(keyCode: Int) =
