@@ -5,7 +5,7 @@
     <vendor email="dmitry.kandalov@gmail.com" url="https://github.com/dkandalov/ijkl-shortcuts-plugin">Dmitry Kandalov</vendor>
 
     <description><![CDATA[
-        Plugin which imposes alt+IJKL navigation shortcuts on currently open keymap.
+        Plugin which imposes alt-ijkl navigation shortcuts on currently open keymap.
         The idea is that these shortcuts are more ergonomic for navigation and editing than using keyboard arrows.
         Some of the shortcuts:
         <ul>

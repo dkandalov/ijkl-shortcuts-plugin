@@ -1,6 +1,6 @@
 ## IJKL shortcuts plugin
 
-This is a plugin which imposes `alt+IJKL` navigation shortcuts on currently open keymap.
+This is a plugin which imposes `alt-ijkl` navigation shortcuts on currently open keymap.
 The idea is that these shortcuts are more ergonomic for navigation and editing than using keyboard arrows
 so you can stop using arrows in IDE editor.
 
