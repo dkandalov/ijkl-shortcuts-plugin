@@ -31,7 +31,7 @@ class AppComponent: ApplicationComponent {
         )
 
         initEventReDispatch(
-            eventQueue = IdeEventQueue.getInstance(),
+            ideEventQueue = IdeEventQueue.getInstance(),
             keyboardFocusManager = KeyboardFocusManager.getCurrentKeyboardFocusManager(),
             application = ApplicationManager.getApplication()
         )
