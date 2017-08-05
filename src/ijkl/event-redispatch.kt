@@ -67,9 +67,9 @@ private class IjklEventDispatcher(
         if (event !is KeyEvent) return false
         if (event.modifiers.and(ALT_MASK) == 0) return false
 
-        val ijIJKL = event.keyCode == VK_I || event.keyCode == VK_J || event.keyCode == VK_K || event.keyCode == VK_L
+        val isIJKL = event.keyCode == VK_I || event.keyCode == VK_J || event.keyCode == VK_K || event.keyCode == VK_L
         val newEvent =
-            if (ijIJKL && (focusIsInTree() || ideEventQueue.isPopupActive)) {
+            if (isIJKL && (focusIsInTree() || ideEventQueue.isPopupActive)) {
                 if (event.keyCode == VK_I) event.copyWithoutAlt(VK_UP)
                 else if (event.keyCode == VK_J) event.copyWithoutAlt(VK_LEFT)
                 else if (event.keyCode == VK_K) (event.copyWithoutAlt(VK_DOWN))
@@ -79,15 +79,15 @@ private class IjklEventDispatcher(
                 null
             }
 
-        if (newEvent != null) {
+        return if (newEvent != null) {
             ideEventQueue.dispatchEvent(newEvent)
-            return true
+            true
         } else {
-            return false
+            false
         }
     }
 
-    fun focusIsInTree() = focusOwnerFinder.find().hasParentJTree()
+    private fun focusIsInTree() = focusOwnerFinder.find().hasParentJTree()
 }
 
 private fun KeyEvent.copyWithoutAlt(keyCode: Int) =
