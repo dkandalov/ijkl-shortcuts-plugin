@@ -57,7 +57,7 @@ When touch typing you would normally position your index fingers on letters `f` 
 The problem is that writing/editing code is never linear and requires navigating around the code.  
 This makes you to move right hand from `j` letter to arrows and takes a lot of effort.
 
-With `alt-ijkl` shortcuts you won't need to use arrow again.
+With `alt-ijkl` shortcuts you won't need to use arrows again.
 
 Another problem with arrow navigation is that left/right arrows jump only one character at a time.
 You can use `ctrl-left/right` (or `alt-left/right` on OSX) to jump between words. 
@@ -66,10 +66,10 @@ That's why in `alt-jl` moves caret to previous/next word.
 Single character navigation is still useful sometimes, so it's mapped to `alt-nm`.
 There is no particular reason for these letters except that they are located not too far from `ijkl`.
 
-It's also extremely useful to navigate to start/end of line.
+It's also very useful to navigate to start/end of line.
 So the navigation to line start/end is mapped as close to `ijkl` as possible to `alt-u` and `alt-o`.
-Navigate to start of line is `alt-u` because `u` is close to `j` and essentially also means moving caret left
-and `alt-o` is end of line because it's about moving right 
+Navigate to start of line is `alt-u` because `u` is close to `j` and essentially also means moving caret left.
+And `alt-o` is end of line because it's about moving right 
 (there is an implicit assumption here that you're coding in English which is written left to right;
 if you're writing code in some other language, you might need to review your life choices).
 
