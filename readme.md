@@ -17,8 +17,10 @@ Editor navigation:
  - `alt-l` - move to next word
  - `alt-n` - move left
  - `alt-m` - move right
- - `alt-u` - move to start of line
- - `alt-o` - move to end of line
+ - `alt-u` - move to line start
+ - `alt-o` - move to line end
+ - `alt-w` - page up
+ - `alt-f` - page down
  - `alt-shift-ijklmnuo` - navigate with selection
 
 Editor text modification:
@@ -29,8 +31,8 @@ Editor text modification:
  - `alt-;` - delete next character
  - `alt-d` - delete next word
  - `alt-y` - remove line
- - `alt-w` - expand word selection
- - `alt-shift-w` - shrink word selection
+ - `alt-e` - expand word selection
+ - `alt-shift-e` - shrink word selection
 
 Search and advanced navigation:
  - `alt-a` - highlight usages in file 
@@ -47,9 +49,12 @@ Search and advanced navigation:
 
 ## Why these shortcuts?
 
+Because arrows are located too far from letter and it takes too much effort to move your wrists.
 
 
-## Conflicts with current keymap
+
+
+## Conflicts with existing keymaps
 
 
 ## OSX Caveats
