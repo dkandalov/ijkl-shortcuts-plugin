@@ -97,7 +97,10 @@ private fun KeyEvent.copyWithoutAlt(keyCode: Int) =
         `when`,
         modifiers.and(ALT_MASK.inv()),
         keyCode,
-        keyChar
+        // Using zero char because:
+        //  - if it's original letter, then navigation doesn't work in popups
+        //  - if it's some other letter, then it shows up Navigate to File/Class action
+        0.toChar()
     )
 
 private fun Component?.hasParentJTree(): Boolean =
