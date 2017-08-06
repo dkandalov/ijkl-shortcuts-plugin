@@ -97,7 +97,7 @@ private fun KeyEvent.copyWithoutAlt(keyCode: Int) =
         `when`,
         modifiers.and(ALT_MASK.inv()),
         keyCode,
-        keyCode.toChar()
+        keyChar
     )
 
 private fun Component?.hasParentJTree(): Boolean =
