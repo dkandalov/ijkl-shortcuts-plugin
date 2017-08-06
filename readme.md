@@ -19,8 +19,8 @@ Editor navigation:
  - `alt-m` - move right
  - `alt-u` - move to line start
  - `alt-o` - move to line end
- - `alt-w` - page up
  - `alt-f` - page down
+ - `alt-w` - page up
  - `alt-shift-ijklmnuo` - navigate with selection
 
 Editor text modification:
@@ -33,6 +33,8 @@ Editor text modification:
  - `alt-y` - remove line
  - `alt-e` - expand word selection
  - `alt-shift-e` - shrink word selection
+ - `alt-ctrl-shift-ik` - move statement up/down
+ - `alt-cmd-shift-ik` (OSX) - move statement up/down
 
 Search and advanced navigation:
  - `alt-a` - highlight usages in file 
@@ -49,24 +51,43 @@ Search and advanced navigation:
 
 ## Why these shortcuts?
 
-Because arrows are located too far from letter and it takes too much effort to move your wrists.
+Because arrows are located too far from letters and it takes too much effort to move wrists.
 
+When touch typing you would normally position your index fingers on letters `f` and `j`.
+The problem is that writing/editing code is never linear and requires navigating around the code.  
+This makes you to move right hand from `j` letter to arrows and takes a lot of effort.
+
+With `alt-ijkl` shortcuts you won't need to use arrow again.
+
+Another problem with arrow navigation is that left/right arrows jump only one character at a time.
+You can use `ctrl-left/right` (or `alt-left/right` on OSX) to jump between words. 
+This is more useful and, arguably, should be default navigation for arrows.
+That's why in `alt-jl` moves caret to previous/next word.
+Single character navigation is still useful sometimes, so it's mapped to `alt-nm`.
+There is no particular reason for these letters except that they are located not too far from `ijkl`.
+
+It's also extremely useful to navigate to start/end of line.
+So the navigation to line start/end is mapped as close to `ijkl` as possible to `alt-u` and `alt-o`.
+Navigate to start of line is `alt-u` because `u` is close to `j` and essentially also means moving caret left
+and `alt-o` is end of line because it's about moving right 
+(there is an implicit assumption here that you're coding in English which is written left to right;
+if you're writing code in some other language, you might need to review your life choices).
 
 
 
 ## Conflicts with existing keymaps
-
+TBD
 
 ## OSX Caveats
 
-There are couple issues when using alt+IJKL shortcuts with built-in OSX keyboard layouts:
-1. dead keys cannot be used as IDE shortcuts (e.g. `alt+i` in US layout)
-2. if `alt+ik` are mapped to some character, then `Navigate to Class` action 
-   handles `alt+ik` shortcuts as both navigation up/down and entering a character.
-3. keys with certain output, when held down, trigger IDE action only once (e.g. `alt+i` with 'ˆ' output in US layout). 
+There are couple issues when using alt-ijkl shortcuts with built-in OSX keyboard layouts:
+1. dead keys cannot be used as IDE shortcuts (e.g. `alt-i` in US layout)
+2. if `alt-ik` are mapped to some character, then `Navigate to Class` action 
+   handles `alt-ik` shortcuts as both navigation up/down and entering a character.
+3. keys with certain output, when held down, trigger IDE action only once (e.g. `alt-i` with 'ˆ' output in US layout). 
 
 The first two issues can be solved by adding keyboard input source which doesn't
-have dead keys and doesn't output characters for `alt+ijkl` shortcuts. 
+have dead keys and doesn't output characters for `alt-ijkl` shortcuts. 
 See section below.
 
 To solve the third issue you can disable sticky keys feature by executing in shell 
