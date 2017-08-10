@@ -8,9 +8,7 @@ import java.io.InputStream
 import javax.swing.KeyStroke
 import javax.xml.parsers.DocumentBuilderFactory
 
-fun InputStream.readShortcutsData(): List<ShortcutData> {
-    return use { readShortcutsDataFrom(this) }
-}
+fun InputStream.readShortcutsData(): List<ShortcutData> = use { readShortcutsDataFrom(this) }
 
 private fun readShortcutsDataFrom(inputStream: InputStream): List<ShortcutData> {
     fun Node.getAttribute(name: String): String? =

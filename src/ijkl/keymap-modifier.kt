@@ -22,7 +22,7 @@ fun initCurrentKeymapModifier(
     logger: Logger,
     actionManager: ActionManager = ActionManager.getInstance()
 ) {
-    var shortcuts = IjklShortcuts(all = keymapInputStream.readShortcutsData())
+    var shortcuts = IjklShortcuts(keymapInputStream.readShortcutsData())
 
     registerKeymapListener(application, object: KeymapChangeListener {
         override fun onChange(oldKeymap: Keymap?, newKeymap: Keymap?) {
