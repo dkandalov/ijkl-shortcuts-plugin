@@ -67,23 +67,35 @@ private class IjklEventDispatcher(
         if (event !is KeyEvent) return false
         if (event.modifiers.and(ALT_MASK) == 0) return false
 
-        val isIJKL = event.keyCode == VK_I || event.keyCode == VK_J || event.keyCode == VK_K || event.keyCode == VK_L
-        val newEvent =
-            if (isIJKL && (focusIsInTree() || ideEventQueue.isPopupActive)) {
-                if (event.keyCode == VK_I) event.copyWithoutAlt(VK_UP)
-                else if (event.keyCode == VK_J) event.copyWithoutAlt(VK_LEFT)
-                else if (event.keyCode == VK_K) (event.copyWithoutAlt(VK_DOWN))
-                else if (event.keyCode == VK_L) event.copyWithoutAlt(VK_RIGHT)
-                else error("")
-            } else {
-                null
-            }
+        val newEvent = event.mapIfIjkl()
 
         return if (newEvent != null) {
             ideEventQueue.dispatchEvent(newEvent)
             true
         } else {
             false
+        }
+    }
+
+    @Suppress("NOTHING_TO_INLINE")
+    private inline fun KeyEvent.mapIfIjkl(): KeyEvent? {
+        // For performance optimisation reasons do the cheapest checks first, i.e. key code, popup then focus in tree.
+        // There is not empirical evidence these optimisations actually useful though.
+        val isIjkl =
+            keyCode == VK_I || keyCode == VK_J ||
+            keyCode == VK_K || keyCode == VK_L ||
+            keyCode == VK_F || keyCode == VK_W
+        if (!isIjkl) return null
+        if (!ideEventQueue.isPopupActive && !focusIsInTree()) return null
+
+        return when (keyCode) {
+            VK_I -> copyWithoutAlt(VK_UP)
+            VK_J -> copyWithoutAlt(VK_LEFT)
+            VK_K -> copyWithoutAlt(VK_DOWN)
+            VK_L -> copyWithoutAlt(VK_RIGHT)
+            VK_F -> copyWithoutAlt(VK_PAGE_DOWN)
+            VK_W -> copyWithoutAlt(VK_PAGE_UP)
+            else -> error("")
         }
     }
 
@@ -107,4 +119,3 @@ private fun Component?.hasParentJTree(): Boolean =
     if (this == null) false
     else if (this is JTree) true
     else parent.hasParentJTree()
-
