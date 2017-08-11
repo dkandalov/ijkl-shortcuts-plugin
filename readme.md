@@ -53,8 +53,7 @@ Search and navigation between files:
 ## Why editor navigation shortcuts?
 
 Because existing key layouts are inefficient and painful to use.
-
-Below you can find the reasons for choosing `ijlk` shortcuts.
+Below you can find reasons for choosing particular keys.
 
 ### IJKL
 When touch typing you would normally position your index fingers on letters `f` and `j`.
