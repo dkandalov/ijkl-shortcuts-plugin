@@ -48,7 +48,9 @@ Search and navigation between files:
 
 ## Why editor navigation shortcuts?
 
-Because existing key layouts are inefficient and painful to use. Below you can find reasons for choosing particular keys.
+Because existing key layouts are inefficient and painful to use. 
+
+Below you can find reasons for choosing particular keys.
 
 ### IJKL
 When touch typing you would normally position your index fingers on letters `f` and `j`. This is fine for writing a lot of text sequentially. The problem is that writing/editing code is never linear and requires a lot of navigation even for simplest tasks. Navigation with standard key layouts makes you move right hand from `j` letter to arrows and back to `j`. This takes a lot of effort.
