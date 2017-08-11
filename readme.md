@@ -1,11 +1,12 @@
 ## IJKL shortcuts plugin
 
-This is a plugin which imposes `alt-ijkl` navigation shortcuts on currently open keymap.
-The idea is that these shortcuts are more ergonomic for navigation and editing than using keyboard arrows
+This is a plugin which enforces `alt-ijkl` navigation shortcuts on currently open keymap, tool windows and popups.
+The idea is that these shortcuts are more ergonomic for navigation/editing than using keyboard arrows
 so you can stop using arrows in IDE editor.
 
-These shortcuts were inspired by Vim and 
-[gaming keyboard layouts](https://en.wikipedia.org/wiki/Arrow_keys#IJKL_keys).
+These shortcuts are inspired by Vim, 
+[gaming keyboard layouts](https://en.wikipedia.org/wiki/Arrow_keys#IJKL_keys)
+and common sense.
 
 
 ## Shortcuts
@@ -24,19 +25,18 @@ Editor navigation:
  - `alt-shift-ijklmnuo` - navigate with selection
 
 Editor text modification:
- - `alt-'` - code completion
- - `alt-l` - choose lookup item and replace
- - `alt-/` - cyclic expand word
- - `cmd-l` or `ctrl-l` - complete statement
+ - `alt-e / alt-shift-e` - expand/shrink word selection
  - `alt-;` - delete next character
  - `alt-d` - delete next word
  - `alt-y` - remove line
- - `alt-e` - expand word selection
- - `alt-shift-e` - shrink word selection
  - `alt-ctrl-shift-ik` - move statement up/down
  - `alt-cmd-shift-ik` (OSX) - move statement up/down
+ - `alt-/` - cyclic expand word (aka hippie completion)
+ - `alt-'` - code completion
+ - `alt-l` - choose lookup item and replace
+ - `cmd-l` or `ctrl-l` - complete statement
 
-Search and advanced navigation:
+Search and navigation between files:
  - `alt-a` - highlight usages in file 
  - `alt-s` - show usages popup 
  - `alt-shift-s` - find usages 
@@ -49,34 +49,63 @@ Search and advanced navigation:
  - `alt-q` - close tab
  - `shift ctrl t` - reopen closed tab
 
-## Why these shortcuts?
 
-Because arrows are located too far from letters and it takes too much effort to move wrists.
+## Why editor navigation shortcuts?
 
+Because existing key layouts are inefficient and painful to use.
+
+Below you can find the reasons for choosing `ijlk` shortcuts.
+
+### IJKL
 When touch typing you would normally position your index fingers on letters `f` and `j`.
-The problem is that writing/editing code is never linear and requires navigating around the code.  
-This makes you to move right hand from `j` letter to arrows and takes a lot of effort.
+This is fine for writing a lot of text sequentially.
+The problem is that writing/editing code is never linear and requires a lot of navigation even for simplest tasks.  
+Navigation with standard key layouts makes you move right hand from `j` letter to arrows and back to `j`.
+This takes a lot of effort.
 
-With `alt-ijkl` shortcuts you won't need to use arrows again.
+Ideally, we would just move arrows into the are with letters and use them as before.
+This is what `ijkl` mapped to `up/left/down/right` is trying to achieve
+(note that both `ijkl` and arrows are used with right hand).
 
-Another problem with arrow navigation is that left/right arrows jump only one character at a time.
+### Alt
+There are several options how to make `ijkl` work for navigation.
+
+One option could be something like vim command/insert modes, i.e.
+"command mode" in which `ijkl` keys work as arrows and
+"insert mode" in which all keys work as in traditional editors.
+It might be a good idea to test this on practice over a long period of time.
+Although not many text editors have replicated vim modes so may be this is a sign.
+
+Another option is to use modifier keys to change behaviour of `ijkl` letters 
+(or you might think about it as enabling "command mode" only when modifier key is pressed).
+In general, this option is much easier to implement in various editors/IDEs.
+And among modifier keys, `alt` was the least used in existing IDE keymaps so the left `alt` was chosen.
+
+### MN and move to next/previous word 
+Three is a problem with arrow navigation that left/right arrows jump only one character at a time.
 You can use `ctrl-left/right` (or `alt-left/right` on OSX) to jump between words. 
 This is more useful and, arguably, should be default navigation for arrows.
 That's why in `alt-jl` moves caret to previous/next word.
 Single character navigation is still useful sometimes, so it's mapped to `alt-nm`.
 There is no particular reason for these letters except that they are located not too far from `ijkl`.
 
-It's also very useful to navigate to start/end of line.
-So the navigation to line start/end is mapped as close to `ijkl` as possible to `alt-u` and `alt-o`.
-Navigate to start of line is `alt-u` because `u` is close to `j` and essentially also means moving caret left.
-And `alt-o` is end of line because it's about moving right 
-(there is an implicit assumption here that you're coding in English which is written left to right;
-if you're writing code in some other language, you might need to review your life choices).
+### UO
+Moving to the start/end of line is another important part of navigation,
+so ideally it should mapped to keys not far from `ijkl`.
+For this reason `u` and `o` seem like a great choice.
+ 
+Moving to the start of line is `u` because it is close to `j` and essentially also means moving caret left.
+And `o` is mapped to the end of line because it's about moving right, similar to `l` 
+(there is an implicit assumption here that you're writing code left to right in English).
 
+### FW
+The choice of `fw` letters mapped to page down/up was copied from [less](https://en.wikipedia.org/wiki/Less_(Unix))
+and admittedly is somewhat arbitrary.
 
 
 ## Conflicts with existing keymaps
 TBD
+
 
 ## OSX Caveats
 
