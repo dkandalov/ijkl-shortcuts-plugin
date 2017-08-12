@@ -115,7 +115,8 @@ private fun KeyEvent.copyWithoutAlt(keyCode: Int) =
         0.toChar()
     )
 
-private fun Component?.hasParentJTree(): Boolean =
-    if (this == null) false
-    else if (this is JTree) true
-    else parent.hasParentJTree()
+private fun Component?.hasParentJTree(): Boolean = when {
+    this == null -> false
+    this is JTree -> true
+    else -> parent.hasParentJTree()
+}

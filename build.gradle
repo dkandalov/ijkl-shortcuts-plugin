@@ -1,22 +1,31 @@
 buildscript {
-	ext.kotlin_version = '1.0.6'
+	ext.kotlin_version = "1.1.1"
 	repositories {
 		mavenCentral()
-	}
-	dependencies {
-		classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+		maven {
+			url "https://oss.sonatype.org/content/repositories/snapshots/"
+		}
+		maven {
+			url 'http://dl.bintray.com/jetbrains/intellij-plugin-service'
+		}
 	}
 }
 
-apply plugin: 'java'
-apply plugin: 'kotlin'
-apply plugin: 'idea'
+plugins {
+	id "org.jetbrains.intellij" version "0.2.16"
+	id "org.jetbrains.kotlin.jvm" version "1.1.1"
+}
+apply plugin:"java"
+apply plugin:"kotlin"
+apply plugin:"idea"
+apply plugin:"org.jetbrains.intellij"
 
-ext.ideaPath = "${System.env.HOME}/Library/Application Support/JetBrains/Toolbox/apps/IDEA-U/ch-0/172.3317.6/IntelliJ IDEA 2017.2 EAP.app/Contents"
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
 
 repositories {
 	mavenCentral()
-	maven { url 'lib' }
+	maven { url "lib" }
 }
 enableProvidedScope()
 
@@ -25,7 +34,6 @@ dependencies {
 	provided "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
 	provided "org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version"
 	provided "junit:junit:4.11" // also includes hamcrest-core
-	provided fileTree(dir: "${ideaPath}/lib/", include: "*.jar")
 }
 
 sourceSets {
@@ -38,6 +46,14 @@ sourceSets {
 	}
 }
 
+compileKotlin {
+	kotlinOptions {
+		jvmTarget = "1.8"
+		apiVersion = "1.0"
+		languageVersion = "1.0"
+	}
+}
+
 def enableProvidedScope() {
 	configurations {
 		provided
@@ -46,4 +62,12 @@ def enableProvidedScope() {
 	idea {
 		module { scopes.PROVIDED.plus += [configurations.provided] }
 	}
+}
+intellij {
+	version "IU-172.3757.29"
+	type "UI"
+	pluginName "ijkl-shortcuts-plugin"
+	downloadSources true
+	sameSinceUntilBuild false
+	updateSinceUntilBuild false
 }

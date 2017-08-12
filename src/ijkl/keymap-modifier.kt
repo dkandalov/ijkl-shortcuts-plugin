@@ -15,6 +15,7 @@ import com.intellij.openapi.keymap.KeymapUtil.getShortcutText
 import com.intellij.openapi.util.Disposer
 import java.io.File
 import java.io.InputStream
+import java.util.*
 
 fun initCurrentKeymapModifier(
     keymapInputStream: InputStream,
@@ -38,7 +39,9 @@ fun initCurrentKeymapModifier(
             if (shortcuts.conflicts.isNotEmpty()) {
                 val conflictsDescription = shortcuts
                     .conflicts.entries
-                    .map { (shortcutData, conflictingActionIds) ->
+                    .map {
+                        val shortcutData = it.key
+                        val conflictingActionIds = it.value
                         val shortcutsDescription = shortcutData.shortcuts.map { getShortcutText(it) }
                         val ijklAction = actionManager.actionText(shortcutData.actionId)
                         val actionsDescription = conflictingActionIds
@@ -50,7 +53,7 @@ fun initCurrentKeymapModifier(
 
                 application.showNotification(
                     message = "There were conflicts between IJKL shortcuts and '$newKeymap' keymap. See <a href=''>IDE log file</a> for more details.",
-                    listener = NotificationListener { _, _ ->
+                    listener = NotificationListener { _1, _2 ->
                         // Based on com.intellij.ide.actions.ShowLogAction code.
                         if (ShowFilePathAction.isSupported()) {
                             val logFile = File(PathManager.getLogPath(), "idea.log")
@@ -103,9 +106,9 @@ data class IjklShortcuts(
     }
 
     fun removeFrom(keymap: Keymap) {
-        added.forEach { (actionId, shortcuts) ->
-            shortcuts.forEach { shortcut ->
-                keymap.removeShortcut(actionId, shortcut)
+        added.forEach {
+            it.shortcuts.forEach { shortcut ->
+                keymap.removeShortcut(it.actionId, shortcut)
             }
         }
     }

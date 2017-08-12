@@ -5,6 +5,7 @@ import com.intellij.openapi.actionSystem.Shortcut
 import com.intellij.ui.KeyStrokeAdapter
 import org.w3c.dom.Node
 import java.io.InputStream
+import java.util.*
 import javax.swing.KeyStroke
 import javax.xml.parsers.DocumentBuilderFactory
 
@@ -33,8 +34,7 @@ private fun readShortcutsDataFrom(inputStream: InputStream): List<ShortcutData> 
                 it.getAttribute("id") ?: "",
                 it.children()
                     .filter { it.nodeName == "keyboard-shortcut" }
-                    .map { it.getAttribute("first-keystroke")?.toKeyboardShortcut() }
-                    .filterNotNull()
+                    .mapNotNull { it.getAttribute("first-keystroke")?.toKeyboardShortcut() }
             )
         }
 }
