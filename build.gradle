@@ -2,12 +2,8 @@ buildscript {
 	ext.kotlin_version = "1.1.1"
 	repositories {
 		mavenCentral()
-		maven {
-			url "https://oss.sonatype.org/content/repositories/snapshots/"
-		}
-		maven {
-			url 'http://dl.bintray.com/jetbrains/intellij-plugin-service'
-		}
+		maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
+		maven { url 'http://dl.bintray.com/jetbrains/intellij-plugin-service' }
 	}
 }
 
@@ -27,22 +23,14 @@ repositories {
 	mavenCentral()
 	maven { url "lib" }
 }
-enableProvidedScope()
-
-dependencies {
-	// dependencies below are "provided" because they should be on IDE classpath
-	provided "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-	provided "org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version"
-	provided "junit:junit:4.11" // also includes hamcrest-core
-}
 
 sourceSets {
 	main {
-		kotlin { srcDir "./src" }
-		resources { srcDir "./src/resources" }
+		kotlin.srcDir "src"
+		resources.srcDir "resources"
 	}
 	test {
-		kotlin { srcDir "./test" }
+		kotlin.srcDir "test"
 	}
 }
 
@@ -54,19 +42,10 @@ compileKotlin {
 	}
 }
 
-def enableProvidedScope() {
-	configurations {
-		provided
-		compile.extendsFrom provided
-	}
-	idea {
-		module { scopes.PROVIDED.plus += [configurations.provided] }
-	}
-}
 intellij {
 	version "IU-172.3757.29"
 	type "UI"
-	pluginName "ijkl-shortcuts-plugin"
+	pluginName "ijkl-shortcuts"
 	downloadSources true
 	sameSinceUntilBuild false
 	updateSinceUntilBuild false
