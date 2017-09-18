@@ -113,10 +113,10 @@
         <keyboard-shortcut first-keystroke="alt a"/>
     </action>
     <action id="MethodDown">
-        <keyboard-shortcut first-keystroke="alt comma"/>
+        <keyboard-shortcut first-keystroke="alt period"/>
     </action>
     <action id="MethodUp">
-        <keyboard-shortcut first-keystroke="alt period"/>
+        <keyboard-shortcut first-keystroke="alt comma"/>
     </action>
     <action id="MoveStatementDown">
         <keyboard-shortcut first-keystroke="shift ctrl alt k"/>
