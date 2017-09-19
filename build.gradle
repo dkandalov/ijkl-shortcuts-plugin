@@ -44,7 +44,6 @@ compileKotlin {
 
 intellij {
 	version "IU-172.3757.29"
-	type "UI"
 	pluginName "ijkl-shortcuts"
 	downloadSources true
 	sameSinceUntilBuild false
