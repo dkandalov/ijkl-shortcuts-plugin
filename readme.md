@@ -40,8 +40,8 @@ Search and navigation between files:
  - `ctrl-cmd-b` or `ctrl-alt-b` - implementations popup
  - `alt-b` - back
  - `alt-shift-b` - forward
- - `cmd-shift-[` or `alt-8` - previous tab
- - `cmd-shift-]` or `alt-9` - next tab
+ - `cmd-shift-[` - previous tab
+ - `cmd-shift-]` - next tab
  - `alt-q` - close tab
  - `shift ctrl t` - reopen closed tab
 

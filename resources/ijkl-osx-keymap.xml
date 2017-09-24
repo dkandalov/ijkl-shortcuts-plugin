@@ -126,11 +126,9 @@
         <keyboard-shortcut first-keystroke="shift meta alt i"/>
     </action>
     <action id="NextTab">
-        <keyboard-shortcut first-keystroke="alt 9"/>
         <keyboard-shortcut first-keystroke="shift meta close_bracket"/>
     </action>
     <action id="PreviousTab">
-        <keyboard-shortcut first-keystroke="alt 8"/>
         <keyboard-shortcut first-keystroke="shift meta open_bracket"/>
     </action>
     <action id="RecentProjectListGroup">

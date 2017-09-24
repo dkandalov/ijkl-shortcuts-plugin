@@ -11,14 +11,14 @@ class Tests {
     @Test fun `win, linux keymap xml`() {
         resourceInputStream("ijkl-keymap.xml").readShortcutsData().validate(
             amountOfActions = 48,
-            amountOfShortcuts = 51
+            amountOfShortcuts = 49
         )
     }
 
     @Test fun `osx keymap xml`() {
         resourceInputStream("ijkl-osx-keymap.xml").readShortcutsData().validate(
             amountOfActions = 48,
-            amountOfShortcuts = 52
+            amountOfShortcuts = 50
         )
     }
 
