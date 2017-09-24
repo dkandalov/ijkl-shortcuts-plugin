@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/dkandalov/ijkl-shortcuts-plugin.svg?branch=master)](https://travis-ci.org/dkandalov/ijkl-shortcuts-plugin)
+
 ## IJKL shortcuts plugin
 
 This is a plugin which enforces `alt-ijkl` navigation shortcuts on currently open keymap, tool windows and popups. The idea is that these shortcuts are more ergonomic for navigation/editing than using keyboard arrows so you can stop using arrows in IDE editor.
