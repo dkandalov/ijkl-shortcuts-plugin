@@ -1,9 +1,11 @@
 package ijkl
 
 import com.intellij.ide.IdeEventQueue
+import com.intellij.ide.IdeEventQueue.EventDispatcher
 import com.intellij.openapi.application.Application
 import com.intellij.openapi.ui.popup.IdePopupEventDispatcher
 import com.intellij.openapi.ui.popup.JBPopup
+import com.intellij.openapi.util.SystemInfo.isMac
 import com.intellij.openapi.wm.IdeFocusManager
 import java.awt.AWTEvent
 import java.awt.Component
@@ -41,13 +43,13 @@ private class FocusOwnerFinder(private val keyboardFocusManager: KeyboardFocusMa
 }
 
 private class IjklIdePopupEventDispatcher(
-    private val dispatcher: IjklEventDispatcher,
+    private val delegate: IjklEventDispatcher,
     private val focusOwnerFinder: FocusOwnerFinder,
     private val afterDispatch: (IjklIdePopupEventDispatcher) -> Unit
 ) : IdePopupEventDispatcher {
 
     override fun dispatch(event: AWTEvent): Boolean {
-        val result = dispatcher.dispatch(event)
+        val result = delegate.dispatch(event)
         afterDispatch(this)
         return result
     }
@@ -61,7 +63,7 @@ private class IjklIdePopupEventDispatcher(
 private class IjklEventDispatcher(
     private val focusOwnerFinder: FocusOwnerFinder,
     private val ideEventQueue: IdeEventQueue
-) : IdeEventQueue.EventDispatcher {
+) : EventDispatcher {
 
     override fun dispatch(event: AWTEvent): Boolean {
         if (event !is KeyEvent) return false
@@ -84,23 +86,35 @@ private class IjklEventDispatcher(
         val isIjkl =
             keyCode == VK_I || keyCode == VK_J ||
             keyCode == VK_K || keyCode == VK_L ||
-            keyCode == VK_F || keyCode == VK_W
+            keyCode == VK_F || keyCode == VK_W ||
+            keyCode == VK_U || keyCode == VK_O ||
+            keyCode == VK_M || keyCode == VK_N
         if (!isIjkl) return null
-        if (!ideEventQueue.isPopupActive && !focusIsInTree()) return null
+
+        val component = focusOwnerFinder.find()
+        if (!ideEventQueue.isPopupActive && !component.hasParentJTree() && !component.hasCommitDialogParent()) return null
+        val isCommitDialog = component.hasCommitDialogParent()
 
         return when (keyCode) {
             VK_I -> copyWithoutAlt(VK_UP)
-            VK_J -> copyWithoutAlt(VK_LEFT)
             VK_K -> copyWithoutAlt(VK_DOWN)
-            VK_L -> copyWithoutAlt(VK_RIGHT)
+            VK_J -> if (isCommitDialog) copyWithModifier(VK_LEFT) else copyWithoutAlt(VK_LEFT)
+            VK_L -> if (isCommitDialog) copyWithModifier(VK_RIGHT) else copyWithoutAlt(VK_RIGHT)
+            VK_N -> if (isCommitDialog) copyWithoutAlt(VK_LEFT) else null
+            VK_M -> if (isCommitDialog) copyWithoutAlt(VK_RIGHT) else null
             VK_F -> copyWithoutAlt(VK_PAGE_DOWN)
             VK_W -> copyWithoutAlt(VK_PAGE_UP)
+            VK_U -> copyWithoutAlt(VK_HOME)
+            VK_O -> copyWithoutAlt(VK_END)
             else -> error("")
         }
     }
-
-    private fun focusIsInTree() = focusOwnerFinder.find().hasParentJTree()
 }
+
+// Using zero char because:
+//  - if it's original letter, then navigation doesn't work in popups
+//  - if it's some other letter, then it shows up Navigate to File/Class action
+private const val zeroChar = 0.toChar()
 
 private fun KeyEvent.copyWithoutAlt(keyCode: Int) =
     KeyEvent(
@@ -109,14 +123,28 @@ private fun KeyEvent.copyWithoutAlt(keyCode: Int) =
         `when`,
         modifiers.and(ALT_MASK.inv()),
         keyCode,
-        // Using zero char because:
-        //  - if it's original letter, then navigation doesn't work in popups
-        //  - if it's some other letter, then it shows up Navigate to File/Class action
-        0.toChar()
+        zeroChar
+    )
+
+
+private fun KeyEvent.copyWithModifier(keyCode: Int) =
+    KeyEvent(
+        source as Component,
+        id,
+        `when`,
+        modifiers.or(if (isMac) ALT_MASK else CTRL_MASK),
+        keyCode,
+        zeroChar
     )
 
 private fun Component?.hasParentJTree(): Boolean = when {
     this == null -> false
     this is JTree -> true
     else -> parent.hasParentJTree()
+}
+
+private fun Component?.hasCommitDialogParent(): Boolean = when {
+    this == null -> false
+    this.toString().contains("layout=com.intellij.openapi.vcs.changes.ui.CommitChangeListDialog") -> true
+    else -> parent.hasCommitDialogParent()
 }
