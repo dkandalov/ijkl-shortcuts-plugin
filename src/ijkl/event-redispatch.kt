@@ -96,8 +96,8 @@ private class IjklEventDispatcher(
         val isCommitDialog = component.hasCommitDialogParent()
 
         return when (keyCode) {
-            VK_I -> copyWithoutAlt(VK_UP)
-            VK_K -> copyWithoutAlt(VK_DOWN)
+            VK_I -> if (isCommitDialog) null else copyWithoutAlt(VK_UP)
+            VK_K -> if (isCommitDialog) null else copyWithoutAlt(VK_DOWN)
             VK_J -> if (isCommitDialog) copyWithModifier(VK_LEFT) else copyWithoutAlt(VK_LEFT)
             VK_L -> if (isCommitDialog) copyWithModifier(VK_RIGHT) else copyWithoutAlt(VK_RIGHT)
             VK_N -> if (isCommitDialog) copyWithoutAlt(VK_LEFT) else null
