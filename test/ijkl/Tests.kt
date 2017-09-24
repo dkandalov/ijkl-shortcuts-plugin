@@ -37,7 +37,9 @@ class Tests {
 
     @Test fun `copy layout from resources to a folder`() {
         val tempDir = FileUtil.createTempDirectory("", "", true)
-        error("tempDir: ${tempDir.absolutePath}")
+        println("tempDir: ${tempDir}")
+        println("tempDir: ${tempDir.absolutePath}")
+        println("tempDir: ${tempDir.exists()}")
 
         copyKeyLayoutTo(fromResource = "ijkl-keys.bundle", toDir = tempDir.absolutePath)
 
