@@ -46,6 +46,7 @@ class Tests {
     private fun allFilesIn(dir: File) = FileUtil
         .findFilesOrDirsByMask(Pattern.compile(".*"), dir)
         .map { it.toRelativeString(dir) }
+        .sorted()
 
     private infix fun <T> T.shouldEqual(that: T) {
         assertThat(this, equalTo(that))
