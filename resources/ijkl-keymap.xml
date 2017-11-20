@@ -136,9 +136,6 @@
     <action id="RenameElement">
         <keyboard-shortcut first-keystroke="shift alt r"/>
     </action>
-    <action id="ReopenClosedTab">
-        <keyboard-shortcut first-keystroke="shift ctrl t"/>
-    </action>
     <action id="ShowUsages">
         <keyboard-shortcut first-keystroke="alt s"/>
     </action>

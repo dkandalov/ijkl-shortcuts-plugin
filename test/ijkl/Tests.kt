@@ -10,8 +10,8 @@ import java.util.regex.Pattern
 class Tests {
     @Test fun `win, linux keymap xml`() {
         resourceInputStream("ijkl-keymap.xml").readShortcutsData().validate(
-            amountOfActions = 48,
-            amountOfShortcuts = 49
+            amountOfActions = 47,
+            amountOfShortcuts = 48
         )
     }
 
