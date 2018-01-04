@@ -43,7 +43,7 @@ compileKotlin {
 }
 
 intellij {
-	def ideVersion = System.getenv().getOrDefault("ACTIVITY_TRACKER_IDEA_VERSION", "IC-172.3757.29")
+	def ideVersion = System.getenv().getOrDefault("IJKL_PLUGIN_IDEA_VERSION", "IC-172.3757.29")
 	println("Using ide version: ${ideVersion}")
 	version ideVersion
 	pluginName "ijkl-shortcuts"
