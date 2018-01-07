@@ -17,8 +17,8 @@ class Tests {
 
     @Test fun `osx keymap xml`() {
         resourceInputStream("ijkl-osx-keymap.xml").readShortcutsData().validate(
-            amountOfActions = 48,
-            amountOfShortcuts = 50
+            amountOfActions = 47,
+            amountOfShortcuts = 49
         )
     }
 
