@@ -81,8 +81,8 @@ private class IjklEventDispatcher(
 
     @Suppress("NOTHING_TO_INLINE")
     private inline fun KeyEvent.mapIfIjkl(): KeyEvent? {
-        // For performance optimisation reasons do the cheapest checks first, i.e. key code, popup then focus in tree.
-        // There is not empirical evidence these optimisations actually useful though.
+        // For performance optimisation reasons do the cheapest checks first, i.e. key code, popup, focus in tree.
+        // There is no empirical evidence that these optimisations are actually useful though.
         val isIjkl =
             keyCode == VK_I || keyCode == VK_J ||
             keyCode == VK_K || keyCode == VK_L ||
@@ -92,16 +92,25 @@ private class IjklEventDispatcher(
         if (!isIjkl) return null
 
         val component = focusOwnerFinder.find()
-        if (!ideEventQueue.isPopupActive && !component.hasParentJTree() && !component.hasCommitDialogParent()) return null
-        val isCommitDialog = component.hasCommitDialogParent()
+        if (!ideEventQueue.isPopupActive && !component.hasParentTree() && !component.hasCommitDialogParent()) return null
+
+        val useCommitDialogWorkarounds = component.hasCommitDialogParent() && !component.hasParentTree()
+        if (useCommitDialogWorkarounds) {
+            when (keyCode) {
+                VK_I -> return null // No mapping so that alt+i triggers "Commit" action
+                VK_K -> return null // No mapping for the symmetry with VK_I.
+                VK_J -> return copyWithModifier(VK_LEFT) // Override for the symmetry with the VK_L.
+                VK_L -> return copyWithModifier(VK_RIGHT) // Override mnemonic for "Clean code" (assuming move left is used more often).
+                VK_N -> return copyWithoutAlt(VK_LEFT) // Override for the symmetry with the VK_M.
+                VK_M -> return copyWithoutAlt(VK_RIGHT) // Override mnemonic for "Amend commit" (assuming that commits are not amended very often).
+            }
+        }
 
         return when (keyCode) {
-            VK_I -> if (isCommitDialog) null else copyWithoutAlt(VK_UP)
-            VK_K -> if (isCommitDialog) null else copyWithoutAlt(VK_DOWN)
-            VK_J -> if (isCommitDialog) copyWithModifier(VK_LEFT) else copyWithoutAlt(VK_LEFT)
-            VK_L -> if (isCommitDialog) copyWithModifier(VK_RIGHT) else copyWithoutAlt(VK_RIGHT)
-            VK_N -> if (isCommitDialog) copyWithoutAlt(VK_LEFT) else null
-            VK_M -> if (isCommitDialog) copyWithoutAlt(VK_RIGHT) else null
+            VK_I -> copyWithoutAlt(VK_UP)
+            VK_K -> copyWithoutAlt(VK_DOWN)
+            VK_J -> copyWithoutAlt(VK_LEFT) // Convert to "left" rather than "alt left" so that in trees it works as "collapse node".
+            VK_L -> copyWithoutAlt(VK_RIGHT) // Convert to "right" rather than "alt right" so that in trees it works as "expand node".
             VK_F -> copyWithoutAlt(VK_PAGE_DOWN)
             VK_W -> copyWithoutAlt(VK_PAGE_UP)
             VK_U -> copyWithoutAlt(VK_HOME)
@@ -113,7 +122,7 @@ private class IjklEventDispatcher(
 
 // Using zero char because:
 //  - if it's original letter, then navigation doesn't work in popups
-//  - if it's some other letter, then it shows up Navigate to File/Class action
+//  - if it's some other letter, then in Navigate to File/Class the letter is inserted into text area
 private const val zeroChar = 0.toChar()
 
 private fun KeyEvent.copyWithoutAlt(keyCode: Int) =
@@ -137,10 +146,10 @@ private fun KeyEvent.copyWithModifier(keyCode: Int) =
         zeroChar
     )
 
-private fun Component?.hasParentJTree(): Boolean = when {
+private fun Component?.hasParentTree(): Boolean = when {
     this == null -> false
     this is JTree -> true
-    else -> parent.hasParentJTree()
+    else -> parent.hasParentTree()
 }
 
 private fun Component?.hasCommitDialogParent(): Boolean = when {
