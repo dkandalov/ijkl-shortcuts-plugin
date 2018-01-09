@@ -88,13 +88,15 @@ private class IjklEventDispatcher(
             keyCode == VK_K || keyCode == VK_L ||
             keyCode == VK_F || keyCode == VK_W ||
             keyCode == VK_U || keyCode == VK_O ||
-            keyCode == VK_M || keyCode == VK_N
+            keyCode == VK_M || keyCode == VK_N ||
+            keyCode == VK_SEMICOLON
         if (!isIjkl) return null
 
         val component = focusOwnerFinder.find()
-        if (!ideEventQueue.isPopupActive && !component.hasParentTree() && !component.hasCommitDialogParent()) return null
+        val hasParentTree = component.hasParentTree()
+        if (!ideEventQueue.isPopupActive && !hasParentTree && !component.hasCommitDialogParent()) return null
 
-        val useCommitDialogWorkarounds = component.hasCommitDialogParent() && !component.hasParentTree()
+        val useCommitDialogWorkarounds = component.hasCommitDialogParent() && !hasParentTree
         if (useCommitDialogWorkarounds) {
             when (keyCode) {
                 VK_I -> return null // No mapping so that alt+i triggers "Commit" action
@@ -106,11 +108,24 @@ private class IjklEventDispatcher(
             }
         }
 
+        if (hasParentTree) {
+            when (keyCode) {
+                VK_J -> return copyWithoutAlt(VK_LEFT) // Convert to "left" rather than "alt left" so that in trees it works as "collapse node".
+                VK_L -> return copyWithoutAlt(VK_RIGHT) // Convert to "right" rather than "alt right" so that in trees it works as "expand node".
+            }
+        }
+
+        if (ideEventQueue.isPopupActive) {
+            when (keyCode) {
+                VK_N -> return copyWithoutAlt(VK_LEFT)
+                VK_M -> return copyWithoutAlt(VK_RIGHT)
+                VK_SEMICOLON -> return copyWithoutAlt(VK_DELETE)
+            }
+        }
+
         return when (keyCode) {
             VK_I -> copyWithoutAlt(VK_UP)
             VK_K -> copyWithoutAlt(VK_DOWN)
-            VK_J -> copyWithoutAlt(VK_LEFT) // Convert to "left" rather than "alt left" so that in trees it works as "collapse node".
-            VK_L -> copyWithoutAlt(VK_RIGHT) // Convert to "right" rather than "alt right" so that in trees it works as "expand node".
             VK_F -> copyWithoutAlt(VK_PAGE_DOWN)
             VK_W -> copyWithoutAlt(VK_PAGE_UP)
             VK_U -> copyWithoutAlt(VK_HOME)
