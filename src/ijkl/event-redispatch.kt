@@ -115,7 +115,7 @@ private class IjklEventDispatcher(
             VK_W -> copyWithoutAlt(VK_PAGE_UP)
             VK_U -> copyWithoutAlt(VK_HOME)
             VK_O -> copyWithoutAlt(VK_END)
-            else -> error("")
+            else -> null
         }
     }
 }
