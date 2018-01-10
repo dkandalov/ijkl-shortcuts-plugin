@@ -13,6 +13,7 @@ import java.awt.Event.ALT_MASK
 import java.awt.KeyboardFocusManager
 import java.awt.event.KeyEvent
 import java.awt.event.KeyEvent.*
+import java.util.*
 import java.util.stream.Stream
 import javax.swing.JTree
 
@@ -94,9 +95,15 @@ private class IjklEventDispatcher(
 
         val component = focusOwnerFinder.find()
         val hasParentTree = component.hasParentTree()
-        if (!ideEventQueue.isPopupActive && !hasParentTree && !component.hasCommitDialogParent()) return null
 
-        val useCommitDialogWorkarounds = component.hasCommitDialogParent() && !hasParentTree
+        if (hasParentTree) {
+            when (keyCode) {
+                VK_J -> return copyWithoutAlt(VK_LEFT) // Convert to "left" (without alt) so that in trees it works as "collapse node".
+                VK_L -> return copyWithoutAlt(VK_RIGHT) // Convert to "right" (without alt) so that in trees it works as "expand node".
+            }
+        }
+
+        val useCommitDialogWorkarounds = !hasParentTree && component.hasParentCommitDialog()
         if (useCommitDialogWorkarounds) {
             when (keyCode) {
                 VK_I -> return null // No mapping so that alt+i triggers "Commit" action
@@ -108,18 +115,20 @@ private class IjklEventDispatcher(
             }
         }
 
-        if (hasParentTree) {
-            when (keyCode) {
-                VK_J -> return copyWithoutAlt(VK_LEFT) // Convert to "left" rather than "alt left" so that in trees it works as "collapse node".
-                VK_L -> return copyWithoutAlt(VK_RIGHT) // Convert to "right" rather than "alt right" so that in trees it works as "expand node".
-            }
-        }
-
         if (ideEventQueue.isPopupActive) {
-            when (keyCode) {
-                VK_N -> return copyWithoutAlt(VK_LEFT)
-                VK_M -> return copyWithoutAlt(VK_RIGHT)
-                VK_SEMICOLON -> return copyWithoutAlt(VK_DELETE)
+            if (component.hasParentChooseByName()) {
+                // Convert to keys without alt so that "Find Class/File" input field doesn't interpret keys as characters.
+                when (keyCode) {
+                    VK_N -> return copyWithoutAlt(VK_LEFT)
+                    VK_M -> return copyWithoutAlt(VK_RIGHT)
+                    VK_SEMICOLON -> return copyWithoutAlt(VK_DELETE)
+                }
+            }
+            if (component.hasParentWizardPopup()) {
+                when (keyCode) {
+                    VK_J -> return copyWithoutAlt(VK_LEFT) // Convert to "left" (without alt) so that it works as "collapse sub-menu".
+                    VK_L -> return copyWithoutAlt(VK_RIGHT) // Convert to "left" (without alt) so that it works as "expand sub-menu".
+                }
             }
         }
 
@@ -167,8 +176,31 @@ private fun Component?.hasParentTree(): Boolean = when {
     else -> parent.hasParentTree()
 }
 
-private fun Component?.hasCommitDialogParent(): Boolean = when {
+private fun Component?.hasParentCommitDialog(): Boolean = when {
     this == null -> false
     this.toString().contains("layout=com.intellij.openapi.vcs.changes.ui.CommitChangeListDialog") -> true
-    else -> parent.hasCommitDialogParent()
+    else -> parent.hasParentCommitDialog()
+}
+
+/**
+ * Ideally this would be a check for "Wizard" in component class name but it doesn't work in Rider.
+ */
+private fun Component?.hasParentWizardPopup() = !hasParentChooseByName()
+
+private fun Component?.hasParentChooseByName(): Boolean = when {
+    this == null -> false
+    this.javaClass.name.contains("ChooseByName") -> true
+    else -> parent.hasParentChooseByName()
+}
+
+private fun Component?.allParentsAsString() = allParents().joinToString(" -- ") { it.javaClass.name }
+
+private fun Component?.allParents(): List<Component> {
+    val result = ArrayList<Component>()
+    var parent = this?.parent
+    while (parent != null) {
+        result.add(parent)
+        parent = parent.parent
+    }
+    return result
 }
