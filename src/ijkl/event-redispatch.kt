@@ -98,20 +98,28 @@ private class IjklEventDispatcher(
 
         if (hasParentTree) {
             when (keyCode) {
-                VK_J -> return copyWithoutAlt(VK_LEFT) // Convert to "left" (without alt) so that in trees it works as "collapse node".
-                VK_L -> return copyWithoutAlt(VK_RIGHT) // Convert to "right" (without alt) so that in trees it works as "expand node".
+                VK_I -> return copyWithoutAlt(VK_UP)
+                VK_K -> return copyWithoutAlt(VK_DOWN)
+                VK_J -> return copyWithoutAlt(VK_LEFT) // Convert to "left" so that in trees it works as "collapse node".
+                VK_L -> return copyWithoutAlt(VK_RIGHT) // Convert to "right" so that in trees it works as "expand node".
+                VK_F -> return copyWithoutAlt(VK_PAGE_DOWN)
+                VK_W -> return copyWithoutAlt(VK_PAGE_UP)
+                VK_U -> return copyWithoutAlt(VK_HOME)
+                VK_O -> return copyWithoutAlt(VK_END)
             }
         }
 
         val useCommitDialogWorkarounds = !hasParentTree && component.hasParentCommitDialog()
         if (useCommitDialogWorkarounds) {
             when (keyCode) {
-                VK_I -> return null // No mapping so that alt+i triggers "Commit" action
+                VK_I -> return null // No mapping so that alt+i triggers "Commit" action.
                 VK_K -> return null // No mapping for the symmetry with VK_I.
                 VK_J -> return copyWithModifier(VK_LEFT) // Override for the symmetry with the VK_L.
                 VK_L -> return copyWithModifier(VK_RIGHT) // Override mnemonic for "Clean code" (assuming move left is used more often).
                 VK_N -> return copyWithoutAlt(VK_LEFT) // Override for the symmetry with the VK_M.
                 VK_M -> return copyWithoutAlt(VK_RIGHT) // Override mnemonic for "Amend commit" (assuming that commits are not amended very often).
+                VK_U -> return copyWithoutAlt(VK_HOME) // Override for the symmetry with the VK_O.
+                VK_O -> return copyWithoutAlt(VK_END) // Override mnemonic for "Optimise imports".
             }
         }
 
@@ -126,21 +134,17 @@ private class IjklEventDispatcher(
             }
             if (component.hasParentWizardPopup()) {
                 when (keyCode) {
-                    VK_J -> return copyWithoutAlt(VK_LEFT) // Convert to "left" (without alt) so that it works as "collapse sub-menu".
-                    VK_L -> return copyWithoutAlt(VK_RIGHT) // Convert to "left" (without alt) so that it works as "expand sub-menu".
+                    VK_J -> return copyWithoutAlt(VK_LEFT) // Convert to "left" so that it works as "collapse sub-menu".
+                    VK_L -> return copyWithoutAlt(VK_RIGHT) // Convert to "left" so that it works as "expand sub-menu".
                 }
+            }
+            when (keyCode) {
+                VK_F -> return copyWithoutAlt(VK_PAGE_DOWN)
+                VK_W -> return copyWithoutAlt(VK_PAGE_UP)
             }
         }
 
-        return when (keyCode) {
-            VK_I -> copyWithoutAlt(VK_UP)
-            VK_K -> copyWithoutAlt(VK_DOWN)
-            VK_F -> copyWithoutAlt(VK_PAGE_DOWN)
-            VK_W -> copyWithoutAlt(VK_PAGE_UP)
-            VK_U -> copyWithoutAlt(VK_HOME)
-            VK_O -> copyWithoutAlt(VK_END)
-            else -> null
-        }
+        return null
     }
 }
 
