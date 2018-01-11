@@ -44,13 +44,13 @@ private class FocusOwnerFinder(private val keyboardFocusManager: KeyboardFocusMa
 }
 
 private class IjklIdePopupEventDispatcher(
-    private val delegate: IjklEventDispatcher,
+    private val delegateDispatcher: IjklEventDispatcher,
     private val focusOwnerFinder: FocusOwnerFinder,
     private val afterDispatch: (IjklIdePopupEventDispatcher) -> Unit
 ) : IdePopupEventDispatcher {
 
     override fun dispatch(event: AWTEvent): Boolean {
-        val result = delegate.dispatch(event)
+        val result = delegateDispatcher.dispatch(event)
         afterDispatch(this)
         return result
     }
@@ -124,14 +124,6 @@ private class IjklEventDispatcher(
         }
 
         if (ideEventQueue.isPopupActive) {
-            if (component.hasParentChooseByName()) {
-                // Convert to keys without alt so that "Find Class/File" input field doesn't interpret keys as characters.
-                when (keyCode) {
-                    VK_N -> return copyWithoutAlt(VK_LEFT)
-                    VK_M -> return copyWithoutAlt(VK_RIGHT)
-                    VK_SEMICOLON -> return copyWithoutAlt(VK_DELETE)
-                }
-            }
             if (component.hasParentWizardPopup()) {
                 when (keyCode) {
                     VK_J -> return copyWithoutAlt(VK_LEFT) // Convert to "left" so that it works as "collapse sub-menu".
@@ -144,7 +136,14 @@ private class IjklEventDispatcher(
             }
         }
 
-        return null
+        // Convert to keys without alt so that there are not interpret as typed characters by input field
+        // (e.g. in Find Class/File, text search in current file, Find in Path popup).
+        return when (keyCode) {
+            VK_N -> return copyWithoutAlt(VK_LEFT)
+            VK_M -> return copyWithoutAlt(VK_RIGHT)
+            VK_SEMICOLON -> return copyWithoutAlt(VK_DELETE)
+            else -> null
+        }
     }
 }
 
