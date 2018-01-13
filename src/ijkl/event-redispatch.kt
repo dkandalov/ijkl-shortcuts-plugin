@@ -1,5 +1,6 @@
 package ijkl
 
+import com.intellij.find.SearchTextArea
 import com.intellij.ide.IdeEventQueue
 import com.intellij.ide.IdeEventQueue.EventDispatcher
 import com.intellij.openapi.application.Application
@@ -137,14 +138,16 @@ private class IjklEventDispatcher(
         }
 
         // Convert to keys without alt so that there are not interpret as typed characters by input field
-        // (e.g. in Find Class/File, text search in current file, Find in Path popup).
-        // ☝️ can't do this because it breaks ctrl+alt+mn refactoring shortcuts
-        return when (keyCode) {
-//            VK_N -> return copyWithoutAlt(VK_LEFT)
-//            VK_M -> return copyWithoutAlt(VK_RIGHT)
-            VK_SEMICOLON -> return copyWithoutAlt(VK_DELETE)
-            else -> null
+        // in text search in current file, Find in Path popup, in Find Class/File popup.
+        if (component.hasParentSearchTextArea() || component.hasParentChooseByName()) {
+            when (keyCode) {
+                VK_N -> return copyWithoutAlt(VK_LEFT)
+                VK_M -> return copyWithoutAlt(VK_RIGHT)
+                VK_SEMICOLON -> return copyWithoutAlt(VK_DELETE)
+            }
         }
+
+        return null
     }
 }
 
@@ -174,13 +177,19 @@ private fun KeyEvent.copyWithModifier(keyCode: Int) =
         zeroChar
     )
 
-private fun Component?.hasParentTree(): Boolean = when {
+private tailrec fun Component?.hasParentTree(): Boolean = when {
     this == null -> false
     this is JTree -> true
     else -> parent.hasParentTree()
 }
 
-private fun Component?.hasParentCommitDialog(): Boolean = when {
+private tailrec fun Component?.hasParentSearchTextArea(): Boolean = when {
+    this == null -> false
+    this is SearchTextArea -> true
+    else -> parent.hasParentSearchTextArea()
+}
+
+private tailrec fun Component?.hasParentCommitDialog(): Boolean = when {
     this == null -> false
     this.toString().contains("layout=com.intellij.openapi.vcs.changes.ui.CommitChangeListDialog") -> true
     else -> parent.hasParentCommitDialog()
@@ -191,7 +200,7 @@ private fun Component?.hasParentCommitDialog(): Boolean = when {
  */
 private fun Component?.hasParentWizardPopup() = !hasParentChooseByName()
 
-private fun Component?.hasParentChooseByName(): Boolean = when {
+private tailrec fun Component?.hasParentChooseByName(): Boolean = when {
     this == null -> false
     this.javaClass.name.contains("ChooseByName") -> true
     else -> parent.hasParentChooseByName()
