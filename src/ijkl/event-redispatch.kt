@@ -138,9 +138,10 @@ private class IjklEventDispatcher(
 
         // Convert to keys without alt so that there are not interpret as typed characters by input field
         // (e.g. in Find Class/File, text search in current file, Find in Path popup).
+        // ☝️ can't do this because it breaks ctrl+alt+mn refactoring shortcuts
         return when (keyCode) {
-            VK_N -> return copyWithoutAlt(VK_LEFT)
-            VK_M -> return copyWithoutAlt(VK_RIGHT)
+//            VK_N -> return copyWithoutAlt(VK_LEFT)
+//            VK_M -> return copyWithoutAlt(VK_RIGHT)
             VK_SEMICOLON -> return copyWithoutAlt(VK_DELETE)
             else -> null
         }
