@@ -49,7 +49,6 @@ tasks.withType<KotlinJvmCompile> {
     }
 }
 
-
 configure<IntelliJPluginExtension> {
     val ideVersion = System.getenv().getOrDefault("IJKL_PLUGIN_IDEA_VERSION", "IC-172.3757.29")
     println("Using ide version: $ideVersion")

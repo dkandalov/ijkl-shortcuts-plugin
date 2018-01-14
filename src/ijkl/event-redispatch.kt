@@ -114,6 +114,12 @@ private class IjklEventDispatcher(
 
         val hasParentTree = component.hasParentTree()
         if (hasParentTree) {
+
+            // In some JDK versions (e.g. in jbrex8u152b1024.10) in trees with filter enabled (by typing some letters)
+            // alt-ik events are processed as if up/down was pressed twice so some results are skipped.
+            // This is a workaround to ignore KEY_TYPED event so that only KEY_PRESSED and KEY_RELEASED are mapped.
+            if (id == KEY_TYPED) return null
+
             when (keyCode) {
                 VK_I -> return copyWithoutAlt(VK_UP)
                 VK_K -> return copyWithoutAlt(VK_DOWN)
