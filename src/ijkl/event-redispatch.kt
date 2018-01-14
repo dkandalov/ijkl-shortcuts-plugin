@@ -95,8 +95,24 @@ private class IjklEventDispatcher(
         if (!isIjkl) return null
 
         val component = focusOwnerFinder.find()
-        val hasParentTree = component.hasParentTree()
 
+        // Workarounds for search in current file, Find in Path popup, in Find Class/File popup.
+        // (Must be done before hasParentTree() because Find in Path popup has a tree but alt+jl shouldn't be mapped like for a tree.)
+        if (component.hasParentSearchTextArea() || component.hasParentChooseByName()) {
+            when (keyCode) {
+                VK_I -> return copyWithoutAlt(VK_UP)
+                VK_K -> return copyWithoutAlt(VK_DOWN)
+                VK_J -> return copyWithModifier(VK_LEFT)
+                VK_L -> return copyWithModifier(VK_RIGHT)
+                VK_U -> return copyWithoutAlt(VK_HOME)
+                VK_O -> return copyWithoutAlt(VK_END)
+                VK_N -> return copyWithoutAlt(VK_LEFT) // Convert to keys without alt so that it's not interpret as typed characters by input field.
+                VK_M -> return copyWithoutAlt(VK_RIGHT) // Convert to keys without alt so that it's not interpret as typed characters by input field.
+                VK_SEMICOLON -> return copyWithoutAlt(VK_DELETE) // Convert to keys without alt so that it's not interpret as typed characters by input field.
+            }
+        }
+
+        val hasParentTree = component.hasParentTree()
         if (hasParentTree) {
             when (keyCode) {
                 VK_I -> return copyWithoutAlt(VK_UP)
@@ -134,16 +150,6 @@ private class IjklEventDispatcher(
             when (keyCode) {
                 VK_F -> return copyWithoutAlt(VK_PAGE_DOWN)
                 VK_W -> return copyWithoutAlt(VK_PAGE_UP)
-            }
-        }
-
-        // Convert to keys without alt so that there are not interpret as typed characters by input field
-        // in text search in current file, Find in Path popup, in Find Class/File popup.
-        if (component.hasParentSearchTextArea() || component.hasParentChooseByName()) {
-            when (keyCode) {
-                VK_N -> return copyWithoutAlt(VK_LEFT)
-                VK_M -> return copyWithoutAlt(VK_RIGHT)
-                VK_SEMICOLON -> return copyWithoutAlt(VK_DELETE)
             }
         }
 
