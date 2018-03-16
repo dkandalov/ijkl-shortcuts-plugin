@@ -23,11 +23,11 @@ fun initEventReDispatch(
     application: Application
 ) {
     val focusOwnerFinder = FocusOwnerFinder(keyboardFocusManager)
-    val dispatcher = IjklEventDispatcher(focusOwnerFinder, ideEventQueue)
+    val ijklEventDispatcher = IjklEventDispatcher(focusOwnerFinder, ideEventQueue)
 
     // This is a workaround to make sure ijkl dispatch works in popups,
     // because IdeEventQueue invokes popup dispatchers before custom dispatchers.
-    val popupEventDispatcher = IjklIdePopupEventDispatcher(dispatcher, focusOwnerFinder, afterDispatch = {
+    val popupEventDispatcher = IjklIdePopupEventDispatcher(ijklEventDispatcher, focusOwnerFinder, afterDispatch = {
         ideEventQueue.popupManager.remove(it)
     })
     ideEventQueue.addActivityListener(Runnable {
@@ -36,7 +36,7 @@ fun initEventReDispatch(
         }
     }, application)
 
-    ideEventQueue.addDispatcher(dispatcher, application)
+    ideEventQueue.addDispatcher(ijklEventDispatcher, application)
 }
 
 private class FocusOwnerFinder(private val keyboardFocusManager: KeyboardFocusManager) {
