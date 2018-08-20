@@ -14,7 +14,6 @@ import java.awt.Event.ALT_MASK
 import java.awt.KeyboardFocusManager
 import java.awt.event.KeyEvent
 import java.awt.event.KeyEvent.*
-import java.util.*
 import java.util.stream.Stream
 import javax.swing.JTree
 
@@ -216,16 +215,4 @@ private tailrec fun Component?.hasParentChooseByName(): Boolean = when {
     this == null -> false
     this.javaClass.name.contains("ChooseByName") -> true
     else -> parent.hasParentChooseByName()
-}
-
-private fun Component?.allParentsAsString() = allParents().joinToString(" -- ") { it.javaClass.name }
-
-private fun Component?.allParents(): List<Component> {
-    val result = ArrayList<Component>()
-    var parent = this?.parent
-    while (parent != null) {
-        result.add(parent)
-        parent = parent.parent
-    }
-    return result
 }

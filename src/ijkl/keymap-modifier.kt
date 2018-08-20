@@ -98,7 +98,7 @@ data class IjklShortcuts(
                 }
 
                 if (conflictingActionIds.isNotEmpty()) {
-                    conflicts.put(shortcutData, conflictingActionIds)
+                    conflicts[shortcutData] = conflictingActionIds
                 }
             }
         }
