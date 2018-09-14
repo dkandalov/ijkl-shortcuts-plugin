@@ -25,7 +25,7 @@ fun initCurrentKeymapModifier(
 ) {
     var shortcuts = IjklShortcuts(keymapInputStream.readShortcutsData())
 
-    registerKeymapListener(application, object: KeymapChangeListener {
+    registerKeymapListener(application, object : KeymapChangeListener {
         override fun onChange(oldKeymap: Keymap?, newKeymap: Keymap?) {
             if (oldKeymap != null) shortcuts.removeFrom(oldKeymap)
             if (newKeymap != null) shortcuts = shortcuts.addTo(newKeymap)
@@ -42,9 +42,9 @@ fun initCurrentKeymapModifier(
                     .map {
                         val shortcutData = it.key
                         val conflictingActionIds = it.value
-                        val shortcutsDescription = shortcutData.shortcuts.map { getShortcutText(it) }
+                        val shortcutsDescription = shortcutData.shortcuts.map { shortcut -> getShortcutText(shortcut) }
                         val ijklAction = actionManager.actionText(shortcutData.actionId)
-                        val actionsDescription = conflictingActionIds
+                        val actionsDescription = conflictingActionIds.asSequence()
                             .map { id -> actionManager.actionText(id) }
                             .joinToString(", ", "[", "]")
 
@@ -82,8 +82,8 @@ data class IjklShortcuts(
 
         // Collect bound action ids before modifying keymap.
         val boundActionIdsByShortcut: Map<Shortcut, List<String>> = all
-            .flatMap { it.shortcuts }.distinct()
-            .associate{ Pair(it, keymap.getActionIds(it).toList()) }
+            .flatMap { it.shortcuts }.asSequence().distinct()
+            .associate { Pair(it, keymap.getActionIds(it).toList()) }
 
         all.forEach { shortcutData ->
             shortcutData.shortcuts.forEach { shortcut ->

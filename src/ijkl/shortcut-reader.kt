@@ -29,10 +29,10 @@ private fun readShortcutsDataFrom(inputStream: InputStream): List<ShortcutData> 
 
     return keymapTag.children()
         .filter { it.nodeName == "action" }
-        .map {
+        .map { child ->
             ShortcutData(
-                it.getAttribute("id") ?: "",
-                it.children()
+                child.getAttribute("id") ?: "",
+                child.children()
                     .filter { it.nodeName == "keyboard-shortcut" }
                     .mapNotNull { it.getAttribute("first-keystroke")?.toKeyboardShortcut() }
             )
