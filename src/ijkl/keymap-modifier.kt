@@ -124,12 +124,16 @@ interface KeymapChangeListener {
 private fun registerKeymapListener(parentDisposable: Disposable, listener: KeymapChangeListener) {
     val keymapManager = KeymapManager.getInstance()
     var keymap = keymapManager.activeKeymap
-    keymapManager.addKeymapManagerListener(KeymapManagerListener { newKeymap ->
-        val oldKeymap = keymap
-        keymap = newKeymap
 
-        if (oldKeymap != newKeymap) {
-            listener.onChange(oldKeymap, newKeymap)
+    @Suppress("ObjectLiteralToLambda") // must be object for compatibility with latest IJ API
+    keymapManager.addKeymapManagerListener(object : KeymapManagerListener {
+        override fun activeKeymapChanged(newKeymap: Keymap?) {
+            val oldKeymap = keymap
+            keymap = newKeymap
+
+            if (oldKeymap != newKeymap) {
+                listener.onChange(oldKeymap, newKeymap)
+            }
         }
     }, parentDisposable)
 
