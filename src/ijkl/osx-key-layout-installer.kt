@@ -42,17 +42,16 @@ fun initOsxKeyLayoutInstaller(
 
 fun copyKeyLayoutTo(fromResource: String, toDir: String) {
     // List directories and files manually because there seems to be no easy way to list files/dirs in classloader resources.
-    FileUtil.createDirectory(File("$toDir/Contents/Resources/English.lproj"))
-    val files = listOf(
+    FileUtil.createDirectory(File("$toDir/Contents/Resources/en.lproj"))
+    listOf(
         "Contents/Info.plist",
         "Contents/version.plist",
         "Contents/Resources/British - IJKL.icns",
         "Contents/Resources/British - IJKL.keylayout",
         "Contents/Resources/U.S. - IJKL.icns",
         "Contents/Resources/U.S. - IJKL.keylayout",
-        "Contents/Resources/English.lproj/InfoPlist.strings"
-    )
-    files.forEach { fileName ->
+        "Contents/Resources/en.lproj/InfoPlist.strings"
+    ).forEach { fileName ->
         FileUtil.copy(
             resourceInputStream("$fromResource/$fileName"),
             FileOutputStream("$toDir/$fileName")

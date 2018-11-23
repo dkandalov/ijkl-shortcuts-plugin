@@ -40,12 +40,12 @@ class Tests {
 
         copyKeyLayoutTo(fromResource = "ijkl-keys.bundle", toDir = tempDir.absolutePath)
 
-        allFilesIn(tempDir) shouldEqual allFilesIn(File("resources/ijkl-keys.bundle"))
+        tempDir.allFiles() shouldEqual File("resources/ijkl-keys.bundle").allFiles()
     }
 
-    private fun allFilesIn(dir: File) = FileUtil
-        .findFilesOrDirsByMask(Pattern.compile(".*"), dir)
-        .map { it.toRelativeString(dir) }
+    private fun File.allFiles() = FileUtil
+        .findFilesOrDirsByMask(Pattern.compile(".*"), this)
+        .map { it.toRelativeString(this) }
         .sorted()
 
     private infix fun <T> T.shouldEqual(that: T) {
