@@ -28,7 +28,9 @@ Editor text modification:
  - `alt-d` - delete next word
  - `alt-y` - remove line
  - `alt-ctrl-shift-ik` - move statement up/down
+ - `alt-ctrl-shift-jl` - move element left/right
  - `alt-cmd-shift-ik` (OSX) - move statement up/down
+ - `alt-cmd-shift-jl` (OSX) - move element left/right
  - `alt-/` - cyclic expand word (aka hippie completion)
  - `alt-'` - code completion
  - `alt-l` - choose lookup item and replace
