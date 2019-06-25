@@ -10,7 +10,7 @@ plugins {
     idea
     java
     kotlin("jvm").version("1.1.1")
-    id("org.jetbrains.intellij").version("0.3.9")
+    id("org.jetbrains.intellij").version("0.4.9")
 }
 java {
     sourceCompatibility = VERSION_1_8
@@ -49,7 +49,10 @@ tasks.withType<KotlinJvmCompile> {
 }
 
 configure<IntelliJPluginExtension> {
-    val ideVersion = System.getenv().getOrDefault("IJKL_PLUGIN_IDEA_VERSION", "IC-172.3757.29")
+    val ideVersion = System.getenv().getOrDefault("IJKL_PLUGIN_IDEA_VERSION",
+        "IC-172.3757.29"
+//        "LATEST-EAP-SNAPSHOT"
+    )
     println("Using ide version: $ideVersion")
     version = ideVersion
     pluginName = "ijkl-shortcuts"
