@@ -124,6 +124,12 @@
     <action id="MoveStatementUp">
         <keyboard-shortcut first-keystroke="shift ctrl alt i"/>
     </action>
+    <action id="MoveElementLeft">
+        <keyboard-shortcut first-keystroke="shift ctrl alt j"/>
+    </action>
+    <action id="MoveElementRight">
+        <keyboard-shortcut first-keystroke="shift ctrl alt l"/>
+    </action>
     <action id="NextTab">
         <keyboard-shortcut first-keystroke="shift ctrl close_bracket"/>
     </action>

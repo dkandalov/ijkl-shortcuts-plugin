@@ -125,6 +125,12 @@
     <action id="MoveStatementUp">
         <keyboard-shortcut first-keystroke="shift meta alt i"/>
     </action>
+    <action id="MoveElementLeft">
+        <keyboard-shortcut first-keystroke="shift meta alt j"/>
+    </action>
+    <action id="MoveElementRight">
+        <keyboard-shortcut first-keystroke="shift meta alt l"/>
+    </action>
     <action id="NextTab">
         <keyboard-shortcut first-keystroke="shift meta close_bracket"/>
     </action>

@@ -25,16 +25,16 @@ fun initCurrentKeymapModifier(
 ) {
     var shortcuts = IjklShortcuts(keymapInputStream.readShortcutsData())
 
-    registerKeymapListener(application, object : KeymapChangeListener {
+    registerKeymapListener(application, object: KeymapChangeListener {
         override fun onChange(oldKeymap: Keymap?, newKeymap: Keymap?) {
             if (oldKeymap != null) shortcuts.removeFrom(oldKeymap)
             if (newKeymap != null) shortcuts = shortcuts.addTo(newKeymap)
 
             logger.info(
                 "Switched keymap from '$oldKeymap' to '$newKeymap'. Shortcuts: " +
-                "added - ${shortcuts.added.size}; " +
-                "already existed - ${shortcuts.alreadyExisted.size}; " +
-                "conflicts - ${shortcuts.conflicts.values.sumBy { it.size }}"
+                    "added - ${shortcuts.added.size}; " +
+                    "already existed - ${shortcuts.alreadyExisted.size}; " +
+                    "conflicts - ${shortcuts.conflicts.values.sumBy { it.size }}"
             )
             if (shortcuts.conflicts.isNotEmpty()) {
                 val conflictsDescription = shortcuts
@@ -126,7 +126,7 @@ private fun registerKeymapListener(parentDisposable: Disposable, listener: Keyma
     var keymap = keymapManager.activeKeymap
 
     @Suppress("ObjectLiteralToLambda") // must be object for compatibility with latest IJ API
-    keymapManager.addKeymapManagerListener(object : KeymapManagerListener {
+    keymapManager.addKeymapManagerListener(object: KeymapManagerListener {
         override fun activeKeymapChanged(newKeymap: Keymap?) {
             val oldKeymap = keymap
             keymap = newKeymap
