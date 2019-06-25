@@ -5,7 +5,6 @@ import com.intellij.openapi.actionSystem.Shortcut
 import com.intellij.ui.KeyStrokeAdapter
 import org.w3c.dom.Node
 import java.io.InputStream
-import java.util.*
 import javax.swing.KeyStroke
 import javax.xml.parsers.DocumentBuilderFactory
 
@@ -15,13 +14,8 @@ private fun readShortcutsDataFrom(inputStream: InputStream): List<ShortcutData> 
     fun Node.getAttribute(name: String): String? =
         attributes.getNamedItem(name)?.nodeValue
 
-    fun Node.children(): List<Node> {
-        val result = ArrayList<Node>()
-        0.until(childNodes.length).forEach { i ->
-            result.add(childNodes.item(i))
-        }
-        return result
-    }
+    fun Node.children(): List<Node> =
+        0.until(childNodes.length).map { i -> childNodes.item(i) }
 
     val builder = DocumentBuilderFactory.newInstance().newDocumentBuilder()
     val document = builder.parse(inputStream)
