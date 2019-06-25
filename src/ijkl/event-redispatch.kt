@@ -47,13 +47,14 @@ private class IjklIdePopupEventDispatcher(
     private val delegateDispatcher: IjklEventDispatcher,
     private val focusOwnerFinder: FocusOwnerFinder,
     private val afterDispatch: (IjklIdePopupEventDispatcher) -> Unit
-) : IdePopupEventDispatcher {
+): IdePopupEventDispatcher {
 
     override fun dispatch(event: AWTEvent): Boolean {
         val result = delegateDispatcher.dispatch(event)
         afterDispatch(this)
         return result
     }
+
     override fun getComponent() = focusOwnerFinder.find()
     override fun getPopupStream(): Stream<JBPopup> = Stream.empty()
     override fun requestFocus() = false
@@ -64,7 +65,7 @@ private class IjklIdePopupEventDispatcher(
 private class IjklEventDispatcher(
     private val focusOwnerFinder: FocusOwnerFinder,
     private val ideEventQueue: IdeEventQueue
-) : EventDispatcher {
+): EventDispatcher {
 
     override fun dispatch(event: AWTEvent): Boolean {
         if (event !is KeyEvent) return false
@@ -86,11 +87,11 @@ private class IjklEventDispatcher(
         // There is no empirical evidence that these optimisations are actually useful though.
         val isIjkl =
             keyCode == VK_I || keyCode == VK_J ||
-            keyCode == VK_K || keyCode == VK_L ||
-            keyCode == VK_F || keyCode == VK_W ||
-            keyCode == VK_U || keyCode == VK_O ||
-            keyCode == VK_M || keyCode == VK_N ||
-            keyCode == VK_SEMICOLON
+                keyCode == VK_K || keyCode == VK_L ||
+                keyCode == VK_F || keyCode == VK_W ||
+                keyCode == VK_U || keyCode == VK_O ||
+                keyCode == VK_M || keyCode == VK_N ||
+                keyCode == VK_SEMICOLON
         if (!isIjkl) return null
 
         val component = focusOwnerFinder.find()
@@ -99,14 +100,14 @@ private class IjklEventDispatcher(
         // (Must be done before hasParentTree() because Find in Path popup has a tree but alt+jl shouldn't be mapped like for a tree.)
         if (component.hasParentSearchTextArea() || component.hasParentChooseByName()) {
             when (keyCode) {
-                VK_I -> return copyWithoutAlt(VK_UP)
-                VK_K -> return copyWithoutAlt(VK_DOWN)
-                VK_J -> return copyWithModifier(VK_LEFT)
-                VK_L -> return copyWithModifier(VK_RIGHT)
-                VK_U -> return copyWithoutAlt(VK_HOME)
-                VK_O -> return copyWithoutAlt(VK_END)
-                VK_N -> return copyWithoutAlt(VK_LEFT) // Convert to keys without alt so that it's not interpret as typed characters by input field.
-                VK_M -> return copyWithoutAlt(VK_RIGHT) // Convert to keys without alt so that it's not interpret as typed characters by input field.
+                VK_I         -> return copyWithoutAlt(VK_UP)
+                VK_K         -> return copyWithoutAlt(VK_DOWN)
+                VK_J         -> return copyWithModifier(VK_LEFT)
+                VK_L         -> return copyWithModifier(VK_RIGHT)
+                VK_U         -> return copyWithoutAlt(VK_HOME)
+                VK_O         -> return copyWithoutAlt(VK_END)
+                VK_N         -> return copyWithoutAlt(VK_LEFT) // Convert to keys without alt so that it's not interpret as typed characters by input field.
+                VK_M         -> return copyWithoutAlt(VK_RIGHT) // Convert to keys without alt so that it's not interpret as typed characters by input field.
                 VK_SEMICOLON -> return copyWithoutAlt(VK_DELETE) // Convert to keys without alt so that it's not interpret as typed characters by input field.
             }
         }
@@ -142,6 +143,15 @@ private class IjklEventDispatcher(
                 VK_M -> return copyWithoutAlt(VK_RIGHT) // Override mnemonic for "Amend commit" (assuming that commits are not amended very often).
                 VK_U -> return copyWithoutAlt(VK_HOME) // Override for the symmetry with the VK_O.
                 VK_O -> return copyWithoutAlt(VK_END) // Override mnemonic for "Optimise imports".
+            }
+        }
+
+        // Starting from #IU-192.5281.24 (2019.2 EAP) there is new commit dialog
+        // which seems to be "stealing" alt+i from editor (probably for "Commit" button mnemonics).
+        // This is a workaround to make sure editor receives alt+i as VK_UP.
+        if (component.toString().contains("EditorComponent")) {
+            when (keyCode) {
+                VK_I -> return copyWithoutAlt(VK_UP)
             }
         }
 
@@ -189,21 +199,26 @@ private fun KeyEvent.copyWithModifier(keyCode: Int) =
     )
 
 private tailrec fun Component?.hasParentTree(): Boolean = when {
-    this == null -> false
+    this == null  -> false
     this is JTree -> true
-    else -> parent.hasParentTree()
+    else          -> parent.hasParentTree()
 }
 
 private tailrec fun Component?.hasParentSearchTextArea(): Boolean = when {
-    this == null -> false
+    this == null           -> false
     this is SearchTextArea -> true
-    else -> parent.hasParentSearchTextArea()
+    else                   -> parent.hasParentSearchTextArea()
 }
 
 private tailrec fun Component?.hasParentCommitDialog(): Boolean = when {
     this == null -> false
-    this.toString().contains("layout=com.intellij.openapi.vcs.changes.ui.CommitChangeListDialog") -> true
-    else -> parent.hasParentCommitDialog()
+    this.toString()
+        .let {
+            it.contains("layout=com.intellij.openapi.vcs.changes.ui.CommitChangeListDialog") || // Heuristic for IJ old commit dialog.
+            it.contains("com.intellij.openapi.vcs.ui.CommitMessage") // Heuristic for IJ new commit dialog inside "Version Control" toolwindow.
+        }
+                 -> true
+    else         -> parent.hasParentCommitDialog()
 }
 
 /**
@@ -212,7 +227,7 @@ private tailrec fun Component?.hasParentCommitDialog(): Boolean = when {
 private fun Component?.hasParentWizardPopup() = !hasParentChooseByName()
 
 private tailrec fun Component?.hasParentChooseByName(): Boolean = when {
-    this == null -> false
+    this == null                                 -> false
     this.javaClass.name.contains("ChooseByName") -> true
-    else -> parent.hasParentChooseByName()
+    else                                         -> parent.hasParentChooseByName()
 }
