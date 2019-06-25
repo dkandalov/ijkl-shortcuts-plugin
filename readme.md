@@ -86,8 +86,8 @@ TBD
 
 There are couple issues when using alt-ijkl shortcuts with built-in OSX keyboard layouts:
 1. dead keys cannot be used as IDE shortcuts (e.g. `alt-i` in US layout)
-2. if `alt-ik` are mapped to some character, then `Navigate to Class` action handles `alt-ik` shortcuts as both navigation up/down and entering a character. 
-3. keys with certain output, when held down, trigger IDE action only once (e.g. `alt-i` with 'ˆ' output in US layout). 
+2. if `alt-ik` are mapped to some character, then `Navigate to Class` action handles `alt-ik` shortcuts as both navigation up/down and entering a character.
+3. keys with certain output, when held down, trigger IDE action only once (e.g. `alt-i` with 'ˆ' output in US layout).
 
 The first two issues can be solved by adding keyboard input source which doesn't have dead keys and doesn't output characters for `alt-ijkl` shortcuts. See section below.
 

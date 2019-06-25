@@ -1,7 +1,7 @@
 <idea-plugin>
     <id>ijkl-shortcuts</id>
     <name>IJKL Shortctus</name>
-    <version>1.13</version>
+    <version>1.14</version>
     <vendor email="dmitry.kandalov@gmail.com" url="https://github.com/dkandalov/ijkl-shortcuts-plugin">Dmitry Kandalov</vendor>
 
     <description><![CDATA[
