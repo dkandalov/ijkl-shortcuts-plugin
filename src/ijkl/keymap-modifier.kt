@@ -87,7 +87,7 @@ data class IjklShortcuts(
 
         all.forEach { shortcutData ->
             shortcutData.shortcuts.forEach { shortcut ->
-                val boundActionIds = boundActionIdsByShortcut[shortcut]!!
+                val boundActionIds = boundActionIdsByShortcut[shortcut] ?: error("no value for $shortcut")
                 val conflictingActionIds = boundActionIds - shortcutData.actionId
 
                 if (boundActionIds.contains(shortcutData.actionId)) {
