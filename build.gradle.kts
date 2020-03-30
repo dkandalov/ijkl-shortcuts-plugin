@@ -12,10 +12,6 @@ plugins {
     kotlin("jvm").version("1.3.71")
     id("org.jetbrains.intellij").version("0.4.17")
 }
-java {
-    sourceCompatibility = VERSION_1_8
-    targetCompatibility = VERSION_1_8
-}
 repositories {
     mavenCentral()
 }

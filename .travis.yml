@@ -1,6 +1,6 @@
 dist: trusty
 language: java
-jdk: oraclejdk8
+jdk: oraclejdk11
 
 env:
   - IJKL_PLUGIN_IDEA_VERSION=IC-193.5233.102
