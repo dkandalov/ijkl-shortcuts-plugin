@@ -22,7 +22,7 @@ fun initOsxKeyLayoutInstaller(
         val message =
             "Because of JDK limitations alt+ijkl shortcuts need keyboard input source with no dead key mapping for alt+[letter] shortcuts. " +
             "<a href=''>Click here</a> to install bundle with 'U.S. - IJKL' and 'British - IJKL' input sources. "
-        application.showNotification(message, NotificationListener { notification, _1 ->
+        application.showNotification(message, NotificationListener { notification, _ ->
             try {
 
                 copyKeyLayoutTo(bundleName, userPathToBundle)

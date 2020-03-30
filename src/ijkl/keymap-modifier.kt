@@ -1,6 +1,6 @@
 package ijkl
 
-import com.intellij.ide.actions.ShowFilePathAction
+import com.intellij.ide.actions.RevealFileAction
 import com.intellij.notification.NotificationListener
 import com.intellij.openapi.Disposable
 import com.intellij.openapi.actionSystem.ActionManager
@@ -53,11 +53,11 @@ fun initCurrentKeymapModifier(
 
                 application.showNotification(
                     message = "There were conflicts between IJKL shortcuts and '$newKeymap' keymap. See <a href=''>IDE log file</a> for more details.",
-                    listener = NotificationListener { _1, _2 ->
+                    listener = NotificationListener { _, _ ->
                         // Based on com.intellij.ide.actions.ShowLogAction code.
-                        if (ShowFilePathAction.isSupported()) {
+                        if (RevealFileAction.isSupported()) {
                             val logFile = File(PathManager.getLogPath(), "idea.log")
-                            ShowFilePathAction.openFile(logFile)
+                            RevealFileAction.openFile(logFile)
                         }
                     }
                 )
@@ -83,7 +83,7 @@ data class IjklShortcuts(
         // Collect bound action ids before modifying keymap.
         val boundActionIdsByShortcut: Map<Shortcut, List<String>> = all
             .flatMap { it.shortcuts }.asSequence().distinct()
-            .associate { Pair(it, keymap.getActionIds(it).toList()) }
+            .associateWith { keymap.getActionIds(it).toList() }
 
         all.forEach { shortcutData ->
             shortcutData.shortcuts.forEach { shortcut ->
@@ -121,11 +121,11 @@ interface KeymapChangeListener {
     fun onChange(oldKeymap: Keymap?, newKeymap: Keymap?)
 }
 
-private fun registerKeymapListener(parentDisposable: Disposable, listener: KeymapChangeListener) {
+private fun registerKeymapListener(application: Application, listener: KeymapChangeListener) {
     val keymapManager = KeymapManager.getInstance()
     var keymap: Keymap? = keymapManager.activeKeymap
 
-    keymapManager.addKeymapManagerListener(object: KeymapManagerListener {
+    application.messageBus.connect().subscribe(KeymapManagerListener.TOPIC, object: KeymapManagerListener {
         override fun activeKeymapChanged(newKeymap: Keymap?) {
             val oldKeymap = keymap
             keymap = newKeymap
@@ -134,9 +134,9 @@ private fun registerKeymapListener(parentDisposable: Disposable, listener: Keyma
                 listener.onChange(oldKeymap, newKeymap)
             }
         }
-    }, parentDisposable)
+    })
 
-    Disposer.register(parentDisposable, Disposable {
+    Disposer.register(application, Disposable {
         listener.onChange(keymap, null)
     })
 
