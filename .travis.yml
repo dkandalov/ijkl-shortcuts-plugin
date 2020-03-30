@@ -3,7 +3,7 @@ language: java
 jdk: oraclejdk8
 
 env:
-  - IJKL_PLUGIN_IDEA_VERSION=IC-172.3757.29
+  - IJKL_PLUGIN_IDEA_VERSION=IC-193.5233.102
   - IJKL_PLUGIN_IDEA_VERSION=LATEST-EAP-SNAPSHOT
 
 script: ./gradlew check buildPlugin --info

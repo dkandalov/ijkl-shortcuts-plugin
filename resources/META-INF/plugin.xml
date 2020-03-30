@@ -29,8 +29,7 @@
     ]]></description>
 
     <!-- http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/build_number_ranges.html -->
-    <!-- Since IJ 2016.1 because it has Kotlin support. -->
-    <idea-version since-build="145"/>
+    <idea-version since-build="193.5233.102"/>
 
     <!-- See http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html -->
     <depends>com.intellij.modules.platform</depends>
