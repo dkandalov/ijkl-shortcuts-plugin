@@ -1,8 +1,6 @@
-import org.gradle.api.JavaVersion.VERSION_1_8
 import org.gradle.api.internal.HasConvention
 import org.jetbrains.intellij.IntelliJPluginExtension
 import org.jetbrains.intellij.tasks.RunIdeTask
-import org.jetbrains.kotlin.gradle.dsl.Coroutines
 import org.jetbrains.kotlin.gradle.dsl.KotlinJvmCompile
 import org.jetbrains.kotlin.gradle.plugin.KotlinSourceSet
 
@@ -10,7 +8,7 @@ plugins {
     idea
     java
     kotlin("jvm").version("1.3.71")
-    id("org.jetbrains.intellij").version("0.4.17")
+    id("org.jetbrains.intellij").version("0.4.18")
 }
 repositories {
     mavenCentral()
@@ -45,7 +43,8 @@ tasks.withType<KotlinJvmCompile> {
 }
 
 configure<IntelliJPluginExtension> {
-    val ideVersion = System.getenv().getOrDefault("IJKL_PLUGIN_IDEA_VERSION",
+    // To find available IDE versions see https://www.jetbrains.com/intellij-repository/releases
+    val ideVersion = System.getenv().getOrDefault("IJ_VERSION",
         "IC-193.5233.102"
 //        "LATEST-EAP-SNAPSHOT"
     )
@@ -57,7 +56,7 @@ configure<IntelliJPluginExtension> {
     updateSinceUntilBuild = false
 }
 
-//task(name = "runIdeWithDifferentJvm", type = RunIdeTask::class, configuration = {
-//    setJbreVersion("jbrex8u152b1024.10")
-//})
+task(name = "runIdeWithDifferentJvm", type = RunIdeTask::class, configuration = {
+    jbrVersion("jbrex8u152b1024.10")
+})
 
