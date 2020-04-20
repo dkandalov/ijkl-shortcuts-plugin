@@ -14,19 +14,15 @@ repositories {
     mavenCentral()
 }
 
-fun sourceRoots(block: SourceSetContainer.() -> Unit) = sourceSets.apply(block)
 val SourceSet.kotlin: SourceDirectorySet
     get() = (this as HasConvention).convention.getPlugin<KotlinSourceSet>().kotlin
-var SourceDirectorySet.sourceDirs: Iterable<File>
-    get() = srcDirs
-    set(value) { setSrcDirs(value) }
 
-sourceRoots {
-    getByName("main") {
+sourceSets {
+    main {
         kotlin.srcDirs("./src")
         resources.srcDirs("./resources")
     }
-    getByName("test") {
+    test {
         kotlin.srcDirs("./test")
     }
 }
@@ -38,7 +34,7 @@ tasks.withType<KotlinJvmCompile> {
         languageVersion = "1.3"
         // Compiler flag to allow building against pre-released versions of Kotlin
         // because IJ EAP can be built using pre-released Kotlin but it's still worth doing to check API compatability
-        freeCompilerArgs += listOf("-Xskip-metadata-version-check")
+        freeCompilerArgs = freeCompilerArgs + listOf("-Xskip-metadata-version-check")
     }
 }
 
