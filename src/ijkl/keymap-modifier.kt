@@ -27,8 +27,9 @@ fun initCurrentKeymapModifier(
 
     registerKeymapListener(application, object: KeymapChangeListener {
         override fun onChange(oldKeymap: Keymap?, newKeymap: Keymap?) {
+            if (newKeymap == null) return
             if (oldKeymap != null) shortcuts.removeFrom(oldKeymap)
-            if (newKeymap != null) shortcuts = shortcuts.addTo(newKeymap)
+            shortcuts = shortcuts.addTo(newKeymap)
 
             logger.info(
                 "Switched keymap from '$oldKeymap' to '$newKeymap'. Shortcuts: " +
@@ -137,8 +138,8 @@ private fun registerKeymapListener(application: Application, listener: KeymapCha
     })
 
     Disposer.register(application, Disposable {
-        listener.onChange(keymap, null)
+        listener.onChange(oldKeymap = keymap, newKeymap = null)
     })
 
-    listener.onChange(null, keymap)
+    listener.onChange(oldKeymap = null, newKeymap = keymap)
 }

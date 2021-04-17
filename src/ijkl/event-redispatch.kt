@@ -10,7 +10,6 @@ import com.intellij.openapi.util.SystemInfo.isMac
 import com.intellij.openapi.wm.IdeFocusManager
 import java.awt.AWTEvent
 import java.awt.Component
-import java.awt.Event.ALT_MASK
 import java.awt.KeyboardFocusManager
 import java.awt.event.KeyEvent
 import java.awt.event.KeyEvent.*
@@ -59,7 +58,6 @@ private class IjklIdePopupEventDispatcher(
     override fun getPopupStream(): Stream<JBPopup> = Stream.empty()
     override fun requestFocus() = false
     override fun close() = false
-    override fun setRestoreFocusSilentely() {}
 }
 
 private class IjklEventDispatcher(
@@ -69,7 +67,7 @@ private class IjklEventDispatcher(
 
     override fun dispatch(event: AWTEvent): Boolean {
         if (event !is KeyEvent) return false
-        if (event.modifiers.and(ALT_MASK) == 0) return false
+        if (event.modifiersEx.and(ALT_DOWN_MASK) == 0) return false
 
         val newEvent = event.mapIfIjkl()
 
@@ -182,7 +180,7 @@ private fun KeyEvent.copyWithoutAlt(keyCode: Int) =
         source as Component,
         id,
         `when`,
-        modifiers.and(ALT_MASK.inv()),
+        modifiersEx.and(ALT_DOWN_MASK.inv()),
         keyCode,
         zeroChar
     )
@@ -193,7 +191,7 @@ private fun KeyEvent.copyWithModifier(keyCode: Int) =
         source as Component,
         id,
         `when`,
-        modifiers.or(if (isMac) ALT_MASK else CTRL_MASK),
+        modifiersEx.or(if (isMac) ALT_DOWN_MASK else CTRL_DOWN_MASK),
         keyCode,
         zeroChar
     )
