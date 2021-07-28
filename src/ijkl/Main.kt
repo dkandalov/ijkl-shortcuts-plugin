@@ -32,7 +32,7 @@ class Main: AppLifecycleListener {
         initEventReDispatch(
             ideEventQueue = IdeEventQueue.getInstance(),
             keyboardFocusManager = KeyboardFocusManager.getCurrentKeyboardFocusManager(),
-            application = ApplicationManager.getApplication()
+            parentDisposable = application
         )
     }
 }

@@ -8,7 +8,6 @@ import com.intellij.openapi.util.io.FileUtil
 import java.io.File
 import java.io.FileOutputStream
 
-
 fun initOsxKeyLayoutInstaller(
     bundleName: String,
     systemPathToBundle: String,
@@ -24,15 +23,13 @@ fun initOsxKeyLayoutInstaller(
             "<a href=''>Click here</a> to install bundle with 'U.S. - IJKL' and 'British - IJKL' input sources. "
         application.showNotification(message, NotificationListener { notification, _ ->
             try {
-
                 copyKeyLayoutTo(bundleName, userPathToBundle)
                 notification.expire()
                 application.showNotification(
                     "The bundle with input sources was copied to '$userPathToBundle'. " +
                     "You will need to add it manually in OSX 'System Preferences -> Keyboard -> Input Sources'. " +
-                    "See <a href='https://github.com/dkandalov/ijkl-shortcuts-plugin/blob/master/readme.md'>plugin readme</a> for more details."
+                    "See <a href='https://github.com/dkandalov/ijkl-shortcuts-plugin/blob/master/readme.md#how-to-install-osx-input-source'>plugin readme</a> for more details."
                 )
-
             } catch(e: Exception) {
                 logger.error(e)
             }

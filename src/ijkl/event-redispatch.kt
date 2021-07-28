@@ -3,7 +3,7 @@ package ijkl
 import com.intellij.find.SearchTextArea
 import com.intellij.ide.IdeEventQueue
 import com.intellij.ide.IdeEventQueue.EventDispatcher
-import com.intellij.openapi.application.Application
+import com.intellij.openapi.Disposable
 import com.intellij.openapi.ui.popup.IdePopupEventDispatcher
 import com.intellij.openapi.ui.popup.JBPopup
 import com.intellij.openapi.util.SystemInfo.isMac
@@ -19,7 +19,7 @@ import javax.swing.JTree
 fun initEventReDispatch(
     ideEventQueue: IdeEventQueue,
     keyboardFocusManager: KeyboardFocusManager,
-    application: Application
+    parentDisposable: Disposable
 ) {
     val focusOwnerFinder = FocusOwnerFinder(keyboardFocusManager)
     val ijklEventDispatcher = IjklEventDispatcher(focusOwnerFinder, ideEventQueue)
@@ -33,9 +33,9 @@ fun initEventReDispatch(
         if (ideEventQueue.isPopupActive) {
             ideEventQueue.popupManager.push(popupEventDispatcher)
         }
-    }, application)
+    }, parentDisposable)
 
-    ideEventQueue.addDispatcher(ijklEventDispatcher, application)
+    ideEventQueue.addDispatcher(ijklEventDispatcher, parentDisposable)
 }
 
 private class FocusOwnerFinder(private val keyboardFocusManager: KeyboardFocusManager) {
@@ -112,7 +112,6 @@ private class IjklEventDispatcher(
 
         val hasParentTree = component.hasParentTree()
         if (hasParentTree) {
-
             // In some JDK versions (e.g. in jbrex8u152b1024.10) in trees with filter enabled (by typing some letters)
             // alt-ik events are processed as if up/down was pressed twice so some results are skipped.
             // This is a workaround to ignore KEY_TYPED event so that only KEY_PRESSED and KEY_RELEASED are mapped.
@@ -184,7 +183,6 @@ private fun KeyEvent.copyWithoutAlt(keyCode: Int) =
         keyCode,
         zeroChar
     )
-
 
 private fun KeyEvent.copyWithModifier(keyCode: Int) =
     KeyEvent(
