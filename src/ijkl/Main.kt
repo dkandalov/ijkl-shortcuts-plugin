@@ -4,14 +4,16 @@ import com.intellij.ide.AppLifecycleListener
 import com.intellij.ide.IdeEventQueue
 import com.intellij.notification.NotificationDisplayType.STICKY_BALLOON
 import com.intellij.notification.NotificationsConfiguration
+import com.intellij.openapi.actionSystem.ActionManager
 import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.diagnostic.Logger
 import com.intellij.openapi.util.SystemInfo
 import java.awt.KeyboardFocusManager
 
 class Main: AppLifecycleListener {
-    override fun appFrameCreated(commandLineArgs: MutableList<String>) {
-        val logger = Logger.getInstance(this.javaClass.canonicalName)
+    @Suppress("UnstableApiUsage")
+    override fun appStarted() {
+        val logger = Logger.getInstance(javaClass.canonicalName)
         val application = ApplicationManager.getApplication()
         NotificationsConfiguration.getNotificationsConfiguration().register(groupDisplayId, STICKY_BALLOON, true)
 
@@ -26,7 +28,8 @@ class Main: AppLifecycleListener {
         initCurrentKeymapModifier(
             keymapInputStream = resourceInputStream(if (SystemInfo.isMac) "ijkl-osx-keymap.xml" else "ijkl-keymap.xml"),
             application = application,
-            logger = logger
+            logger = logger,
+            actionManager = ActionManager.getInstance()
         )
 
         initEventReDispatch(
