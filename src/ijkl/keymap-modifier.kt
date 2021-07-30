@@ -1,8 +1,6 @@
 package ijkl
 
 import com.intellij.ide.actions.RevealFileAction
-import com.intellij.notification.NotificationListener
-import com.intellij.openapi.Disposable
 import com.intellij.openapi.actionSystem.ActionManager
 import com.intellij.openapi.actionSystem.Shortcut
 import com.intellij.openapi.application.Application
@@ -15,13 +13,12 @@ import com.intellij.openapi.keymap.KeymapUtil.getShortcutText
 import com.intellij.openapi.util.Disposer
 import java.io.File
 import java.io.InputStream
-import java.util.*
 
 fun initCurrentKeymapModifier(
     keymapInputStream: InputStream,
     application: Application,
     logger: Logger,
-    actionManager: ActionManager = ActionManager.getInstance()
+    actionManager: ActionManager
 ) {
     var shortcuts = IjklShortcuts(keymapInputStream.readShortcutsData())
 
@@ -54,7 +51,7 @@ fun initCurrentKeymapModifier(
 
                 application.showNotification(
                     message = "There were conflicts between IJKL shortcuts and '$newKeymap' keymap. See <a href=''>IDE log file</a> for more details.",
-                    listener = NotificationListener { _, _ ->
+                    listener = { _, _ ->
                         // Based on com.intellij.ide.actions.ShowLogAction code.
                         if (RevealFileAction.isSupported()) {
                             val logFile = File(PathManager.getLogPath(), "idea.log")
@@ -137,9 +134,9 @@ private fun registerKeymapListener(application: Application, listener: KeymapCha
         }
     })
 
-    Disposer.register(application, Disposable {
+    Disposer.register(application) {
         listener.onChange(oldKeymap = keymap, newKeymap = null)
-    })
+    }
 
     listener.onChange(oldKeymap = null, newKeymap = keymap)
 }

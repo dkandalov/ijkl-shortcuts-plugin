@@ -29,7 +29,7 @@ fun initEventReDispatch(
     val popupEventDispatcher = IjklIdePopupEventDispatcher(ijklEventDispatcher, focusOwnerFinder, afterDispatch = {
         ideEventQueue.popupManager.remove(it)
     })
-    ideEventQueue.addActivityListener(Runnable {
+    ideEventQueue.addActivityListener({
         if (ideEventQueue.isPopupActive) {
             ideEventQueue.popupManager.push(popupEventDispatcher)
         }

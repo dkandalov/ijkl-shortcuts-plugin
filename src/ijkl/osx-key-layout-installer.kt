@@ -1,6 +1,5 @@
 package ijkl
 
-import com.intellij.notification.NotificationListener
 import com.intellij.openapi.application.Application
 import com.intellij.openapi.diagnostic.Logger
 import com.intellij.openapi.util.SystemInfo
@@ -21,19 +20,19 @@ fun initOsxKeyLayoutInstaller(
         val message =
             "Because of JDK limitations alt+ijkl shortcuts need keyboard input source with no dead key mapping for alt+[letter] shortcuts. " +
             "<a href=''>Click here</a> to install bundle with 'U.S. - IJKL' and 'British - IJKL' input sources. "
-        application.showNotification(message, NotificationListener { notification, _ ->
+        application.showNotification(message) { notification, _ ->
             try {
                 copyKeyLayoutTo(bundleName, userPathToBundle)
                 notification.expire()
                 application.showNotification(
                     "The bundle with input sources was copied to '$userPathToBundle'. " +
-                    "You will need to add it manually in OSX 'System Preferences -> Keyboard -> Input Sources'. " +
-                    "See <a href='https://github.com/dkandalov/ijkl-shortcuts-plugin/blob/master/readme.md#how-to-install-osx-input-source'>plugin readme</a> for more details."
-                )
-            } catch(e: Exception) {
+                        "You will need to add it manually in OSX 'System Preferences -> Keyboard -> Input Sources'. " +
+                        "See <a href='https://github.com/dkandalov/ijkl-shortcuts-plugin/blob/master/readme.md#how-to-install-osx-input-source'>plugin readme</a> for more details."
+                                            )
+            } catch (e: Exception) {
                 logger.error(e)
             }
-        })
+        }
     }
 }
 

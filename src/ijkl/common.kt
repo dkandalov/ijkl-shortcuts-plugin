@@ -22,7 +22,7 @@ fun resourceInputStream(fileName: String): InputStream {
 fun Application.showNotification(message: String, listener: NotificationListener = URL_OPENING_LISTENER) {
     messageBus
         .syncPublisher(Notifications.TOPIC)
-        .notify(Notification(groupDisplayId, notificationTitle, message, INFORMATION, listener))
+        .notify(Notification(groupDisplayId, notificationTitle, message, INFORMATION).setListener(listener))
 }
 
 fun ActionManager.actionText(actionId: String) =
