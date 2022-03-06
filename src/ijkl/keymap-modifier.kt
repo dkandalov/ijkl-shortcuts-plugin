@@ -24,8 +24,8 @@ fun initCurrentKeymapModifier(
 
     registerKeymapListener(application, object: KeymapChangeListener {
         override fun onChange(oldKeymap: Keymap?, newKeymap: Keymap?) {
-            if (newKeymap == null) return
             if (oldKeymap != null) shortcuts.removeFrom(oldKeymap)
+            if (newKeymap == null) return
             shortcuts = shortcuts.addTo(newKeymap)
 
             logger.info(
