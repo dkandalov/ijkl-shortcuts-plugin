@@ -1,7 +1,7 @@
 <idea-plugin>
     <id>ijkl-shortcuts</id>
     <name>IJKL Shortcuts</name>
-    <version>1.17</version>
+    <version>1.18</version>
     <vendor email="dmitry.kandalov@gmail.com" url="https://github.com/dkandalov/ijkl-shortcuts-plugin">Dmitry Kandalov</vendor>
 
     <description><![CDATA[
@@ -29,7 +29,7 @@
     ]]></description>
 
     <!-- http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/build_number_ranges.html -->
-    <idea-version since-build="203"/>
+    <idea-version since-build="212.4746.92"/>
 
     <!-- See http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html -->
     <depends>com.intellij.modules.platform</depends>
