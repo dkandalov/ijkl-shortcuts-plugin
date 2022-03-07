@@ -5,7 +5,7 @@ import org.jetbrains.kotlin.gradle.plugin.KotlinSourceSet
 
 plugins {
     kotlin("jvm").version("1.5.10")
-    id("org.jetbrains.intellij").version("0.7.2")
+    id("org.jetbrains.intellij").version("1.4.0")
     id("java")
 }
 repositories {
@@ -38,11 +38,11 @@ tasks.withType<KotlinJvmCompile> {
 
 configure<IntelliJPluginExtension> {
     // To find available IDE versions see https://www.jetbrains.com/intellij-repository/releases
-    version = "212.4746.92"
-    // version = "LATEST-EAP-SNAPSHOT"
+    version.set("212.4746.92")
+    // version.set("LATEST-EAP-SNAPSHOT")
 
-    pluginName = "ijkl-shortcuts"
-    downloadSources = true
-    sameSinceUntilBuild = false
-    updateSinceUntilBuild = false
+    pluginName.set("ijkl-shortcuts")
+    downloadSources.set(true)
+    sameSinceUntilBuild.set(false)
+    updateSinceUntilBuild.set(false)
 }
