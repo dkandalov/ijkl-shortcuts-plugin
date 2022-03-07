@@ -4,10 +4,9 @@ import org.jetbrains.kotlin.gradle.dsl.KotlinJvmCompile
 import org.jetbrains.kotlin.gradle.plugin.KotlinSourceSet
 
 plugins {
-    idea
-    java
-    kotlin("jvm").version("1.4.31")
+    kotlin("jvm").version("1.5.10")
     id("org.jetbrains.intellij").version("0.7.2")
+    id("java")
 }
 repositories {
     mavenCentral()
@@ -29,8 +28,8 @@ sourceSets {
 tasks.withType<KotlinJvmCompile> {
     kotlinOptions {
         jvmTarget = "11"
-        apiVersion = "1.4"
-        languageVersion = "1.4"
+        apiVersion = "1.5"
+        languageVersion = "1.5"
         // Compiler flag to allow building against pre-released versions of Kotlin
         // because IJ EAP can be built using pre-released Kotlin but it's still worth doing to check API compatibility
         freeCompilerArgs = freeCompilerArgs + listOf("-Xskip-metadata-version-check")
@@ -39,12 +38,9 @@ tasks.withType<KotlinJvmCompile> {
 
 configure<IntelliJPluginExtension> {
     // To find available IDE versions see https://www.jetbrains.com/intellij-repository/releases
-    val ideVersion = System.getenv().getOrDefault("IJ_VERSION",
-        "212.4746.92"
-//        "LATEST-EAP-SNAPSHOT"
-    )
-    println("Using ide version: $ideVersion")
-    version = ideVersion
+    version = "212.4746.92"
+    // version = "LATEST-EAP-SNAPSHOT"
+
     pluginName = "ijkl-shortcuts"
     downloadSources = true
     sameSinceUntilBuild = false
