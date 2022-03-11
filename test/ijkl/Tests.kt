@@ -5,7 +5,7 @@ import org.hamcrest.core.IsEqual.equalTo
 import org.junit.Assert.assertThat
 import org.junit.Test
 import java.io.File
-import java.util.regex.Pattern
+import java.util.TreeSet
 
 class Tests {
     @Test fun `win, linux keymap xml`() {
@@ -24,7 +24,7 @@ class Tests {
 
     private fun List<ShortcutData>.validate(amountOfActions: Int, amountOfShortcuts: Int) {
         size shouldEqual amountOfActions
-        sumBy { it.shortcuts.size } shouldEqual amountOfShortcuts
+        sumOf { it.shortcuts.size } shouldEqual amountOfShortcuts
         first().apply {
             actionId shouldEqual "\$Delete"
             shortcuts shouldEqual listOf("alt semicolon").map { it.toKeyboardShortcut() }
@@ -38,15 +38,13 @@ class Tests {
     @Test fun `copy layout from resources to a folder`() {
         val tempDir = FileUtil.createTempDirectory("", "", true)
 
-        copyKeyLayoutTo(fromResource = "ijkl-keys.bundle", toDir = tempDir.absolutePath)
+        copyKeyLayout(fromResource = "ijkl-keys.bundle", toDir = tempDir.absolutePath)
 
         tempDir.allFiles() shouldEqual File("resources/ijkl-keys.bundle").allFiles()
     }
 
-    private fun File.allFiles() = FileUtil
-        .findFilesOrDirsByMask(Pattern.compile(".*"), this)
-        .map { it.toRelativeString(this) }
-        .sorted()
+    private fun File.allFiles() = walkTopDown()
+        .mapTo(TreeSet()) { it.toRelativeString(this) }
 
     private infix fun <T> T.shouldEqual(that: T) {
         assertThat(this, equalTo(that))

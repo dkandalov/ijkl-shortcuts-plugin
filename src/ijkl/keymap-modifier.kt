@@ -32,7 +32,7 @@ fun initCurrentKeymapModifier(
                 "Switched keymap from '$oldKeymap' to '$newKeymap'. Shortcuts: " +
                     "added - ${shortcuts.added.size}; " +
                     "already existed - ${shortcuts.alreadyExisted.size}; " +
-                    "conflicts - ${shortcuts.conflicts.values.sumBy { it.size }}"
+                    "conflicts - ${shortcuts.conflicts.values.sumOf { it.size }}"
             )
             if (shortcuts.conflicts.isNotEmpty()) {
                 val conflictsDescription = shortcuts

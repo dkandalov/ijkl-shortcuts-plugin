@@ -22,7 +22,7 @@ fun initOsxKeyLayoutInstaller(
             "<a href=''>Click here</a> to install bundle with 'U.S. - IJKL' and 'British - IJKL' input sources. "
         application.showNotification(message) { notification, _ ->
             try {
-                copyKeyLayoutTo(bundleName, userPathToBundle)
+                copyKeyLayout(bundleName, userPathToBundle)
                 notification.expire()
                 application.showNotification(
                     "The bundle with input sources was copied to '$userPathToBundle'. " +
@@ -36,9 +36,10 @@ fun initOsxKeyLayoutInstaller(
     }
 }
 
-fun copyKeyLayoutTo(fromResource: String, toDir: String) {
+fun copyKeyLayout(fromResource: String, toDir: String) {
     // List directories and files manually because there seems to be no easy way to list files/dirs in classloader resources.
     FileUtil.createDirectory(File("$toDir/Contents/Resources/en.lproj"))
+    FileUtil.createDirectory(File("$toDir/Contents/Resources/English.lproj"))
     listOf(
         "Contents/Info.plist",
         "Contents/version.plist",
@@ -46,7 +47,8 @@ fun copyKeyLayoutTo(fromResource: String, toDir: String) {
         "Contents/Resources/British - IJKL.keylayout",
         "Contents/Resources/U.S. - IJKL.icns",
         "Contents/Resources/U.S. - IJKL.keylayout",
-        "Contents/Resources/en.lproj/InfoPlist.strings"
+        "Contents/Resources/en.lproj/InfoPlist.strings",
+        "Contents/Resources/English.lproj/InfoPlist.strings",
     ).forEach { fileName ->
         FileUtil.copy(
             resourceInputStream("$fromResource/$fileName"),
