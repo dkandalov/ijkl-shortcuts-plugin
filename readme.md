@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/dkandalov/ijkl-shortcuts-plugin.svg?branch=master)](https://travis-ci.org/dkandalov/ijkl-shortcuts-plugin)
+[![Build Status](https://github.com/dkandalov/ijkl-shortcuts-plugin/workflows/CI/badge.svg)](https://github.com/dkandalov/ijkl-shortcuts-plugin/actions)
 
 ## IJKL shortcuts plugin
 
