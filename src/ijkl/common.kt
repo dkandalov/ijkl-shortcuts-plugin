@@ -16,7 +16,7 @@ private const val notificationTitle = "IJKL Shortcuts plugin"
 fun resourceInputStream(fileName: String): InputStream {
     val file = File(fileName)
     return if (file.exists()) file.inputStream()
-    else Main::class.java.classLoader.getResource(fileName)!!.openStream()
+    else Main::class.java.classLoader.getResource(fileName)?.openStream() ?: error("Couldn't find '$fileName'")
 }
 
 fun Application.showNotification(message: String, listener: NotificationListener = URL_OPENING_LISTENER) {
