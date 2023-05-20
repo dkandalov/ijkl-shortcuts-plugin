@@ -11,22 +11,20 @@ import javax.xml.parsers.DocumentBuilderFactory
 fun InputStream.readShortcutsData(): List<ShortcutData> = use { readShortcutsDataFrom(this) }
 
 private fun readShortcutsDataFrom(inputStream: InputStream): List<ShortcutData> {
-    fun Node.getAttribute(name: String): String? =
-        attributes.getNamedItem(name)?.nodeValue
+    fun Node.getAttribute(name: String): String? = attributes.getNamedItem(name)?.nodeValue
+    fun Node.children(): List<Node> = 0.until(childNodes.length).map { i -> childNodes.item(i) }
 
-    fun Node.children(): List<Node> =
-        0.until(childNodes.length).map { i -> childNodes.item(i) }
-
-    val builder = DocumentBuilderFactory.newInstance().newDocumentBuilder()
-    val document = builder.parse(inputStream)
-    val keymapTag = document.children().find { it.nodeName == "keymap" } ?: error("")
+    val keymapTag = DocumentBuilderFactory.newInstance().newDocumentBuilder()
+        .parse(inputStream)
+        .children()
+        .find { it.nodeName == "keymap" } ?: error("Could find keymap tag")
 
     return keymapTag.children()
         .filter { it.nodeName == "action" }
         .map { child ->
             ShortcutData(
-                child.getAttribute("id") ?: "",
-                child.children()
+                actionId = child.getAttribute("id") ?: "",
+                shortcuts = child.children()
                     .filter { it.nodeName == "keyboard-shortcut" }
                     .mapNotNull { it.getAttribute("first-keystroke")?.toKeyboardShortcut() }
             )
@@ -34,7 +32,7 @@ private fun readShortcutsDataFrom(inputStream: InputStream): List<ShortcutData> 
 }
 
 fun String?.toKeyboardShortcut(): Shortcut? {
-    if (this == null || isBlank()) return null
+    if (isNullOrBlank()) return null
 
     val firstKeystroke: KeyStroke?
     val secondKeystroke: KeyStroke?
