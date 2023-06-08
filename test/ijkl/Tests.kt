@@ -7,7 +7,7 @@ import org.junit.Test
 import java.io.File
 import java.util.TreeSet
 
-class Tests {
+class ReadShortcutsTests {
     @Test fun `win, linux keymap xml`() {
         resourceInputStream("ijkl-keymap.xml").readShortcutsData().validate(
             amountOfActions = 49,
@@ -34,7 +34,9 @@ class Tests {
             shortcuts shouldEqual listOf("shift ctrl back_space").map { it.toKeyboardShortcut() }
         }
     }
+}
 
+class CopyKeyLayoutTests {
     @Test fun `copy layout from resources to a folder`() {
         val tempDir = FileUtil.createTempDirectory("", "", true)
 
@@ -46,7 +48,8 @@ class Tests {
     private fun File.allFiles() = walkTopDown()
         .mapTo(TreeSet()) { it.toRelativeString(this) }
 
-    private infix fun <T> T.shouldEqual(that: T) {
-        assertThat(this, equalTo(that))
-    }
+}
+
+private infix fun <T> T.shouldEqual(that: T) {
+    assertThat(this, equalTo(that))
 }
