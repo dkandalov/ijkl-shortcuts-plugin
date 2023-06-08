@@ -67,22 +67,18 @@ private class IjklEventDispatcher(
 
     override fun dispatch(event: AWTEvent): Boolean {
         if (event !is KeyEvent) return false
-        if (event.modifiersEx.and(ALT_DOWN_MASK) == 0) return false
 
-        val newEvent = event.mapIfIjkl()
-
-        return if (newEvent != null) {
-            ideEventQueue.dispatchEvent(newEvent)
-            true
-        } else {
-            false
-        }
+        val newEvent = event.mapIfIjkl() ?: return false
+        ideEventQueue.dispatchEvent(newEvent)
+        return true
     }
 
+    // For performance optimisation reasons do the cheapest checks first, i.e. key code, popup, focus in tree.
+    // There is no empirical evidence that these optimisations are actually useful though.
     @Suppress("NOTHING_TO_INLINE")
     private inline fun KeyEvent.mapIfIjkl(): KeyEvent? {
-        // For performance optimisation reasons do the cheapest checks first, i.e. key code, popup, focus in tree.
-        // There is no empirical evidence that these optimisations are actually useful though.
+        if (modifiersEx.and(ALT_DOWN_MASK) == 0) return null
+
         val isIjkl =
             keyCode == VK_I || keyCode == VK_J ||
                 keyCode == VK_K || keyCode == VK_L ||
