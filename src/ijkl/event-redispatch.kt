@@ -26,8 +26,8 @@ fun initEventReDispatch(
 
     // This is a workaround to make sure ijkl dispatch works in popups,
     // because IdeEventQueue invokes popup dispatchers before custom dispatchers.
-    val popupEventDispatcher = IjklIdePopupEventDispatcher(ijklEventDispatcher, focusOwnerFinder, afterDispatch = {
-        ideEventQueue.popupManager.remove(it)
+    val popupEventDispatcher = IjklIdePopupEventDispatcher(ijklEventDispatcher, focusOwnerFinder, afterDispatch = { dispatcher ->
+        ideEventQueue.popupManager.remove(dispatcher)
     })
     ideEventQueue.addActivityListener({
         if (ideEventQueue.isPopupActive) {
@@ -95,7 +95,7 @@ private class IjklEventDispatcher(
         val component = focusOwnerFinder.find()
 
         // Workarounds for search in current file, Find in Path popup, in Find Class/File popup.
-        // (Must be done before hasParentTree() because Find in Path popup has a tree but alt+jl shouldn't be mapped like for a tree.)
+        // (Must be done before hasParentTree() because Find in Path popup has a tree but alt+jl shouldn't be mapped like that for a tree.)
         if (component.hasParentSearchTextArea() || component.hasParentChooseByName()) {
             when (keyCode) {
                 VK_I         -> return copyWithoutAlt(VK_UP)
@@ -156,7 +156,7 @@ private class IjklEventDispatcher(
             if (component.hasParentWizardPopup()) {
                 when (keyCode) {
                     VK_J -> return copyWithoutAlt(VK_LEFT) // Convert to "left" so that it works as "collapse sub-menu".
-                    VK_L -> return copyWithoutAlt(VK_RIGHT) // Convert to "left" so that it works as "expand sub-menu".
+                    VK_L -> return copyWithoutAlt(VK_RIGHT) // Convert to "right" so that it works as "expand sub-menu".
                 }
             }
             when (keyCode) {
