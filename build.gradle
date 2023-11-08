@@ -1,8 +1,6 @@
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-
 plugins {
-    id 'org.jetbrains.kotlin.jvm' version '1.5.10'
     id 'org.jetbrains.intellij' version '1.4.0'
+    id 'org.jetbrains.kotlin.jvm' version '1.5.10'
     id 'java'
 }
 
@@ -12,15 +10,15 @@ repositories {
 
 sourceSets {
     main {
-        java.srcDirs('./src')
-        resources.srcDirs('./resources')
+        kotlin.srcDir './src'
+        resources.srcDir './resources'
     }
     test {
-        java.srcDirs('./test')
+        kotlin.srcDir './test'
     }
 }
 
-tasks.withType(KotlinCompile).configureEach {
+compileKotlin {
     kotlinOptions {
         jvmTarget = "11"
         apiVersion = "1.5"
@@ -41,3 +39,4 @@ intellij {
     sameSinceUntilBuild.set(false)
     updateSinceUntilBuild.set(false)
 }
+buildSearchableOptions.enabled = false // Disable because it takes a long time and the plugin doesn't need it
