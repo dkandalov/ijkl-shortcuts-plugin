@@ -101,7 +101,6 @@ interface KeyEventContext {
     val hasParentTree: Boolean
     val hasParentCommitDialog: Boolean
     val hasParentWizardPopup: Boolean
-    val isNewCommitDialog: Boolean
     val isPopupActive: Boolean
 }
 
@@ -112,7 +111,6 @@ private class Context(focusOwnerFinder: FocusOwnerFinder, ideEventQueue: IdeEven
     override val hasParentTree by lazy(NONE) { component.hasParentTree() }
     override val hasParentCommitDialog by lazy(NONE) { component.hasParentCommitDialog() }
     override val hasParentWizardPopup by lazy(NONE) { component.hasParentWizardPopup() }
-    override val isNewCommitDialog by lazy(NONE) { component.toString().contains("EditorComponent") }
     override val isPopupActive by lazy(NONE) { ideEventQueue.isPopupActive }
 }
 
@@ -177,15 +175,6 @@ private inline fun KeyEvent.mapIfIjkl(context: KeyEventContext): KeyEvent? {
             VK_M -> return copyWithoutAlt(VK_RIGHT) // Override mnemonic for "Amend commit" (assuming that commits are not amended very often).
             VK_U -> return copyWithoutAlt(VK_HOME) // Override for the symmetry with the VK_O.
             VK_O -> return copyWithoutAlt(VK_END) // Override mnemonic for "Optimise imports".
-        }
-    }
-
-    // Starting from #IU-192.5281.24 (2019.2 EAP) there is new commit dialog
-    // which seems to be "stealing" alt+i from editor (probably for "Commit" button mnemonics).
-    // This is a workaround to make sure editor receives alt+i as VK_UP.
-    if (context.isNewCommitDialog) {
-        when (keyCode) {
-            VK_I -> return copyWithoutAlt(VK_UP)
         }
     }
 
