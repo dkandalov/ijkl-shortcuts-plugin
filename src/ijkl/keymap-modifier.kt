@@ -81,7 +81,7 @@ data class IjklShortcuts(
         // Collect bound action ids before modifying keymap.
         val boundActionIdsByShortcut: Map<Shortcut, List<String>> = all
             .flatMap { it.shortcuts }.asSequence().distinct()
-            .associateWith { keymap.getActionIds(it).toList() }
+            .associateWith { keymap.getActionIdList(it).toList() }
 
         all.forEach { shortcutData ->
             shortcutData.shortcuts.forEach { shortcut ->

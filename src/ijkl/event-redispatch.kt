@@ -87,10 +87,9 @@ private class IjklEventDispatcher(
     private val focusOwnerFinder: FocusOwnerFinder,
     private val ideEventQueue: IdeEventQueue
 ): EventDispatcher {
-
-    override fun dispatch(event: AWTEvent): Boolean {
-        if (event !is KeyEvent) return false
-        val newEvent = event.mapIfIjkl(Context(focusOwnerFinder, ideEventQueue)) ?: return false
+    override fun dispatch(e: AWTEvent): Boolean {
+        if (e !is KeyEvent) return false
+        val newEvent = e.mapIfIjkl(Context(focusOwnerFinder, ideEventQueue)) ?: return false
         ideEventQueue.dispatchEvent(newEvent)
         return true
     }

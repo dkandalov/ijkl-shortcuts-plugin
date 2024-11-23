@@ -1,8 +1,8 @@
 package ijkl
 
 import com.intellij.openapi.util.io.FileUtil
+import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.core.IsEqual.equalTo
-import org.junit.Assert.assertThat
 import org.junit.Test
 import java.io.File
 import java.util.TreeSet
