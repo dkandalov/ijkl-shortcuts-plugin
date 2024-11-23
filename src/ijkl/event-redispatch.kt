@@ -255,7 +255,7 @@ private tailrec fun Component?.hasParentCommitDialog(): Boolean = when {
 }
 
 /**
- * Ideally this would be a check for "Wizard" in component class name but it doesn't work in Rider.
+ * Ideally this would be a check for "Wizard" in component class name, but it doesn't work in Rider.
  */
 private fun Component?.hasParentWizardPopup() = !hasParentChooseByName()
 
