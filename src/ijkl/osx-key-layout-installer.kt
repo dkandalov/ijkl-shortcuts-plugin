@@ -4,8 +4,7 @@ import com.intellij.openapi.application.Application
 import com.intellij.openapi.diagnostic.Logger
 import com.intellij.openapi.util.SystemInfo
 import com.intellij.openapi.util.io.FileUtil
-import java.io.File
-import java.io.FileOutputStream
+import java.io.*
 
 fun initOsxKeyLayoutInstaller(
     bundleName: String,
@@ -26,9 +25,9 @@ fun initOsxKeyLayoutInstaller(
                 notification.expire()
                 application.showNotification(
                     "The bundle with input sources was copied to '$userPathToBundle'. " +
-                        "You will need to add it manually in OSX 'System Preferences -> Keyboard -> Input Sources'. " +
-                        "See <a href='https://github.com/dkandalov/ijkl-shortcuts-plugin/blob/master/readme.md#how-to-install-osx-input-source'>plugin readme</a> for more details."
-                                            )
+                        "You will need to add it manually in macOS 'System Preferences -> Keyboard -> Input Sources'. " +
+                        "See <a href='https://github.com/dkandalov/ijkl-shortcuts-plugin/blob/master/readme.md#how-to-install-macos-input-source'>plugin readme</a> for more details."
+                )
             } catch (e: Exception) {
                 logger.error(e)
             }
