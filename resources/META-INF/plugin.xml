@@ -42,5 +42,6 @@
         <action id="ijkl.MoveCaretLeftWithSelectionAction" class="ijkl.MoveCaretLeftWithSelectionAction" text="Move Caret Left With Selection in Text Component" use-shortcut-of="EditorLeftWithSelection"/>
         <action id="ijkl.MoveCaretRightAction" class="ijkl.MoveCaretRightAction" text="Move Caret Right in Text Component" use-shortcut-of="EditorRight"/>
         <action id="ijkl.MoveCaretRightWithSelectionAction" class="ijkl.MoveCaretRightWithSelectionAction" text="Move Caret Right With Selection in Text Component" use-shortcut-of="EditorRightWithSelection"/>
+        <action id="ijkl.DeleteAction" class="ijkl.DeleteAction" text="Delete in Text Component" use-shortcut-of="EditorDelete"/>
     </actions>
 </idea-plugin>
