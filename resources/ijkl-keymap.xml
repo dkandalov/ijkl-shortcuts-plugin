@@ -11,15 +11,11 @@
     <action id="CodeCompletion">
         <keyboard-shortcut first-keystroke="alt quote"/>
     </action>
-    <action id="EditSource">
+    <action id="GotoDeclaration">
         <keyboard-shortcut first-keystroke="alt h"/>
     </action>
     <action id="Editor Delete">
         <keyboard-shortcut first-keystroke="alt semicolon"/>
-    </action>
-    <action id="EditorChooseLookupItemReplace">
-        <keyboard-shortcut first-keystroke="alt l"/>
-        <keyboard-shortcut first-keystroke="alt quote"/>
     </action>
     <action id="EditorCompleteStatement">
         <keyboard-shortcut first-keystroke="ctrl l"/>
@@ -140,7 +136,7 @@
         <keyboard-shortcut first-keystroke="shift ctrl alt o"/>
     </action>
     <action id="RenameElement">
-        <keyboard-shortcut first-keystroke="shift alt r"/>
+        <keyboard-shortcut first-keystroke="alt r"/>
     </action>
     <action id="ShowUsages">
         <keyboard-shortcut first-keystroke="alt s"/>

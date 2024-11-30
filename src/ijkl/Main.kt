@@ -25,7 +25,7 @@ class Main : AppLifecycleListener {
         )
 
         initCurrentKeymapModifier(
-            keymapInputStream = resourceInputStream(if (SystemInfo.isMac) "ijkl-osx-keymap.xml" else "ijkl-keymap.xml"),
+            keymapInputStream = resourceInputStream(if (SystemInfo.isMac) "ijkl-macos-keymap.xml" else "ijkl-keymap.xml"),
             application = application,
             logger = logger,
             actionManager = ActionManager.getInstance()

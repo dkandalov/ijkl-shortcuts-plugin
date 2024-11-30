@@ -10,15 +10,15 @@ import java.util.TreeSet
 class ReadShortcutsTests {
     @Test fun `win, linux keymap xml`() {
         resourceInputStream("ijkl-keymap.xml").readShortcutsData().validate(
-            amountOfActions = 49,
-            amountOfShortcuts = 50
+            amountOfActions = 48,
+            amountOfShortcuts = 48
         )
     }
 
     @Test fun `osx keymap xml`() {
-        resourceInputStream("ijkl-osx-keymap.xml").readShortcutsData().validate(
-            amountOfActions = 49,
-            amountOfShortcuts = 51
+        resourceInputStream("ijkl-macos-keymap.xml").readShortcutsData().validate(
+            amountOfActions = 48,
+            amountOfShortcuts = 49
         )
     }
 
