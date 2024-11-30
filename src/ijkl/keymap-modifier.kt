@@ -1,18 +1,13 @@
 package ijkl
 
 import com.intellij.ide.actions.RevealFileAction
-import com.intellij.openapi.actionSystem.ActionManager
-import com.intellij.openapi.actionSystem.Shortcut
-import com.intellij.openapi.application.Application
-import com.intellij.openapi.application.PathManager
+import com.intellij.openapi.actionSystem.*
+import com.intellij.openapi.application.*
 import com.intellij.openapi.diagnostic.Logger
-import com.intellij.openapi.keymap.Keymap
-import com.intellij.openapi.keymap.KeymapManager
-import com.intellij.openapi.keymap.KeymapManagerListener
+import com.intellij.openapi.keymap.*
 import com.intellij.openapi.keymap.KeymapUtil.getShortcutText
 import com.intellij.openapi.util.Disposer
-import java.io.File
-import java.io.InputStream
+import java.io.*
 
 fun initCurrentKeymapModifier(
     keymapInputStream: InputStream,
@@ -22,7 +17,7 @@ fun initCurrentKeymapModifier(
 ) {
     var shortcuts = IjklShortcuts(keymapInputStream.readShortcutsData())
 
-    registerKeymapListener(application, object: KeymapChangeListener {
+    registerKeymapListener(application, object : KeymapChangeListener {
         override fun onChange(oldKeymap: Keymap?, newKeymap: Keymap?) {
             if (oldKeymap != null) shortcuts.removeFrom(oldKeymap)
             if (newKeymap == null) return
@@ -45,7 +40,6 @@ fun initCurrentKeymapModifier(
                         val actionsDescription = conflictingActionIds.asSequence()
                             .map { id -> actionManager.actionText(id) }
                             .joinToString(", ", "[", "]")
-
                         "$shortcutsDescription '$ijklAction' conflicts with: $actionsDescription"
                     }
 
@@ -54,8 +48,7 @@ fun initCurrentKeymapModifier(
                     listener = { _, _ ->
                         // Based on com.intellij.ide.actions.ShowLogAction code.
                         if (RevealFileAction.isSupported()) {
-                            val logFile = File(PathManager.getLogPath(), "idea.log")
-                            RevealFileAction.openFile(logFile)
+                            RevealFileAction.openFile(File(PathManager.getLogPath(), "idea.log"))
                         }
                     }
                 )
@@ -67,8 +60,8 @@ fun initCurrentKeymapModifier(
 
 data class ShortcutData(val actionId: String, val shortcuts: List<Shortcut>)
 
-data class IjklShortcuts(
-    val all: List<ShortcutData>,
+private data class IjklShortcuts(
+    val shortcutsToAdd: List<ShortcutData>,
     val added: List<ShortcutData> = ArrayList(),
     val alreadyExisted: Set<ShortcutData> = LinkedHashSet(),
     val conflicts: Map<ShortcutData, List<String>> = HashMap()
@@ -79,28 +72,28 @@ data class IjklShortcuts(
         val conflicts = HashMap<ShortcutData, List<String>>()
 
         // Collect bound action ids before modifying keymap.
-        val boundActionIdsByShortcut: Map<Shortcut, List<String>> = all
-            .flatMap { it.shortcuts }.asSequence().distinct()
-            .associateWith { keymap.getActionIdList(it).toList() }
+        val actionIdsByShortcut: Map<Shortcut, List<String>> =
+            shortcutsToAdd.flatMap { it.shortcuts }.distinct()
+                .associateWith { keymap.getActionIdList(it) }
 
-        all.forEach { shortcutData ->
+        shortcutsToAdd.forEach { shortcutData ->
             shortcutData.shortcuts.forEach { shortcut ->
-                val boundActionIds = boundActionIdsByShortcut[shortcut] ?: error("no value for $shortcut")
-                val conflictingActionIds = boundActionIds - shortcutData.actionId
+                val boundActionIds = actionIdsByShortcut[shortcut] ?: error("no value for $shortcut")
 
-                if (boundActionIds.contains(shortcutData.actionId)) {
+                if (shortcutData.actionId in boundActionIds) {
                     alreadyExisted.add(shortcutData)
                 } else {
-                    added.add(shortcutData)
                     keymap.addShortcut(shortcutData.actionId, shortcut)
+                    added.add(shortcutData)
                 }
 
+                val conflictingActionIds = boundActionIds - shortcutData.actionId
                 if (conflictingActionIds.isNotEmpty()) {
                     conflicts[shortcutData] = conflictingActionIds
                 }
             }
         }
-        return IjklShortcuts(all, added, alreadyExisted, conflicts)
+        return IjklShortcuts(shortcutsToAdd, added, alreadyExisted, conflicts)
     }
 
     fun removeFrom(keymap: Keymap) {
@@ -123,7 +116,7 @@ private fun registerKeymapListener(application: Application, listener: KeymapCha
     val keymapManager = KeymapManager.getInstance()
     var keymap: Keymap? = keymapManager.activeKeymap
 
-    application.messageBus.connect().subscribe(KeymapManagerListener.TOPIC, object: KeymapManagerListener {
+    application.messageBus.connect().subscribe(KeymapManagerListener.TOPIC, object : KeymapManagerListener {
         override fun activeKeymapChanged(newKeymap: Keymap?) {
             val oldKeymap = keymap
             keymap = newKeymap
