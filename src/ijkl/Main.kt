@@ -16,7 +16,7 @@ class Main : AppLifecycleListener {
         val application = ApplicationManager.getApplication()
         NotificationsConfiguration.getNotificationsConfiguration().register(groupDisplayId, STICKY_BALLOON, true)
 
-        installOsxKeyLayout(
+        installMacosKeyLayout(
             bundleName = "ijkl-keys.bundle",
             systemPathToBundle = "/Library/Keyboard Layouts/ijkl-keys.bundle",
             userPathToBundle = "${System.getProperty("user.home")}/Library/Keyboard Layouts/ijkl-keys.bundle",
