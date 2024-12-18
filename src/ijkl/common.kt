@@ -1,11 +1,9 @@
 package ijkl
 
-import com.intellij.notification.Notification
-import com.intellij.notification.NotificationListener
+import com.intellij.notification.*
 import com.intellij.notification.NotificationListener.URL_OPENING_LISTENER
 import com.intellij.notification.NotificationType.INFORMATION
-import com.intellij.notification.Notifications
-import com.intellij.openapi.actionSystem.ActionManager
+import com.intellij.openapi.actionSystem.*
 import com.intellij.openapi.application.Application
 import java.io.File
 import java.io.InputStream
@@ -19,10 +17,12 @@ fun resourceInputStream(fileName: String): InputStream {
     else Main::class.java.classLoader.getResource(fileName)?.openStream() ?: error("Couldn't find '$fileName'")
 }
 
-fun Application.showNotification(message: String, listener: NotificationListener = URL_OPENING_LISTENER) {
+fun Application.showNotification(message: String, listener: NotificationListener) {
+    @Suppress("DEPRECATION") // Use deprecated setListener() because there isn't alternative to URL_OPENING_LISTENER
     messageBus
         .syncPublisher(Notifications.TOPIC)
-        .notify(Notification(groupDisplayId, notificationTitle, message, INFORMATION).setListener(listener))
+        .notify(Notification(groupDisplayId, notificationTitle, message, INFORMATION)
+            .setListener(listener))
 }
 
 fun ActionManager.actionText(actionId: String) =

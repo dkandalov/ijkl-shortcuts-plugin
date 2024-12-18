@@ -1,5 +1,6 @@
 package ijkl
 
+import com.intellij.notification.NotificationListener.URL_OPENING_LISTENER
 import com.intellij.openapi.application.Application
 import com.intellij.openapi.diagnostic.Logger
 import com.intellij.openapi.util.SystemInfo
@@ -26,7 +27,8 @@ fun installMacosKeyLayout(
                 application.showNotification(
                     "The bundle with input sources was copied to '$userPathToBundle'. " +
                         "You will need to add it manually in macOS 'System Preferences -> Keyboard -> Input Sources'. " +
-                        "See <a href='https://github.com/dkandalov/ijkl-shortcuts-plugin/blob/master/readme.md#how-to-install-macos-input-source'>plugin readme</a> for more details."
+                        "See <a href='https://github.com/dkandalov/ijkl-shortcuts-plugin/blob/master/readme.md#how-to-install-macos-input-source'>plugin readme</a> for more details.",
+                    URL_OPENING_LISTENER
                 )
             } catch (e: Exception) {
                 logger.error(e)

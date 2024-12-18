@@ -48,7 +48,7 @@ private class IjklIdePopupEventDispatcher(
 private class IjklEventDispatcher(
     private val focusOwnerFinder: FocusOwnerFinder,
     private val ideEventQueue: IdeEventQueue
-): EventDispatcher {
+) : EventDispatcher {
     override fun dispatch(e: AWTEvent): Boolean {
         if (e !is KeyEvent) return false
         val newEvent = e.mapIfIjkl(Context(focusOwnerFinder, ideEventQueue)) ?: return false
@@ -89,7 +89,7 @@ private class Context(focusOwnerFinder: FocusOwnerFinder, ideEventQueue: IdeEven
  *
  * For performance optimisation reasons the cheapest checks should be done first.
  * (There is no empirical evidence that these optimisations are actually useful though.)
-*/
+ */
 private fun KeyEvent.mapIfIjkl(context: KeyEventContext): KeyEvent? {
     if (modifiersEx.and(ALT_DOWN_MASK) == 0) return null
     if (context.findActionsByShortcut) return null
@@ -148,14 +148,16 @@ private fun KeyEvent.copyWithoutAlt(newKeyCode: Int, newKeyChar: Char? = null) =
         keyLocation
     )
 
-private tailrec fun Component?.hasParentTree(): Boolean = when {
-    this == null  -> false
-    this is JTree -> true
-    else          -> parent.hasParentTree()
-}
+private tailrec fun Component?.hasParentTree(): Boolean =
+    when {
+        this == null  -> false
+        this is JTree -> true
+        else          -> parent.hasParentTree()
+    }
 
-private tailrec fun Component?.hasParentSearchTextArea(): Boolean = when {
-    this == null           -> false
-    this is SearchTextArea -> true
-    else                   -> parent.hasParentSearchTextArea()
-}
+private tailrec fun Component?.hasParentSearchTextArea(): Boolean =
+    when {
+        this == null           -> false
+        this is SearchTextArea -> true
+        else                   -> parent.hasParentSearchTextArea()
+    }

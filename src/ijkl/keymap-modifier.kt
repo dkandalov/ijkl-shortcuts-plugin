@@ -113,8 +113,7 @@ interface KeymapChangeListener {
 }
 
 private fun registerKeymapListener(application: Application, listener: KeymapChangeListener) {
-    val keymapManager = KeymapManager.getInstance()
-    var keymap: Keymap? = keymapManager.activeKeymap
+    var keymap: Keymap? = KeymapManager.getInstance().activeKeymap
 
     application.messageBus.connect().subscribe(KeymapManagerListener.TOPIC, object : KeymapManagerListener {
         override fun activeKeymapChanged(newKeymap: Keymap?) {
