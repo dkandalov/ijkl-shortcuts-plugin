@@ -12,19 +12,17 @@ fun InputStream.readShortcutsData(): List<ShortcutData> = use { readShortcutsDat
 
 private fun readShortcutsDataFrom(inputStream: InputStream): List<ShortcutData> {
     fun Node.getAttribute(name: String): String? = attributes.getNamedItem(name)?.nodeValue
-    fun Node.children(): List<Node> = 0.until(childNodes.length).map { i -> childNodes.item(i) }
+    fun Node.children(): List<Node> = (0..<childNodes.length).map { i -> childNodes.item(i) }
 
     val keymapTag = DocumentBuilderFactory.newInstance().newDocumentBuilder()
-        .parse(inputStream)
-        .children()
-        .find { it.nodeName == "keymap" } ?: error("Could find keymap tag")
+        .parse(inputStream).children().find { it.nodeName == "keymap" } ?: error("Could find keymap tag")
 
     return keymapTag.children()
         .filter { it.nodeName == "action" }
-        .map { child ->
+        .map { actionNode ->
             ShortcutData(
-                actionId = child.getAttribute("id") ?: "",
-                shortcuts = child.children()
+                actionId = actionNode.getAttribute("id") ?: "",
+                shortcuts = actionNode.children()
                     .filter { it.nodeName == "keyboard-shortcut" }
                     .mapNotNull { it.getAttribute("first-keystroke")?.toKeyboardShortcut() }
             )
