@@ -77,9 +77,9 @@ private class Context(focusOwnerFinder: FocusOwnerFinder, ideEventQueue: IdeEven
  * Use cases:
  * - project view tool window - ok
  * - alt+enter popup - ok
- * - auto-completion popup - ok (alt+l moves on char at a time)
+ * - auto-completion popup - ok (alt+l moves one char at a time)
  * - text search within file (cmd+F) - ok
- * - find in files (cmd+shift+F) - alt+k clashes with mnemonic (page up/down don't work after mismatch)
+ * - find in files (cmd+shift+F) - alt+k (clashes with "File mas_k_" mnemonic)
  * - file structure popup (cmd+F12) - ok
  * - go to classes/files/actions/etc (cmd+N) - ok
  * - commit dialog: alt+m, alt+i clash with mnemonics
@@ -93,20 +93,19 @@ private class Context(focusOwnerFinder: FocusOwnerFinder, ideEventQueue: IdeEven
 private fun KeyEvent.mapIfIjkl(context: KeyEventContext): KeyEvent? {
     if (modifiersEx.and(ALT_DOWN_MASK) == 0) return null
     if (context.findActionsByShortcut) return null
-    if (context.hasParentSearchTextArea) return null
 
-    if (context.isPopupActive && !context.hasParentTree) {
+    if ((context.isPopupActive && !context.hasParentTree) || context.hasParentSearchTextArea) {
         when {
-            keyCode == VK_I || keyChar == 'i'         -> return copyWithoutAlt(VK_UP, '↑')
-            keyCode == VK_K || keyChar == 'k'         -> return copyWithoutAlt(VK_DOWN, '↓')
-            keyCode == VK_J || keyChar == 'j'         -> return copyWithoutAlt(VK_LEFT, '←')
-            keyCode == VK_L || keyChar == 'l'         -> return copyWithoutAlt(VK_RIGHT, '→')
+            keyCode == VK_I || keyChar == 'i'         -> return copyWithoutAlt(VK_UP)
+            keyCode == VK_K || keyChar == 'k'         -> return copyWithoutAlt(VK_DOWN)
+            keyCode == VK_J || keyChar == 'j'         -> return copyWithoutAlt(VK_LEFT)
+            keyCode == VK_L || keyChar == 'l'         -> return copyWithoutAlt(VK_RIGHT)
             keyCode == VK_U || keyChar == 'u'         -> return copyWithoutAlt(VK_HOME)
             keyCode == VK_O || keyChar == 'o'         -> return copyWithoutAlt(VK_END)
-            keyCode == VK_F || keyChar == 'f'         -> return copyWithoutAlt(VK_PAGE_DOWN, '⇟')
-            keyCode == VK_W || keyChar == 'w'         -> return copyWithoutAlt(VK_PAGE_UP, '⇞')
-            keyCode == VK_N || keyChar == 'n'         -> return copyWithoutAlt(VK_LEFT, '←') // Convert to keys without alt so that it's not interpret as typed characters by input field.
-            keyCode == VK_M || keyChar == 'm'         -> return copyWithoutAlt(VK_RIGHT, '→') // Convert to keys without alt so that it's not interpret as typed characters by input field.
+            keyCode == VK_F || keyChar == 'f'         -> return copyWithoutAlt(VK_PAGE_DOWN)
+            keyCode == VK_W || keyChar == 'w'         -> return copyWithoutAlt(VK_PAGE_UP)
+            keyCode == VK_N || keyChar == 'n'         -> return copyWithoutAlt(VK_LEFT) // Convert to keys without alt so that it's not interpret as typed characters by input field.
+            keyCode == VK_M || keyChar == 'm'         -> return copyWithoutAlt(VK_RIGHT) // Convert to keys without alt so that it's not interpret as typed characters by input field.
             keyCode == VK_SEMICOLON || keyChar == ';' -> return copyWithoutAlt(VK_DELETE) // Convert to keys without alt so that it's not interpret as typed characters by input field.
         }
     }
@@ -137,14 +136,14 @@ private fun KeyEvent.mapIfIjkl(context: KeyEventContext): KeyEvent? {
 //  - if it's some other letter, then in Navigate to File/Class the letter is inserted into text area
 private const val zeroChar = 0.toChar()
 
-private fun KeyEvent.copyWithoutAlt(newKeyCode: Int, newKeyChar: Char? = null) =
+private fun KeyEvent.copyWithoutAlt(newKeyCode: Int) =
     KeyEvent(
         source as Component,
         id,
         `when`,
         modifiersEx.and(ALT_DOWN_MASK.inv()),
         if (id == KEY_PRESSED) newKeyCode else 0,
-        newKeyChar ?: zeroChar,
+        zeroChar,
         keyLocation
     )
 
