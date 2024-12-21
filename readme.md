@@ -2,10 +2,11 @@
 
 ## IJKL shortcuts plugin
 
-This is a plugin which enforces `alt-ijkl` navigation shortcuts on currently open keymap, tool windows and popups. The idea is that these shortcuts are more ergonomic for navigation/editing than using keyboard arrows so you can stop using arrows in IDE editor.
+This plugin adds `alt-ijkl` navigation shortcuts to the current keymap, tool windows, and popups. The idea is that these shortcuts are more ergonomic for navigation/editing than using keyboard arrows, so you can stop using arrows in the IDE editor.
 
 These shortcuts are inspired by Vim and [gaming keyboard layouts](https://en.wikipedia.org/wiki/Arrow_keys#IJKL_keys).
 
+You can see the shortcuts in action in [this talk](https://www.youtube.com/watch?v=AxxNHKCldzA).
 
 ## Shortcuts
 
@@ -20,7 +21,7 @@ Editor navigation:
  - `alt-o` - move to line end
  - `alt-f` - page down
  - `alt-w` - page up
- - `alt-shift-ijklmnuo` - navigate with selection
+ - `alt-shift-ijklmnuo` - move with selection
 
 Editor text modification:
  - `alt-e / alt-shift-e` - expand/shrink word selection

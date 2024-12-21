@@ -5,8 +5,9 @@
     <vendor email="dmitry.kandalov@gmail.com" url="https://github.com/dkandalov/ijkl-shortcuts-plugin">Dmitry Kandalov</vendor>
 
     <description><![CDATA[
-        Plugin which imposes alt-ijkl navigation shortcuts on currently open keymap.
-        The idea is that these shortcuts are more ergonomic for navigation and editing than using keyboard arrows.
+        This plugin adds `alt-ijkl` navigation shortcuts to the current keymap, tool windows, and popups.
+        The idea is that these shortcuts are more ergonomic for navigation/editing than using keyboard arrows,
+        so you can stop using arrows in the IDE editor.
         Some of the shortcuts:
         <ul>
             <li>alt-i - line up</li>
@@ -17,7 +18,7 @@
             <li>alt-m - move right</li>
             <li>alt-u - move to start of line</li>
             <li>alt-o - move to end of line</li>
-            <li>alt-shift-ijklmnuo - navigate with selection</li>
+            <li>alt-shift-ijklmnuo - move with selection</li>
             <li>alt-d - delete next word</li>
             <li>alt-; - delete next character</li>
         </ul>
