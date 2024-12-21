@@ -30,6 +30,18 @@ fun initEventReDispatch(
     ideEventQueue.addDispatcher(ijklDispatcher, parentDisposable)
 }
 
+private class IjklEventDispatcher(
+    private val focusOwnerFinder: FocusOwnerFinder,
+    private val ideEventQueue: IdeEventQueue
+) : EventDispatcher {
+    override fun dispatch(e: AWTEvent): Boolean {
+        if (e !is KeyEvent) return false
+        val newEvent = e.mapIfIjkl(Context(focusOwnerFinder, ideEventQueue)) ?: return false
+        ideEventQueue.dispatchEvent(newEvent)
+        return true
+    }
+}
+
 private class FocusOwnerFinder(private val keyboardFocusManager: KeyboardFocusManager) {
     fun find(): Component? = keyboardFocusManager.focusOwner ?: IdeFocusManager.findInstanceByContext(null).focusOwner
 }
@@ -43,18 +55,6 @@ private class IjklIdePopupEventDispatcher(
     override fun getPopupStream(): Stream<JBPopup> = Stream.empty()
     override fun requestFocus() = false
     override fun close() = false
-}
-
-private class IjklEventDispatcher(
-    private val focusOwnerFinder: FocusOwnerFinder,
-    private val ideEventQueue: IdeEventQueue
-) : EventDispatcher {
-    override fun dispatch(e: AWTEvent): Boolean {
-        if (e !is KeyEvent) return false
-        val newEvent = e.mapIfIjkl(Context(focusOwnerFinder, ideEventQueue)) ?: return false
-        ideEventQueue.dispatchEvent(newEvent)
-        return true
-    }
 }
 
 interface KeyEventContext {
@@ -79,7 +79,7 @@ private class Context(focusOwnerFinder: FocusOwnerFinder, ideEventQueue: IdeEven
  * - alt+enter popup - ok
  * - auto-completion popup - ok (alt+l moves one char at a time)
  * - text search within file (cmd+F) - ok
- * - find in files (cmd+shift+F) - alt+k (clashes with "File mas_k_" mnemonic)
+ * - find in files (cmd+shift+F) - ok (alt+k clashes with "File mas_k_" mnemonic)
  * - file structure popup (cmd+F12) - ok
  * - go to classes/files/actions/etc (cmd+N) - ok
  * - commit dialog: alt+m, alt+i clash with mnemonics
@@ -90,7 +90,7 @@ private class Context(focusOwnerFinder: FocusOwnerFinder, ideEventQueue: IdeEven
  * For performance optimisation reasons the cheapest checks should be done first.
  * (There is no empirical evidence that these optimisations are actually useful though.)
  */
-private fun KeyEvent.mapIfIjkl(context: KeyEventContext): KeyEvent? {
+fun KeyEvent.mapIfIjkl(context: KeyEventContext): KeyEvent? {
     if (modifiersEx.and(ALT_DOWN_MASK) == 0) return null
     if (context.findActionsByShortcut) return null
 
