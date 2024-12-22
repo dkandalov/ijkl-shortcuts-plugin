@@ -108,7 +108,7 @@ private data class IjklShortcuts(
         "IjklShortcuts{added=$added, alreadyExisted=$alreadyExisted, conflictsByActionId=$conflicts}"
 }
 
-interface KeymapChangeListener {
+private interface KeymapChangeListener {
     fun onChange(oldKeymap: Keymap?, newKeymap: Keymap?)
 }
 
