@@ -133,6 +133,10 @@
     <action id="PreviousTab">
         <keyboard-shortcut first-keystroke="shift meta open_bracket"/>
     </action>
+    <action id="ReopenClosedTab">
+        <keyboard-shortcut first-keystroke="shift ctrl T"/>
+        <keyboard-shortcut first-keystroke="shift meta T"/>
+    </action>
     <action id="RecentProjectListGroup">
         <keyboard-shortcut first-keystroke="shift meta alt o"/>
     </action>
