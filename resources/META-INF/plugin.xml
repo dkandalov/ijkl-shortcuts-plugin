@@ -19,8 +19,6 @@
             <li>alt-u - move to start of line</li>
             <li>alt-o - move to end of line</li>
             <li>alt-shift-ijklmnuo - move with selection</li>
-            <li>alt-d - delete next word</li>
-            <li>alt-; - delete next character</li>
         </ul>
         Note that in macOS you will need to configure keyboard input source without dead keys.
         This can be done after plugin startup in notification popup.

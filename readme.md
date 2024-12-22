@@ -34,21 +34,22 @@ Editor text modification:
  - `alt-cmd-shift-jl` (macOS) - move element left/right
  - `alt-/` - cyclic expand word (aka hippie completion)
  - `alt-'` - code completion
- - `alt-l` - choose lookup item and replace
  - `cmd-l` or `ctrl-l` - complete statement
 
 Search and navigation between files:
- - `alt-a` - highlight usages in file 
- - `alt-s` - show usages popup 
- - `alt-shift-s` - find usages 
- - `alt-h` - jump to source
+ - `alt-a` - highlight usages in file
+ - `alt-s` - show usages popup
+ - `alt-shift-s` - find usages
+ - `alt-h` - go to declaration or usages
  - `ctrl-cmd-b` or `ctrl-alt-b` - implementations popup
  - `alt-b` - back
  - `alt-shift-b` - forward
+
+Tab navigation:
  - `cmd-shift-[` - previous tab
  - `cmd-shift-]` - next tab
  - `alt-q` - close tab
- - `shift ctrl t` - reopen closed tab
+ - `ctrl-shift-t` - reopen closed tab
 
 
 ## Why editor navigation shortcuts?
